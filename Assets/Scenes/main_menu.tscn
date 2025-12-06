@@ -1,8 +1,26 @@
-[gd_scene load_steps=4 format=3 uid="uid://i3f2fkc6gvdo"]
+[gd_scene load_steps=9 format=3 uid="uid://i3f2fkc6gvdo"]
 
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_x6jn2"]
 [ext_resource type="Texture2D" uid="uid://dqotditve6qxc" path="res://Assets/backgrounds/background_layer_2.png" id="2_cbhea"]
 [ext_resource type="Texture2D" uid="uid://82e4b4xmqqlk" path="res://Assets/backgrounds/background_layer_3.png" id="3_tanm1"]
+[ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="4_6qsvb"]
+[ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="5_fadmi"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_shbfh"]
+texture = ExtResource("5_fadmi")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+region_rect = Rect2(320.7649, 99.79722, 90.51404, 27.40152)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hxcs8"]
+texture = ExtResource("5_fadmi")
+region_rect = Rect2(417.88293, 100.68405, 89.69479, 26.605736)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6qsvb"]
+texture = ExtResource("5_fadmi")
+region_rect = Rect2(417.58148, 100.874954, 90.58624, 26.069885)
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -39,6 +57,29 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_tanm1")
 
+[node name="Name" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -139.5
+offset_top = 60.0
+offset_right = 139.5
+offset_bottom = 111.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4_6qsvb")
+theme_override_font_sizes/font_size = 50
+text = "Light Seeker"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="MenuContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -52,27 +93,38 @@ offset_right = 48.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="Name" type="Label" parent="MenuContainer"]
-layout_mode = 2
-text = "Light Seeker"
+theme_override_constants/separation = 20
 
 [node name="Start" type="Button" parent="MenuContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_fonts/font = ExtResource("4_6qsvb")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_shbfh")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_hxcs8")
+theme_override_styles/hover = SubResource("StyleBoxTexture_6qsvb")
 text = "Spēlēt"
 
 [node name="Shop" type="Button" parent="MenuContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("4_6qsvb")
+theme_override_font_sizes/font_size = 32
 text = "Veikals"
 
 [node name="Locker" type="Button" parent="MenuContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("4_6qsvb")
+theme_override_font_sizes/font_size = 32
 text = "Skapis"
 
 [node name="Settings" type="Button" parent="MenuContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("4_6qsvb")
+theme_override_font_sizes/font_size = 32
 text = "Iestatījumi"
 
 [node name="Quit" type="Button" parent="MenuContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("4_6qsvb")
+theme_override_font_sizes/font_size = 32
 text = "Iziet"
