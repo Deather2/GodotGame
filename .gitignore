@@ -1,0 +1,10 @@
+# Godot
+.import/
+.godot/
+mono/
+*.import
+*.tmp
+
+# OS junk
+Thumbs.db
+.DS_Store
