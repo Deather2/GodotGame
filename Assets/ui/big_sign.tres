@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://cym52mg2u2n1d"]
+
+[ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="1_eg7t8"]
+
+[resource]
+atlas = ExtResource("1_eg7t8")
+region = Rect2(422.96802, 628.928, 98.467224, 85.95422)

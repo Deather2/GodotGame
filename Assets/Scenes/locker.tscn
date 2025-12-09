@@ -1,4 +1,10 @@
-[gd_scene format=3 uid="uid://brs4xwnhiytl"]
+[gd_scene load_steps=6 format=3 uid="uid://brs4xwnhiytl"]
+
+[ext_resource type="Texture2D" uid="uid://cvgl420rq54qg" path="res://Assets/ui/locker_back.tres" id="1_53tuw"]
+[ext_resource type="Texture2D" uid="uid://c3blpwxp2fsws" path="res://Assets/ui/header.tres" id="2_o67te"]
+[ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="3_6aab2"]
+[ext_resource type="Texture2D" uid="uid://cym52mg2u2n1d" path="res://Assets/ui/big_sign.tres" id="4_6aab2"]
+[ext_resource type="Texture2D" uid="uid://cku3k8km5g3ql" path="res://Assets/ui/tall_box.tres" id="5_3sstc"]
 
 [node name="Wardrobe" type="Control"]
 layout_mode = 3
@@ -7,3 +13,77 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_53tuw")
+
+[node name="Name" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -96.75
+offset_top = 20.0
+offset_right = 96.75
+offset_bottom = 140.0
+grow_horizontal = 2
+texture = ExtResource("2_o67te")
+
+[node name="Label" type="Label" parent="Name"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -77.0
+offset_top = -28.0
+offset_right = 77.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_6aab2")
+theme_override_font_sizes/font_size = 56
+text = "Skapis"
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -147.0
+offset_top = -127.5
+offset_right = 147.0
+offset_bottom = 127.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_6aab2")
+
+[node name="TextureRect" type="TextureRect" parent="TextureRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -71.0
+offset_top = -102.5
+offset_right = 71.0
+offset_bottom = 81.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_3sstc")
