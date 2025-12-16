@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CharacterDB" load_steps=4 format=3 uid="uid://cvwqdppkj64vm"]
+
+[ext_resource type="Script" uid="uid://b7mc5qhmvucnx" path="res://Assets/Scripts/CharacterDB.gd" id="1_i6avy"]
+[ext_resource type="Texture2D" uid="uid://c5fcachqg8bwl" path="res://Assets/characters/Adventurer/Individual Sprites/adventurer-idle-00.png" id="2_s6c3s"]
+[ext_resource type="Texture2D" uid="uid://gueetxa54huo" path="res://Assets/characters/Adventurer/Individual Sprites/adventurer-idle-2-00.png" id="3_7d18p"]
+
+[resource]
+script = ExtResource("1_i6avy")
+textures = Array[Texture2D]([ExtResource("2_s6c3s"), ExtResource("3_7d18p")])
+names = Array[String](["Prince Artorius Valenhardt Aurelius", "2Prince Artorius Valenhardt Aurelius"])
+stories = Array[String](["Princis Artorius Valenhardt Aurelius nāk no senas karaļu dzimtas, kas gadsimtiem ilgi valdīja pār aukstu ziemeļu karalisti. Pēc nodevības karaliskajā galmā viņš zaudēja tiesības uz troni un zvērēja pats noskaidrot, kurš iznīcināja viņa ģimenes godu. Tagad Artorijs ceļo pa pasauli, palīdzot ciemiem un pilsētām, lai atgūtu uzticību vienkāršajiem ļaudīm un atrastu patiesību par savu dzimtu.", "2Princis Artorius Valenhardt Aurelius nāk no senas karaļu dzimtas, kas gadsimtiem ilgi valdīja pār aukstu ziemeļu karalisti.Pēc nodevības karaliskajā galmā viņš zaudēja tiesības uz troni un zvērēja pats noskaidrot, kurš iznīcināja viņa ģimenes godu.Tagad Artorijs ceļo pa pasauli, palīdzot ciemiem un pilsētām, lai atgūtu uzticību vienkāršajiem ļaudīm un atrastu patiesību par savu dzimtu."])
+metadata/_custom_type_script = "uid://b7mc5qhmvucnx"

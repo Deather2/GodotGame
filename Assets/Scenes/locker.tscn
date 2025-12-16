@@ -1,10 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://brs4xwnhiytl"]
+[gd_scene load_steps=14 format=3 uid="uid://brs4xwnhiytl"]
 
 [ext_resource type="Texture2D" uid="uid://cvgl420rq54qg" path="res://Assets/ui/locker_back.tres" id="1_53tuw"]
 [ext_resource type="Script" uid="uid://j1yooegh3ii6" path="res://Assets/Scripts/locker.gd" id="1_vtrg8"]
-[ext_resource type="Texture2D" uid="uid://c5fcachqg8bwl" path="res://Assets/characters/Adventurer/Individual Sprites/adventurer-idle-00.png" id="2_ferge"]
 [ext_resource type="Texture2D" uid="uid://c3blpwxp2fsws" path="res://Assets/ui/header.tres" id="2_o67te"]
-[ext_resource type="Texture2D" uid="uid://bd3mfyfmwwjhx" path="res://Assets/characters/Adventurer/Individual Sprites/adventurer-run-03.png" id="3_1my43"]
+[ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_xt3uu"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="3_6aab2"]
 [ext_resource type="Texture2D" uid="uid://cym52mg2u2n1d" path="res://Assets/ui/big_sign.tres" id="4_6aab2"]
 [ext_resource type="Texture2D" uid="uid://cku3k8km5g3ql" path="res://Assets/ui/tall_box.tres" id="5_3sstc"]
@@ -38,7 +37,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_vtrg8")
-characters = Array[Texture2D]([ExtResource("2_ferge"), ExtResource("3_1my43")])
+db = ExtResource("2_xt3uu")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -208,10 +207,16 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 97.0
-offset_top = -154.0
+offset_top = -164.0
 offset_right = 400.0
-offset_bottom = -78.5
+offset_bottom = -88.5
 grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("3_6aab2")
 theme_override_font_sizes/font_size = 48
 text = "Vārds:"
@@ -226,12 +231,19 @@ anchor_bottom = 0.5
 offset_left = 97.0
 offset_top = -37.75
 offset_right = 403.0
-offset_bottom = 37.75
+offset_bottom = 48.0
 grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("3_6aab2")
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 32
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="StoryLabel" type="Label" parent="Background"]
 layout_mode = 1
@@ -241,11 +253,17 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -399.0
-offset_top = -154.0
-offset_right = -90.0
-offset_bottom = -78.5
+offset_top = -164.0
+offset_right = -96.0
+offset_bottom = -88.5
 grow_horizontal = 0
 grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("3_6aab2")
 theme_override_font_sizes/font_size = 48
 text = "Apraksts:"
@@ -269,8 +287,16 @@ horizontal_scroll_mode = 0
 
 [node name="Story" type="Label" parent="Background/StoryBox"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("3_6aab2")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
 autowrap_mode = 3
 
 [connection signal="mouse_entered" from="Background/LeftButton" to="." method="_on_button_mouse_entered"]
