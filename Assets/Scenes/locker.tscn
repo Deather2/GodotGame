@@ -202,6 +202,77 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_xt3uu")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_xt3uu")
 theme_override_styles/hover = SubResource("StyleBoxTexture_xt3uu")
 
+[node name="NameLabel" type="Label" parent="Background"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 97.0
+offset_top = -154.0
+offset_right = 400.0
+offset_bottom = -78.5
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_6aab2")
+theme_override_font_sizes/font_size = 48
+text = "Vārds:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Name" type="Label" parent="Background"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 97.0
+offset_top = -37.75
+offset_right = 403.0
+offset_bottom = 37.75
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_6aab2")
+theme_override_font_sizes/font_size = 48
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StoryLabel" type="Label" parent="Background"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -399.0
+offset_top = -154.0
+offset_right = -90.0
+offset_bottom = -78.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_6aab2")
+theme_override_font_sizes/font_size = 48
+text = "Apraksts:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StoryBox" type="ScrollContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -387.0
+offset_top = -76.0
+offset_right = -97.0
+offset_bottom = 142.0
+grow_horizontal = 0
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="Story" type="Label" parent="Background/StoryBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_6aab2")
+theme_override_font_sizes/font_size = 32
+autowrap_mode = 3
+
 [connection signal="mouse_entered" from="Background/LeftButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Background/LeftButton" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Background/LeftButton" to="." method="_on_left_button_pressed"]
