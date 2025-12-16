@@ -18,7 +18,6 @@ func _save_selected_character() -> void:
 	var cfg := ConfigFile.new()
 	var err := cfg.load(SAVE_PATH)
 	if err != OK:
-		# если файла ещё нет, просто продолжаем с пустым
 		pass
 
 	cfg.set_value(SECTION, "selected_character_index", selected_character_index)

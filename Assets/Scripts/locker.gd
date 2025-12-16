@@ -9,6 +9,8 @@ var characters: Array[Texture2D] = []
 @onready var select_button: Button = $Background/SelectButton
 @onready var name_label: Label = $Background/Name
 @onready var story_label: Label = $Background/StoryBox/Story
+@onready var info_label: Label = $Background/InfoLabel
+
 
 var current_index: int = 0
 
@@ -30,13 +32,11 @@ func _update_character() -> void:
 	_update_select_button()
 
 	if db != null:
-		# vārds
 		if current_index < db.names.size():
 			name_label.text = db.names[current_index]
 		else:
 			name_label.text = ""
 
-		# stāsts
 		if current_index < db.stories.size():
 			story_label.text = db.stories[current_index]
 		else:
@@ -46,9 +46,16 @@ func _update_character() -> void:
 func _update_select_button() -> void:
 	if characters.size() <= 1:
 		select_button.visible = false
+		left_button.visible = false
+		right_button.visible = false
+		info_label.visible = true
 		return
 
+	info_label.visible = false
+	left_button.visible = true
+	right_button.visible = true
 	select_button.visible = current_index != GameState.selected_character_index
+
 
 
 func _on_left_button_pressed() -> void:
