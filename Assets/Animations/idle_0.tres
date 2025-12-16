@@ -1,0 +1,26 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3 uid="uid://dxu0k46qid04c"]
+
+[ext_resource type="Texture2D" uid="uid://c5fcachqg8bwl" path="res://Assets/characters/Adventurer/Individual Sprites/adventurer-idle-00.png" id="1_nkune"]
+[ext_resource type="Texture2D" uid="uid://dmiqnlwnt8pkn" path="res://Assets/characters/Adventurer/Individual Sprites/adventurer-idle-01.png" id="2_m11yc"]
+[ext_resource type="Texture2D" uid="uid://6p5yepu3stb2" path="res://Assets/characters/Adventurer/Individual Sprites/adventurer-idle-02.png" id="3_umrk7"]
+[ext_resource type="Texture2D" uid="uid://d1smih61rhefo" path="res://Assets/characters/Adventurer/Individual Sprites/adventurer-idle-03.png" id="4_mc8n4"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_nkune")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_m11yc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_umrk7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_mc8n4")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}]

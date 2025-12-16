@@ -1,11 +1,200 @@
-[gd_scene load_steps=11 format=3 uid="uid://i3f2fkc6gvdo"]
+[gd_scene load_steps=18 format=3 uid="uid://i3f2fkc6gvdo"]
 
 [ext_resource type="Script" uid="uid://3ap22gt4fg27" path="res://Assets/Scripts/MainMenu.gd" id="1_fadmi"]
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_x6jn2"]
 [ext_resource type="Texture2D" uid="uid://dqotditve6qxc" path="res://Assets/backgrounds/background_layer_2.png" id="2_cbhea"]
+[ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_hxcs8"]
 [ext_resource type="Texture2D" uid="uid://82e4b4xmqqlk" path="res://Assets/backgrounds/background_layer_3.png" id="3_tanm1"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="4_6qsvb"]
 [ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="5_fadmi"]
+[ext_resource type="Texture2D" uid="uid://coh4xlti3qpdf" path="res://Assets/tilesets/oak_woods_tileset.png" id="6_shbfh"]
+[ext_resource type="Script" uid="uid://b85gboidk5du0" path="res://Assets/Scripts/MenuBody.gd" id="8_xkmpe"]
+[ext_resource type="SpriteFrames" uid="uid://dxu0k46qid04c" path="res://Assets/Animations/idle_0.tres" id="9_pd3f2"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hxcs8"]
+texture = ExtResource("6_shbfh")
+texture_region_size = Vector2i(24, 24)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+5:0/0 = 0
+5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+6:0/0 = 0
+6:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+7:0/0 = 0
+7:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+8:0/0 = 0
+8:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+10:0/0 = 0
+10:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+12:0/0 = 0
+14:0/0 = 0
+15:0/0 = 0
+16:0/0 = 0
+17:0/0 = 0
+19:0/0 = 0
+20:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+3:1/0 = 0
+14:1/0 = 0
+15:1/0 = 0
+17:1/0 = 0
+19:1/0 = 0
+20:1/0 = 0
+0:2/0 = 0
+3:2/0 = 0
+6:2/0 = 0
+10:2/0 = 0
+14:2/0 = 0
+17:2/0 = 0
+19:2/0 = 0
+20:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+5:3/0 = 0
+7:3/0 = 0
+9:3/0 = 0
+11:3/0 = 0
+14:3/0 = 0
+15:3/0 = 0
+16:3/0 = 0
+17:3/0 = 0
+6:4/0 = 0
+10:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+6:5/0 = 0
+15:5/0 = 0
+18:5/0 = 0
+19:5/0 = 0
+0:6/0 = 0
+3:6/0 = 0
+9:6/0 = 0
+10:6/0 = 0
+12:6/0 = 0
+13:6/0 = 0
+15:6/0 = 0
+18:6/0 = 0
+19:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+2:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, 0, 12, 12, -12, 12)
+3:7/0 = 0
+3:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, 0.5257416, 12, 12, -12, 12)
+5:7/0 = 0
+5:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+6:7/0 = 0
+6:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+7:7/0 = 0
+7:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+9:7/0 = 0
+10:7/0 = 0
+12:7/0 = 0
+13:7/0 = 0
+18:7/0 = 0
+19:7/0 = 0
+0:8/0 = 0
+1:8/0 = 0
+2:8/0 = 0
+3:8/0 = 0
+3:8/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+9:8/0 = 0
+10:8/0 = 0
+12:8/0 = 0
+12:8/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+13:8/0 = 0
+13:8/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+15:8/0 = 0
+16:8/0 = 0
+18:8/0 = 0
+19:8/0 = 0
+0:9/0 = 0
+3:9/0 = 0
+5:9/0 = 0
+5:9/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+6:9/0 = 0
+6:9/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+7:9/0 = 0
+7:9/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+9:9/0 = 0
+10:9/0 = 0
+18:9/0 = 0
+19:9/0 = 0
+0:10/0 = 0
+1:10/0 = 0
+2:10/0 = 0
+3:10/0 = 0
+9:10/0 = 0
+10:10/0 = 0
+12:10/0 = 0
+13:10/0 = 0
+15:10/0 = 0
+18:10/0 = 0
+19:10/0 = 0
+0:11/0 = 0
+5:11/0 = 0
+6:11/0 = 0
+7:11/0 = 0
+15:11/0 = 0
+18:11/0 = 0
+19:11/0 = 0
+0:12/0 = 0
+1:12/0 = 0
+2:12/0 = 0
+3:12/0 = 0
+18:12/0 = 0
+0:13/0 = 0
+1:13/0 = 0
+2:13/0 = 0
+3:13/0 = 0
+5:13/0 = 0
+6:13/0 = 0
+7:13/0 = 0
+8:13/0 = 0
+9:13/0 = 0
+10:13/0 = 0
+11:13/0 = 0
+12:13/0 = 0
+13:13/0 = 0
+14:13/0 = 0
+16:13/0 = 0
+17:13/0 = 0
+18:13/0 = 0
+19:13/0 = 0
+20:13/0 = 0
+0:14/0 = 0
+1:14/0 = 0
+5:14/0 = 0
+6:14/0 = 0
+7:14/0 = 0
+8:14/0 = 0
+9:14/0 = 0
+10:14/0 = 0
+11:14/0 = 0
+12:14/0 = 0
+18:14/0 = 0
+19:14/0 = 0
+20:14/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_xkmpe"]
+tile_size = Vector2i(24, 24)
+physics_layer_0/collision_layer = 1
+sources/1 = SubResource("TileSetAtlasSource_hxcs8")
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hxcs8"]
+radius = 20.0
+height = 80.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_shbfh"]
 content_margin_left = 16.0
@@ -67,9 +256,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -139.5
-offset_top = 60.0
+offset_top = 45.0
 offset_right = 139.5
-offset_bottom = 111.0
+offset_bottom = 96.0
 grow_horizontal = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
@@ -84,6 +273,32 @@ text = "Light Seeker"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="World2D" type="Node2D" parent="."]
+
+[node name="TileMap" type="TileMap" parent="World2D"]
+scale = Vector2(3, 3)
+tile_set = SubResource("TileSet_xkmpe")
+format = 2
+layer_0/tile_data = PackedInt32Array(393216, 1, 0, 393217, 65537, 0, 393218, 131073, 0, 458752, 1, 2, 524288, 1, 3, 524289, 65537, 3, 524290, 131073, 3, 458755, 65537, 1, 524291, 131073, 3, 393219, 131073, 7, 393220, 196609, 7, 458756, 196609, 8, 458757, 131073, 7, 458758, 196609, 7, 524294, 786433, 8, 458753, 65537, 1, 458754, 65537, 1, 524292, 131073, 3, 524293, 196609, 3, 524295, 786433, 8, 524296, 786433, 8, 524297, 786433, 8, 524298, 786433, 8, 524299, 786433, 8, 524300, 786433, 8, 524301, 786433, 8, 458766, 327681, 9, 458767, 327681, 9, 524302, 65537, 3, 524303, 65537, 3)
+
+[node name="MenuBody" type="CharacterBody2D" parent="World2D"]
+script = ExtResource("8_xkmpe")
+character_db = ExtResource("2_hxcs8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World2D/MenuBody"]
+position = Vector2(72, 390)
+shape = SubResource("CapsuleShape2D_hxcs8")
+
+[node name="StandPoint" type="Marker2D" parent="World2D/MenuBody"]
+position = Vector2(72, 432)
+
+[node name="MenuCharacter" type="AnimatedSprite2D" parent="World2D/MenuBody/StandPoint"]
+z_index = 10
+scale = Vector2(3, 3)
+sprite_frames = ExtResource("9_pd3f2")
+animation = &"idle"
+frame_progress = 0.8235487
+
 [node name="MenuContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -92,9 +307,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -97.0
-offset_top = -124.0
+offset_top = -174.0
 offset_right = 97.0
-offset_bottom = 196.0
+offset_bottom = 186.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 30
