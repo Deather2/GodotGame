@@ -297,7 +297,7 @@ z_index = 10
 scale = Vector2(3, 3)
 sprite_frames = ExtResource("9_pd3f2")
 animation = &"idle"
-frame_progress = 0.8235487
+frame_progress = 0.8741944
 
 [node name="MenuContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
