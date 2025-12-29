@@ -8,10 +8,8 @@ var hotspot := Vector2(0, 0)
 func _ready() -> void:
 	set_normal()  
 
-
 func set_hover() -> void:
 	Input.set_custom_mouse_cursor(cursor_hover, Input.CURSOR_ARROW, hotspot)
-
 
 func set_normal() -> void:
 	Input.set_custom_mouse_cursor(cursor_normal, Input.CURSOR_ARROW, hotspot)

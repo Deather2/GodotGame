@@ -55,7 +55,8 @@ text = "Izvēlieties līmeni"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LevelsContainer" type="CenterContainer" parent="."]
+[node name="PagesHolder" type="Control" parent="."]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -63,7 +64,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GridContainer" type="GridContainer" parent="LevelsContainer"]
+[node name="LevelsContainer" type="CenterContainer" parent="PagesHolder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="PagesHolder/LevelsContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 30
 theme_override_constants/v_separation = 30
