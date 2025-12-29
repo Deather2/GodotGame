@@ -1,4 +1,5 @@
 extends Button
+class_name LevelButton
 
 @export var star_empty: Texture2D
 @export var star_full: Texture2D
