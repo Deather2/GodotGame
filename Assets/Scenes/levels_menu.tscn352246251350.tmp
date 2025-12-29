@@ -1,0 +1,156 @@
+[gd_scene load_steps=11 format=3 uid="uid://ru6my31iays2"]
+
+[ext_resource type="Script" uid="uid://ds6pa7yu56gah" path="res://Assets/Scripts/LevelsMenu.gd" id="1_bvbgm"]
+[ext_resource type="PackedScene" uid="uid://c3retqugyu8ab" path="res://Assets/Scenes/level_button.tscn" id="2_2018i"]
+[ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="3_oc7xc"]
+[ext_resource type="Texture2D" uid="uid://d37rs6cwppcrd" path="res://Assets/ui/Ramka.png" id="3_yar8t"]
+[ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="4_2oixe"]
+[ext_resource type="Texture2D" uid="uid://dfli2ldbdrs7q" path="res://Assets/ui/newbuttons.png" id="5_ovywt"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t6v1y"]
+texture = ExtResource("5_ovywt")
+region_rect = Rect2(1, 1.0719178, 14.009886, 14.012246)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0ouis"]
+texture = ExtResource("5_ovywt")
+region_rect = Rect2(17, 2, 14, 13.084164)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yar8t"]
+texture = ExtResource("4_2oixe")
+region_rect = Rect2(816.106, 259.96237, 48.15802, 23.980042)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ovywt"]
+texture = ExtResource("4_2oixe")
+region_rect = Rect2(879.9657, 260.01166, 48.04657, 24.13623)
+
+[node name="LevelsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bvbgm")
+level_button_scene = ExtResource("2_2018i")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_yar8t")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -196.5
+offset_top = 50.0
+offset_right = 196.5
+offset_bottom = 98.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_oc7xc")
+theme_override_font_sizes/font_size = 48
+text = "Izvēlieties līmeni"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PagesHolder" type="Control" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LevelsContainer" type="CenterContainer" parent="PagesHolder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="PagesHolder/LevelsContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 30
+theme_override_constants/v_separation = 30
+columns = 3
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 268.0
+offset_top = 40.0
+offset_right = 332.0
+offset_bottom = 104.0
+grow_horizontal = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_t6v1y")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_0ouis")
+theme_override_styles/hover = SubResource("StyleBoxTexture_t6v1y")
+
+[node name="ResetButton" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="ConfirmReset" type="ConfirmationDialog" parent="."]
+
+[node name="PrevPage" type="Button" parent="."]
+custom_minimum_size = Vector2(112, 56)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -156.0
+offset_top = -108.0
+offset_right = -44.0
+offset_bottom = -52.0
+grow_horizontal = 2
+grow_vertical = 0
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_yar8t")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_yar8t")
+theme_override_styles/hover = SubResource("StyleBoxTexture_yar8t")
+theme_override_styles/focus = SubResource("StyleBoxTexture_yar8t")
+
+[node name="NextPage" type="Button" parent="."]
+custom_minimum_size = Vector2(112, 56)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 44.0
+offset_top = -108.0
+offset_right = 156.0
+offset_bottom = -52.0
+grow_horizontal = 2
+grow_vertical = 0
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_ovywt")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ovywt")
+theme_override_styles/hover = SubResource("StyleBoxTexture_ovywt")
+
+[connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="BackButton" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="PrevPage" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="PrevPage" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="NextPage" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="NextPage" to="." method="_on_button_mouse_exited"]

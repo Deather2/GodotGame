@@ -12,9 +12,14 @@ var current_container: Control
 @onready var pages_holder: Control = $PagesHolder
 @onready var back_btn: Button = $BackButton
 @onready var reset_btn: Button = $ResetButton
-@onready var confirm_reset: ConfirmationDialog = $ConfirmReset
 @onready var prev_page: Button = $PrevPage
 @onready var next_page: Button = $NextPage
+
+@onready var dim: ColorRect = $Dim
+
+@onready var confirm_reset: Control = $ConfirmReset
+@onready var confirm_yes: Button = $ConfirmReset/Panel/VBoxContainer/Buttons/YesButton
+@onready var confirm_no: Button = $ConfirmReset/Panel/VBoxContainer/Buttons/NoButton
 
 func _ready() -> void:
 	current_container = $PagesHolder/LevelsContainer
@@ -24,7 +29,16 @@ func _ready() -> void:
 	prev_page.pressed.connect(_on_prev_page)
 	next_page.pressed.connect(_on_next_page)
 
+	# Confirm buttons (connect once)
+	confirm_yes.pressed.connect(_on_reset_confirmed)
+	confirm_no.pressed.connect(_on_reset_canceled)
+
+	# start hidden
+	dim.visible = false
+	confirm_reset.visible = false
+
 	_build_grid()
+	reset_btn.visible = GameState.has_any_progress()
 
 func _page_count() -> int:
 	return int(ceil(float(GameState.LEVEL_COUNT) / float(PER_PAGE)))
@@ -48,7 +62,10 @@ func _build_grid() -> void:
 		var btn: LevelButton = level_button_scene.instantiate() as LevelButton
 		grid.add_child(btn)
 
-		btn.mouse_entered.connect(Cursor.set_hover)
+		btn.mouse_entered.connect(func():
+			if not btn.disabled:
+				Cursor.set_hover()
+		)
 		btn.mouse_exited.connect(Cursor.set_normal)
 
 		btn.setup(i)
@@ -64,15 +81,23 @@ func _on_level_pressed(i: int) -> void:
 	print("level pressed:", i)
 
 func _on_back_pressed() -> void:
-	print("back")
+	SceneManager.goto_main_menu()
 
 func _on_reset_pressed() -> void:
-	confirm_reset.confirmed.connect(func():
-		GameState.reset_level_progress()
-		page = 0
-		_build_grid()
-	, CONNECT_ONE_SHOT)
-	confirm_reset.popup_centered()
+	dim.visible = true
+	confirm_reset.visible = true
+
+func _on_reset_confirmed() -> void:
+	dim.visible = false
+	confirm_reset.visible = false
+	GameState.reset_all_progress_keep_settings()
+	page = 0
+	_build_grid()
+	reset_btn.visible = GameState.has_any_progress()
+
+func _on_reset_canceled() -> void:
+	dim.visible = false
+	confirm_reset.visible = false
 
 func _on_button_mouse_entered() -> void:
 	Cursor.set_hover()
@@ -97,7 +122,6 @@ func _animate_to_page(new_page: int, dir: int) -> void:
 		return
 
 	animating = true
-
 	_update_arrows_for(new_page)
 
 	var old_container: Control = current_container
@@ -121,7 +145,10 @@ func _animate_to_page(new_page: int, dir: int) -> void:
 		var btn: LevelButton = level_button_scene.instantiate() as LevelButton
 		new_grid.add_child(btn)
 
-		btn.mouse_entered.connect(Cursor.set_hover)
+		btn.mouse_entered.connect(func():
+			if not btn.disabled:
+				Cursor.set_hover()
+		)
 		btn.mouse_exited.connect(Cursor.set_normal)
 
 		btn.setup(i)
@@ -142,6 +169,5 @@ func _animate_to_page(new_page: int, dir: int) -> void:
 		page = new_page
 		old_container.queue_free()
 		current_container = new_container
-
 		animating = false
 	)

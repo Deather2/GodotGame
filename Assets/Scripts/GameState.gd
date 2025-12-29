@@ -1,6 +1,8 @@
 extends Node
 
-const SAVE_PATH := "user://player_settings.cfg"
+# 2 файла:
+const SETTINGS_PATH := "user://settings.cfg"
+const PROGRESS_PATH := "user://progress.cfg"
 
 const PLAYER_SECTION := "player"
 const PROGRESS_SECTION := "progress"
@@ -13,9 +15,10 @@ var stars_per_level: Array[int] = []
 func _ready() -> void:
 	_load_selected_character()
 	_load_level_progress()
+	print(OS.get_user_data_dir())
 
 # --------------------------
-# Персонаж
+# Персонаж (это прогресс -> progress.cfg)
 # --------------------------
 func set_selected_character(index: int) -> void:
 	selected_character_index = index
@@ -23,21 +26,20 @@ func set_selected_character(index: int) -> void:
 
 func _save_selected_character() -> void:
 	var cfg := ConfigFile.new()
-	cfg.load(SAVE_PATH) # если файла нет — ок
-
+	cfg.load(PROGRESS_PATH) # если файла нет — ок
 	cfg.set_value(PLAYER_SECTION, "selected_character_index", selected_character_index)
-	cfg.save(SAVE_PATH)
+	cfg.save(PROGRESS_PATH)
 
 func _load_selected_character() -> void:
 	var cfg := ConfigFile.new()
-	var err := cfg.load(SAVE_PATH)
+	var err := cfg.load(PROGRESS_PATH)
 	if err == OK:
 		selected_character_index = int(cfg.get_value(PLAYER_SECTION, "selected_character_index", 0))
 	else:
 		selected_character_index = 0
 
 # --------------------------
-# Прогресс уровней
+# Прогресс уровней (progress.cfg)
 # --------------------------
 func _init_default_progress() -> void:
 	stars_per_level.resize(LEVEL_COUNT)
@@ -46,24 +48,29 @@ func _init_default_progress() -> void:
 
 func _save_level_progress() -> void:
 	var cfg := ConfigFile.new()
-	cfg.load(SAVE_PATH) # если файла нет — ок
-
+	cfg.load(PROGRESS_PATH) 
 	cfg.set_value(PROGRESS_SECTION, "stars_per_level", stars_per_level)
-	cfg.save(SAVE_PATH)
+	cfg.save(PROGRESS_PATH)
 
 func _load_level_progress() -> void:
 	var cfg := ConfigFile.new()
-	var err := cfg.load(SAVE_PATH)
+	var err := cfg.load(PROGRESS_PATH)
 	if err != OK:
 		_init_default_progress()
 		return
 
-	var arr = cfg.get_value(PROGRESS_SECTION, "stars_per_level", null)
+	var arr: Variant = cfg.get_value(PROGRESS_SECTION, "stars_per_level", null)
 	if arr == null:
 		_init_default_progress()
 		return
 
-	stars_per_level = arr
+	if arr is Array:
+		stars_per_level.clear()
+		for v in (arr as Array):
+			stars_per_level.append(int(v))
+	else:
+		_init_default_progress()
+		return
 
 	if stars_per_level.size() < LEVEL_COUNT:
 		while stars_per_level.size() < LEVEL_COUNT:
@@ -84,6 +91,16 @@ func set_level_stars(level_index: int, stars: int) -> void:
 	stars_per_level[level_index] = max(stars_per_level[level_index], stars)
 	_save_level_progress()
 
-func reset_level_progress() -> void:
+func reset_all_progress_keep_settings() -> void:
 	_init_default_progress()
+	selected_character_index = 0
 	_save_level_progress()
+	_save_selected_character()
+
+func has_any_progress() -> bool:
+	if selected_character_index != 0:
+		return true
+	for s in stars_per_level:
+		if s > 0:
+			return true
+	return false

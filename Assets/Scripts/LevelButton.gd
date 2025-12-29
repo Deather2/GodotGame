@@ -23,8 +23,13 @@ func setup(i: int) -> void:
 
 func _refresh() -> void:
 	var unlocked := GameState.is_level_unlocked(level_index)
+
 	disabled = not unlocked
 	lock_tex.visible = not unlocked
+	$Stars.visible = unlocked
+
+	if not unlocked:
+		return
 
 	var got := GameState.stars_per_level[level_index]
 	for s in range(3):

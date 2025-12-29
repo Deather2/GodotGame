@@ -1,10 +1,28 @@
-[gd_scene load_steps=8 format=3 uid="uid://ru6my31iays2"]
+[gd_scene load_steps=17 format=3 uid="uid://ru6my31iays2"]
 
 [ext_resource type="Script" uid="uid://ds6pa7yu56gah" path="res://Assets/Scripts/LevelsMenu.gd" id="1_bvbgm"]
 [ext_resource type="PackedScene" uid="uid://c3retqugyu8ab" path="res://Assets/Scenes/level_button.tscn" id="2_2018i"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="3_oc7xc"]
 [ext_resource type="Texture2D" uid="uid://d37rs6cwppcrd" path="res://Assets/ui/Ramka.png" id="3_yar8t"]
 [ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="4_2oixe"]
+[ext_resource type="Texture2D" uid="uid://dfli2ldbdrs7q" path="res://Assets/ui/newbuttons.png" id="5_ovywt"]
+[ext_resource type="Texture2D" uid="uid://b0215xlkibelg" path="res://Assets/ui/newbuttons2.png" id="6_t6v1y"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t6v1y"]
+texture = ExtResource("5_ovywt")
+region_rect = Rect2(1, 1.0719178, 14.009886, 14.012246)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0ouis"]
+texture = ExtResource("5_ovywt")
+region_rect = Rect2(17, 2, 14, 13.084164)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5humi"]
+texture = ExtResource("6_t6v1y")
+region_rect = Rect2(1, 1, 14, 14)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t6xiy"]
+texture = ExtResource("6_t6v1y")
+region_rect = Rect2(17, 2, 14, 13)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yar8t"]
 texture = ExtResource("4_2oixe")
@@ -13,6 +31,18 @@ region_rect = Rect2(816.106, 259.96237, 48.15802, 23.980042)
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ovywt"]
 texture = ExtResource("4_2oixe")
 region_rect = Rect2(879.9657, 260.01166, 48.04657, 24.13623)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_obegr"]
+texture = ExtResource("4_2oixe")
+region_rect = Rect2(864, 704, 97, 96)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_firr7"]
+texture = ExtResource("4_2oixe")
+region_rect = Rect2(377, 760, 17, 14)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_imeig"]
+texture = ExtResource("4_2oixe")
+region_rect = Rect2(408, 759, 15, 15)
 
 [node name="LevelsMenu" type="Control"]
 layout_mode = 3
@@ -79,16 +109,34 @@ theme_override_constants/v_separation = 30
 columns = 3
 
 [node name="BackButton" type="Button" parent="."]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 268.0
+offset_top = 40.0
+offset_right = 332.0
+offset_bottom = 104.0
+grow_horizontal = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_t6v1y")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_0ouis")
+theme_override_styles/hover = SubResource("StyleBoxTexture_t6v1y")
 
 [node name="ResetButton" type="Button" parent="."]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
-
-[node name="ConfirmReset" type="ConfirmationDialog" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -332.0
+offset_top = 40.0
+offset_right = -268.0
+offset_bottom = 104.0
+grow_horizontal = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_5humi")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_t6xiy")
+theme_override_styles/hover = SubResource("StyleBoxTexture_5humi")
 
 [node name="PrevPage" type="Button" parent="."]
 custom_minimum_size = Vector2(112, 56)
@@ -129,7 +177,116 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_ovywt")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_ovywt")
 theme_override_styles/hover = SubResource("StyleBoxTexture_ovywt")
 
+[node name="Dim" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.53333336)
+
+[node name="ConfirmReset" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="ConfirmReset"]
+custom_minimum_size = Vector2(800, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_obegr")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ConfirmReset/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -327.0
+offset_top = -200.0
+offset_right = 327.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 60
+alignment = 1
+
+[node name="Title" type="Label" parent="ConfirmReset/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_oc7xc")
+theme_override_font_sizes/font_size = 32
+text = "Apstiprinājums"
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="ConfirmReset/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/paragraph_spacing = 10
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_oc7xc")
+theme_override_font_sizes/font_size = 24
+text = "Vai tiešām vēlaties atiestatīt visu progresu (līmeņus, varoņus un zvaigznes)?
+Šo darbību nevarēs atcelt."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="ConfirmReset/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 60
+alignment = 1
+
+[node name="YesButton" type="Button" parent="ConfirmReset/Panel/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(90, 70)
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_firr7")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_firr7")
+theme_override_styles/hover = SubResource("StyleBoxTexture_firr7")
+
+[node name="NoButton" type="Button" parent="ConfirmReset/Panel/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(90, 70)
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_imeig")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_imeig")
+theme_override_styles/hover = SubResource("StyleBoxTexture_imeig")
+
+[connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="BackButton" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="ResetButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="ResetButton" to="." method="_on_button_mouse_exited"]
 [connection signal="mouse_entered" from="PrevPage" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="PrevPage" to="." method="_on_button_mouse_exited"]
 [connection signal="mouse_entered" from="NextPage" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="NextPage" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="ConfirmReset/Panel/VBoxContainer/Buttons/YesButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="ConfirmReset/Panel/VBoxContainer/Buttons/YesButton" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="ConfirmReset/Panel/VBoxContainer/Buttons/NoButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="ConfirmReset/Panel/VBoxContainer/Buttons/NoButton" to="." method="_on_button_mouse_exited"]

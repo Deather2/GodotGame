@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://i3f2fkc6gvdo"]
+[gd_scene load_steps=17 format=3 uid="uid://i3f2fkc6gvdo"]
 
 [ext_resource type="Script" uid="uid://3ap22gt4fg27" path="res://Assets/Scripts/MainMenu.gd" id="1_fadmi"]
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_x6jn2"]
@@ -202,15 +202,11 @@ content_margin_top = 8.0
 content_margin_right = 16.0
 content_margin_bottom = 8.0
 texture = ExtResource("5_fadmi")
-region_rect = Rect2(320.7649, 99.79722, 90.51404, 27.40152)
+region_rect = Rect2(417.83246, 100.71987, 90.39563, 26.478867)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hxcs8"]
 texture = ExtResource("5_fadmi")
-region_rect = Rect2(417.88293, 100.68405, 89.69479, 26.605736)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6qsvb"]
-texture = ExtResource("5_fadmi")
-region_rect = Rect2(417.58148, 100.874954, 90.58624, 26.069885)
+region_rect = Rect2(320.81204, 99.820404, 90.491455, 27.469383)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6qsvb"]
 
@@ -315,59 +311,146 @@ grow_vertical = 2
 theme_override_constants/separation = 30
 
 [node name="Start" type="Button" parent="MenuContainer"]
+custom_minimum_size = Vector2(194, 48)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
-theme_override_fonts/font = ExtResource("4_6qsvb")
-theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hxcs8")
-theme_override_styles/hover = SubResource("StyleBoxTexture_6qsvb")
+theme_override_styles/hover = SubResource("StyleBoxTexture_hxcs8")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6qsvb")
+
+[node name="Label" type="Label" parent="MenuContainer/Start"]
+custom_minimum_size = Vector2(194, 48)
+layout_mode = 0
+offset_top = -1.0
+offset_right = 194.0
+offset_bottom = 47.0
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4_6qsvb")
+theme_override_font_sizes/font_size = 32
 text = "Spēlēt"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Shop" type="Button" parent="MenuContainer"]
+custom_minimum_size = Vector2(194, 48)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
-theme_override_fonts/font = ExtResource("4_6qsvb")
-theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hxcs8")
-theme_override_styles/hover = SubResource("StyleBoxTexture_6qsvb")
+theme_override_styles/hover = SubResource("StyleBoxTexture_hxcs8")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6qsvb")
+
+[node name="Label" type="Label" parent="MenuContainer/Shop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4_6qsvb")
+theme_override_font_sizes/font_size = 32
 text = "Veikals"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Locker" type="Button" parent="MenuContainer"]
+custom_minimum_size = Vector2(194, 48)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
-theme_override_fonts/font = ExtResource("4_6qsvb")
-theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hxcs8")
-theme_override_styles/hover = SubResource("StyleBoxTexture_6qsvb")
+theme_override_styles/hover = SubResource("StyleBoxTexture_hxcs8")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6qsvb")
+
+[node name="Label" type="Label" parent="MenuContainer/Locker"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4_6qsvb")
+theme_override_font_sizes/font_size = 32
 text = "Skapis"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Settings" type="Button" parent="MenuContainer"]
+custom_minimum_size = Vector2(194, 48)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
-theme_override_fonts/font = ExtResource("4_6qsvb")
-theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hxcs8")
-theme_override_styles/hover = SubResource("StyleBoxTexture_6qsvb")
+theme_override_styles/hover = SubResource("StyleBoxTexture_hxcs8")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6qsvb")
+
+[node name="Label" type="Label" parent="MenuContainer/Settings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4_6qsvb")
+theme_override_font_sizes/font_size = 32
 text = "Iestatījumi"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Quit" type="Button" parent="MenuContainer"]
+custom_minimum_size = Vector2(194, 48)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
-theme_override_fonts/font = ExtResource("4_6qsvb")
-theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hxcs8")
-theme_override_styles/hover = SubResource("StyleBoxTexture_6qsvb")
+theme_override_styles/hover = SubResource("StyleBoxTexture_hxcs8")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6qsvb")
+
+[node name="Label" type="Label" parent="MenuContainer/Quit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4_6qsvb")
+theme_override_font_sizes/font_size = 32
 text = "Iziet"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="mouse_entered" from="MenuContainer/Start" to="." method="_on_menu_button_mouse_entered"]
 [connection signal="mouse_exited" from="MenuContainer/Start" to="." method="_on_menu_button_mouse_exited"]
