@@ -26,7 +26,7 @@ func set_selected_character(index: int) -> void:
 
 func _save_selected_character() -> void:
 	var cfg := ConfigFile.new()
-	cfg.load(PROGRESS_PATH) # если файла нет — ок
+	cfg.load(PROGRESS_PATH) 
 	cfg.set_value(PLAYER_SECTION, "selected_character_index", selected_character_index)
 	cfg.save(PROGRESS_PATH)
 

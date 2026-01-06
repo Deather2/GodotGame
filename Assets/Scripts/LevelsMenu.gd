@@ -6,6 +6,8 @@ var page: int = 0
 var animating: bool = false
 var current_container: Control
 
+var confirm_animating: bool = false
+
 @export var level_button_scene: PackedScene
 @export var level_previews: Array[Texture2D] = []
 
@@ -21,6 +23,7 @@ var current_container: Control
 @onready var confirm_yes: Button = $ConfirmReset/Panel/VBoxContainer/Buttons/YesButton
 @onready var confirm_no: Button = $ConfirmReset/Panel/VBoxContainer/Buttons/NoButton
 
+
 func _ready() -> void:
 	current_container = $PagesHolder/LevelsContainer
 
@@ -29,23 +32,29 @@ func _ready() -> void:
 	prev_page.pressed.connect(_on_prev_page)
 	next_page.pressed.connect(_on_next_page)
 
-	# Confirm buttons (connect once)
 	confirm_yes.pressed.connect(_on_reset_confirmed)
 	confirm_no.pressed.connect(_on_reset_canceled)
 
 	# start hidden
 	dim.visible = false
+	dim.modulate.a = 0.0
+
 	confirm_reset.visible = false
+	confirm_reset.modulate.a = 0.0
+	confirm_reset.scale = Vector2(0.9, 0.9)
 
 	_build_grid()
 	reset_btn.visible = GameState.has_any_progress()
 
+
 func _page_count() -> int:
 	return int(ceil(float(GameState.LEVEL_COUNT) / float(PER_PAGE)))
+
 
 func _update_arrows_for(p: int) -> void:
 	prev_page.visible = p > 0
 	next_page.visible = p < _page_count() - 1
+
 
 func _build_grid() -> void:
 	var grid: GridContainer = current_container.get_node("GridContainer") as GridContainer
@@ -77,27 +86,89 @@ func _build_grid() -> void:
 
 	_update_arrows_for(page)
 
+
 func _on_level_pressed(i: int) -> void:
 	print("level pressed:", i)
 
-func _on_back_pressed() -> void:
-	SceneManager.goto_main_menu()
 
-func _on_reset_pressed() -> void:
+func _on_back_pressed() -> void:
+	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
+
+
+# ---------------- Confirm dialog (code animation) ----------------
+
+func _show_confirm() -> void:
+	if confirm_animating:
+		return
+	confirm_animating = true
+
+	# block clicks behind
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	confirm_reset.mouse_filter = Control.MOUSE_FILTER_STOP
+
 	dim.visible = true
 	confirm_reset.visible = true
 
-func _on_reset_confirmed() -> void:
-	dim.visible = false
+	# start state
+	dim.modulate.a = 0.0
+	confirm_reset.modulate.a = 0.0
+	confirm_reset.scale = Vector2(0.1, 0.1)
+
+	var t := create_tween()
+	t.set_trans(Tween.TRANS_QUAD)
+	t.set_ease(Tween.EASE_OUT)
+
+	t.tween_property(dim, "modulate:a", 0.55, 0.35)
+	t.parallel().tween_property(confirm_reset, "modulate:a", 1.0, 0.35)
+	t.parallel().tween_property(confirm_reset, "scale", Vector2(1.0, 1.0), 0.35)
+
+	await t.finished
+	confirm_animating = false
+
+
+func _hide_confirm() -> void:
+	if confirm_animating:
+		return
+	confirm_animating = true
+
+	var t := create_tween()
+	t.set_trans(Tween.TRANS_QUAD)
+	t.set_ease(Tween.EASE_IN)
+
+	t.tween_property(confirm_reset, "modulate:a", 0.0, 0.3)
+	t.parallel().tween_property(confirm_reset, "scale", Vector2(0.9, 0.9), 0.3)
+	t.parallel().tween_property(dim, "modulate:a", 0.0, 0.3)
+
+	await t.finished
+
 	confirm_reset.visible = false
+	dim.visible = false
+
+	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	confirm_reset.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	confirm_animating = false
+
+
+# ---------------- Reset flow ----------------
+
+func _on_reset_pressed() -> void:
+	await _show_confirm()
+
+
+func _on_reset_confirmed() -> void:
+	await _hide_confirm()
 	GameState.reset_all_progress_keep_settings()
 	page = 0
 	_build_grid()
 	reset_btn.visible = GameState.has_any_progress()
 
+
 func _on_reset_canceled() -> void:
-	dim.visible = false
-	confirm_reset.visible = false
+	await _hide_confirm()
+
+
+# ---------------- Paging ----------------
 
 func _on_button_mouse_entered() -> void:
 	Cursor.set_hover()

@@ -90,4 +90,4 @@ func _on_button_mouse_exited() -> void:
 
 
 func _on_back_pressed() -> void:
-	SceneManager.goto_main_menu()
+	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)

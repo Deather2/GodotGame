@@ -289,7 +289,6 @@ shape = SubResource("CapsuleShape2D_hxcs8")
 position = Vector2(72, 432)
 
 [node name="MenuCharacter" type="AnimatedSprite2D" parent="World2D/MenuBody/StandPoint"]
-z_index = 10
 scale = Vector2(3, 3)
 sprite_frames = ExtResource("9_pd3f2")
 animation = &"idle"
