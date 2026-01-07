@@ -11,8 +11,16 @@ var characters: Array[Texture2D] = []
 @onready var story_label: Label = $Background/StoryBox/Story
 @onready var info_label: Label = $Background/InfoLabel
 
+# NEW: info button + bubble
+@onready var info_button: Button = $Background/InfoButton
+@onready var info_bubble: Control = $Background/InfoBubble
+@onready var info_bubble_text: Label = $Background/InfoBubble/Text
 
 var current_index: int = 0
+
+# NEW
+var info_pinned: bool = false
+
 
 func _ready() -> void:
 	Cursor.set_normal()
@@ -25,6 +33,10 @@ func _ready() -> void:
 
 	current_index = clamp(GameState.selected_character_index, 0, characters.size() - 1)
 	_update_character()
+
+	# NEW: setup info bubble
+	info_bubble.visible = false
+	info_bubble_text.text = "Tēla izskats neietekmē spēles gaitu, grūtību vai spējas. Tas ir tikai vizuāls noformējums — izvēlies to, kas patīk!"
 
 
 func _update_character() -> void:
@@ -55,7 +67,6 @@ func _update_select_button() -> void:
 	left_button.visible = true
 	right_button.visible = true
 	select_button.visible = current_index != GameState.selected_character_index
-
 
 
 func _on_left_button_pressed() -> void:
@@ -91,3 +102,37 @@ func _on_button_mouse_exited() -> void:
 
 func _on_back_pressed() -> void:
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
+
+
+# =========================
+# NEW: InfoButton handlers
+# =========================
+
+func _on_info_button_mouse_entered() -> void:
+	Cursor.set_hover()
+	info_bubble.visible = true
+
+func _on_info_button_mouse_exited() -> void:
+	Cursor.set_normal()
+	if !info_pinned:
+		info_bubble.visible = false
+
+func _on_info_button_pressed() -> void:
+	info_pinned = !info_pinned
+	info_bubble.visible = info_pinned or info_button.is_hovered()
+
+func _input(event: InputEvent) -> void:
+	if !info_pinned:
+		return
+
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
+			var p: Vector2 = mb.position
+
+			var on_button := info_button.get_global_rect().has_point(p)
+			var on_bubble := info_bubble.get_global_rect().has_point(p)
+
+			if !on_button and !on_bubble:
+				info_pinned = false
+				info_bubble.visible = false

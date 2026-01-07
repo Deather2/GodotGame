@@ -86,10 +86,9 @@ func _build_grid() -> void:
 
 	_update_arrows_for(page)
 
-
+#ZDESJ SDELATJ
 func _on_level_pressed(i: int) -> void:
 	print("level pressed:", i)
-
 
 func _on_back_pressed() -> void:
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)

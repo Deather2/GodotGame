@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://brs4xwnhiytl"]
+[gd_scene load_steps=17 format=3 uid="uid://brs4xwnhiytl"]
 
 [ext_resource type="Texture2D" uid="uid://cvgl420rq54qg" path="res://Assets/ui/locker_back.tres" id="1_53tuw"]
 [ext_resource type="Script" uid="uid://j1yooegh3ii6" path="res://Assets/Scripts/locker.gd" id="1_vtrg8"]
@@ -28,6 +28,22 @@ region_rect = Rect2(592.9966, 529.89417, 14.042114, 13.244629)
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xt3uu"]
 texture = ExtResource("6_d76on")
 region_rect = Rect2(376.78802, 759.9652, 17.360992, 14.315247)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hrioe"]
+texture = ExtResource("6_d76on")
+region_rect = Rect2(577, 545, 14, 14)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_18i1l"]
+texture = ExtResource("6_d76on")
+region_rect = Rect2(593, 546, 14, 13)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ferge"]
+bg_color = Color(0.0627451, 0.07450981, 0.101960786, 0.92156863)
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.16470589, 0.2, 0.26666668, 1)
+shadow_size = 2
 
 [node name="Wardrobe" type="Control"]
 layout_mode = 3
@@ -172,9 +188,9 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -177.0
+offset_left = -279.0
 offset_top = 75.0
-offset_right = -113.0
+offset_right = -215.0
 offset_bottom = 139.0
 grow_horizontal = 0
 focus_mode = 0
@@ -327,6 +343,47 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
+[node name="InfoButton" type="Button" parent="Background"]
+layout_mode = 1
+offset_left = 215.0
+offset_top = 75.0
+offset_right = 279.0
+offset_bottom = 139.0
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_hrioe")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_18i1l")
+theme_override_styles/hover = SubResource("StyleBoxTexture_hrioe")
+
+[node name="InfoBubble" type="Panel" parent="Background"]
+visible = false
+layout_mode = 0
+offset_left = 271.0
+offset_top = 129.0
+offset_right = 671.0
+offset_bottom = 279.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ferge")
+
+[node name="Text" type="Label" parent="Background/InfoBubble"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_6aab2")
+theme_override_font_sizes/font_size = 24
+text = "Tēla izskats neietekmē spēles grūtību vai spējas. Tas ir tikai vizuāls noformējums — izvēlies to, kas patīk!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
 [connection signal="mouse_entered" from="Background/LeftButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Background/LeftButton" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Background/LeftButton" to="." method="_on_left_button_pressed"]
@@ -339,3 +396,8 @@ autowrap_mode = 3
 [connection signal="mouse_entered" from="Background/SelectButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Background/SelectButton" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Background/SelectButton" to="." method="_on_select_button_pressed"]
+[connection signal="mouse_entered" from="Background/InfoButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="Background/InfoButton" to="." method="_on_info_button_mouse_entered"]
+[connection signal="mouse_exited" from="Background/InfoButton" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_exited" from="Background/InfoButton" to="." method="_on_info_button_mouse_exited"]
+[connection signal="pressed" from="Background/InfoButton" to="." method="_on_info_button_pressed"]
