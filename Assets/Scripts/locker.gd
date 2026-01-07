@@ -11,14 +11,12 @@ var characters: Array[Texture2D] = []
 @onready var story_label: Label = $Background/StoryBox/Story
 @onready var info_label: Label = $Background/InfoLabel
 
-# NEW: info button + bubble
 @onready var info_button: Button = $Background/InfoButton
 @onready var info_bubble: Control = $Background/InfoBubble
 @onready var info_bubble_text: Label = $Background/InfoBubble/Text
 
 var current_index: int = 0
 
-# NEW
 var info_pinned: bool = false
 
 
@@ -34,7 +32,6 @@ func _ready() -> void:
 	current_index = clamp(GameState.selected_character_index, 0, characters.size() - 1)
 	_update_character()
 
-	# NEW: setup info bubble
 	info_bubble.visible = false
 	info_bubble_text.text = "Tēla izskats neietekmē spēles gaitu, grūtību vai spējas. Tas ir tikai vizuāls noformējums — izvēlies to, kas patīk!"
 

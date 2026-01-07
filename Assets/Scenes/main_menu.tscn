@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="5_fadmi"]
 [ext_resource type="Texture2D" uid="uid://coh4xlti3qpdf" path="res://Assets/tilesets/oak_woods_tileset.png" id="6_shbfh"]
 [ext_resource type="Script" uid="uid://b85gboidk5du0" path="res://Assets/Scripts/MenuBody.gd" id="8_xkmpe"]
-[ext_resource type="SpriteFrames" uid="uid://dxu0k46qid04c" path="res://Assets/Animations/idle_0.tres" id="9_pd3f2"]
+[ext_resource type="SpriteFrames" uid="uid://dxu0k46qid04c" path="res://Assets/Animations/Char0.tres" id="9_pd3f2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hxcs8"]
 texture = ExtResource("6_shbfh")
@@ -286,9 +286,10 @@ position = Vector2(72, 390)
 shape = SubResource("CapsuleShape2D_hxcs8")
 
 [node name="StandPoint" type="Marker2D" parent="World2D/MenuBody"]
-position = Vector2(72, 432)
+position = Vector2(72, 435)
 
 [node name="MenuCharacter" type="AnimatedSprite2D" parent="World2D/MenuBody/StandPoint"]
+position = Vector2(0, -48)
 scale = Vector2(3, 3)
 sprite_frames = ExtResource("9_pd3f2")
 animation = &"idle"

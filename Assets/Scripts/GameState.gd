@@ -1,6 +1,7 @@
 extends Node
 
-# 2 файла:
+signal selected_character_changed(new_index: int)
+
 const SETTINGS_PATH := "user://settings.cfg"
 const PROGRESS_PATH := "user://progress.cfg"
 
@@ -15,24 +16,27 @@ var stars_per_level: Array[int] = []
 func _ready() -> void:
 	_load_selected_character()
 	_load_level_progress()
-	print(OS.get_user_data_dir())
 
 # --------------------------
-# Персонаж (это прогресс -> progress.cfg)
+# Персонаж (progress.cfg)
 # --------------------------
 func set_selected_character(index: int) -> void:
+	if index == selected_character_index:
+		return
+
 	selected_character_index = index
 	_save_selected_character()
+	emit_signal("selected_character_changed", selected_character_index)
 
 func _save_selected_character() -> void:
-	var cfg := ConfigFile.new()
-	cfg.load(PROGRESS_PATH) 
+	var cfg: ConfigFile = ConfigFile.new()
+	cfg.load(PROGRESS_PATH)
 	cfg.set_value(PLAYER_SECTION, "selected_character_index", selected_character_index)
 	cfg.save(PROGRESS_PATH)
 
 func _load_selected_character() -> void:
-	var cfg := ConfigFile.new()
-	var err := cfg.load(PROGRESS_PATH)
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: int = cfg.load(PROGRESS_PATH)
 	if err == OK:
 		selected_character_index = int(cfg.get_value(PLAYER_SECTION, "selected_character_index", 0))
 	else:
@@ -47,14 +51,14 @@ func _init_default_progress() -> void:
 		stars_per_level[i] = 0
 
 func _save_level_progress() -> void:
-	var cfg := ConfigFile.new()
-	cfg.load(PROGRESS_PATH) 
+	var cfg: ConfigFile = ConfigFile.new()
+	cfg.load(PROGRESS_PATH)
 	cfg.set_value(PROGRESS_SECTION, "stars_per_level", stars_per_level)
 	cfg.save(PROGRESS_PATH)
 
 func _load_level_progress() -> void:
-	var cfg := ConfigFile.new()
-	var err := cfg.load(PROGRESS_PATH)
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: int = cfg.load(PROGRESS_PATH)
 	if err != OK:
 		_init_default_progress()
 		return
@@ -96,6 +100,7 @@ func reset_all_progress_keep_settings() -> void:
 	selected_character_index = 0
 	_save_level_progress()
 	_save_selected_character()
+	emit_signal("selected_character_changed", selected_character_index)
 
 func has_any_progress() -> bool:
 	if selected_character_index != 0:

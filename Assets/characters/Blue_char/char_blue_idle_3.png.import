@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nyceyg645nnt"
-path="res://.godot/imported/char_blue.png-8260d42901a5d911ad040337ec16e1d0.ctex"
+uid="uid://cmtyae7es3lim"
+path="res://.godot/imported/char_blue_idle_3.png-724a22f825d0ff1957b1e58c4ffe50cf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/characters/char_blue.png"
-dest_files=["res://.godot/imported/char_blue.png-8260d42901a5d911ad040337ec16e1d0.ctex"]
+source_file="res://Assets/characters/Blue_char/char_blue_idle_3.png"
+dest_files=["res://.godot/imported/char_blue_idle_3.png-724a22f825d0ff1957b1e58c4ffe50cf.ctex"]
 
 [params]
 
