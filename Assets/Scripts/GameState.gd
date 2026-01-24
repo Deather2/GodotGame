@@ -1,6 +1,8 @@
 extends Node
 
 signal selected_character_changed(new_index: int)
+signal unlocks_changed
+signal stars_spent_changed
 
 const SETTINGS_PATH := "user://settings.cfg"
 const PROGRESS_PATH := "user://progress.cfg"
@@ -13,13 +15,15 @@ const LEVEL_COUNT := 13
 var selected_character_index: int = 0
 var stars_per_level: Array[int] = []
 
+var unlocked_characters: Array[int] = []
+var stars_spent: int = 0
+
+
 func _ready() -> void:
 	_load_selected_character()
 	_load_level_progress()
+	_load_shop_progress()
 
-# --------------------------
-# Персонаж (progress.cfg)
-# --------------------------
 func set_selected_character(index: int) -> void:
 	if index == selected_character_index:
 		return
@@ -42,9 +46,6 @@ func _load_selected_character() -> void:
 	else:
 		selected_character_index = 0
 
-# --------------------------
-# Прогресс уровней (progress.cfg)
-# --------------------------
 func _init_default_progress() -> void:
 	stars_per_level.resize(LEVEL_COUNT)
 	for i in range(LEVEL_COUNT):
@@ -95,17 +96,99 @@ func set_level_stars(level_index: int, stars: int) -> void:
 	stars_per_level[level_index] = max(stars_per_level[level_index], stars)
 	_save_level_progress()
 
+
+func _init_default_shop() -> void:
+	unlocked_characters = [0] 
+	stars_spent = 0
+
+func _save_shop_progress() -> void:
+	var cfg: ConfigFile = ConfigFile.new()
+	cfg.load(PROGRESS_PATH)
+	cfg.set_value(PROGRESS_SECTION, "unlocked_characters", unlocked_characters)
+	cfg.set_value(PROGRESS_SECTION, "stars_spent", stars_spent)
+	cfg.save(PROGRESS_PATH)
+
+func _load_shop_progress() -> void:
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: int = cfg.load(PROGRESS_PATH)
+	if err != OK:
+		_init_default_shop()
+		_save_shop_progress()
+		return
+
+	var unlocked: Variant = cfg.get_value(PROGRESS_SECTION, "unlocked_characters", null)
+	if unlocked is Array:
+		unlocked_characters.clear()
+		for v in (unlocked as Array):
+			unlocked_characters.append(int(v))
+	else:
+		unlocked_characters = [0]
+
+	if not unlocked_characters.has(0):
+		unlocked_characters.insert(0, 0)
+
+	stars_spent = int(cfg.get_value(PROGRESS_SECTION, "stars_spent", 0))
+	if stars_spent < 0:
+		stars_spent = 0
+
+func is_character_unlocked(id: int) -> bool:
+	return unlocked_characters.has(id)
+
+func unlock_character(id: int) -> void:
+	if id < 0:
+		return
+	if unlocked_characters.has(id):
+		return
+	unlocked_characters.append(id)
+	_save_shop_progress()
+	emit_signal("unlocks_changed")
+
+func get_total_stars() -> int:
+	var sum := 0
+	for s in stars_per_level:
+		sum += int(s)
+	return sum
+
+func get_available_stars() -> int:
+	return max(get_total_stars() - stars_spent, 0)
+
+func can_afford(price: int) -> bool:
+	return get_available_stars() >= price
+
+func spend_stars(price: int) -> bool:
+	if price <= 0:
+		return true
+	if not can_afford(price):
+		return false
+	stars_spent += price
+	_save_shop_progress()
+	emit_signal("stars_spent_changed")
+	return true
+
 func reset_all_progress_keep_settings() -> void:
 	_init_default_progress()
 	selected_character_index = 0
+	_init_default_shop()
+
 	_save_level_progress()
 	_save_selected_character()
+	_save_shop_progress()
+
 	emit_signal("selected_character_changed", selected_character_index)
+	emit_signal("unlocks_changed")
+	emit_signal("stars_spent_changed")
 
 func has_any_progress() -> bool:
 	if selected_character_index != 0:
 		return true
+
 	for s in stars_per_level:
 		if s > 0:
 			return true
+
+	if stars_spent > 0:
+		return true
+	if unlocked_characters.size() > 1:
+		return true
+
 	return false

@@ -15,7 +15,8 @@ var characters: Array[Texture2D] = []
 @onready var info_bubble: Control = $Background/InfoBubble
 @onready var info_bubble_text: Label = $Background/InfoBubble/Text
 
-var current_index: int = 0
+var unlocked_ids: Array[int] = []
+var current_pos: int = 0 
 
 var info_pinned: bool = false
 
@@ -29,31 +30,72 @@ func _ready() -> void:
 	if characters.is_empty():
 		return
 
-	current_index = clamp(GameState.selected_character_index, 0, characters.size() - 1)
+	_rebuild_unlocked_list()
+
+	if not unlocked_ids.has(GameState.selected_character_index):
+		GameState.set_selected_character(0)
+
+	current_pos = unlocked_ids.find(GameState.selected_character_index)
+	if current_pos == -1:
+		current_pos = 0
+
 	_update_character()
 
 	info_bubble.visible = false
 	info_bubble_text.text = "Tēla izskats neietekmē spēles gaitu, grūtību vai spējas. Tas ir tikai vizuāls noformējums — izvēlies to, kas patīk!"
 
+	if GameState.has_signal("unlocks_changed"):
+		GameState.connect("unlocks_changed", Callable(self, "_on_unlocks_changed"))
+
+
+func _on_unlocks_changed() -> void:
+	var current_id := _get_current_id()
+
+	_rebuild_unlocked_list()
+
+	if unlocked_ids.has(current_id):
+		current_pos = unlocked_ids.find(current_id)
+	else:
+		current_pos = 0
+
+	_update_character()
+
+
+func _rebuild_unlocked_list() -> void:
+	unlocked_ids.clear()
+
+	for id in GameState.unlocked_characters:
+		var i := int(id)
+		if i >= 0 and i < characters.size():
+			if not unlocked_ids.has(i):
+				unlocked_ids.append(i)
+
+	if not unlocked_ids.has(0):
+		unlocked_ids.insert(0, 0)
+
+	unlocked_ids.sort()
+
+
+func _get_current_id() -> int:
+	if unlocked_ids.is_empty():
+		return 0
+	return unlocked_ids[current_pos]
+
 
 func _update_character() -> void:
-	character_sprite.texture = characters[current_index]
+	var id := _get_current_id()
+
+	character_sprite.texture = characters[id]
 	_update_select_button()
 
 	if db != null:
-		if current_index < db.names.size():
-			name_label.text = db.names[current_index]
-		else:
-			name_label.text = ""
+		name_label.text = db.names[id] if id < db.names.size() else ""
+		story_label.text = db.stories[id] if id < db.stories.size() else ""
 
-		if current_index < db.stories.size():
-			story_label.text = db.stories[current_index]
-		else:
-			story_label.text = ""
 
 
 func _update_select_button() -> void:
-	if characters.size() <= 1:
+	if unlocked_ids.size() <= 1:
 		select_button.visible = false
 		left_button.visible = false
 		right_button.visible = false
@@ -63,29 +105,32 @@ func _update_select_button() -> void:
 	info_label.visible = false
 	left_button.visible = true
 	right_button.visible = true
-	select_button.visible = current_index != GameState.selected_character_index
+
+	var id := _get_current_id()
+	select_button.visible = id != GameState.selected_character_index
 
 
 func _on_left_button_pressed() -> void:
-	if characters.size() <= 1:
+	if unlocked_ids.size() <= 1:
 		print("Jums pagaidām ir atbloķēts tikai viens tēls.")
 		return
 
-	current_index = (current_index - 1 + characters.size()) % characters.size()
+	current_pos = (current_pos - 1 + unlocked_ids.size()) % unlocked_ids.size()
 	_update_character()
 
 
 func _on_right_button_pressed() -> void:
-	if characters.size() <= 1:
+	if unlocked_ids.size() <= 1:
 		print("Jums pagaidām ir atbloķēts tikai viens tēls.")
 		return
 
-	current_index = (current_index + 1) % characters.size()
+	current_pos = (current_pos + 1) % unlocked_ids.size()
 	_update_character()
 
 
 func _on_select_button_pressed() -> void:
-	GameState.set_selected_character(current_index)
+	var id := _get_current_id()
+	GameState.set_selected_character(id)
 	_update_select_button()
 
 
@@ -99,11 +144,6 @@ func _on_button_mouse_exited() -> void:
 
 func _on_back_pressed() -> void:
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
-
-
-# =========================
-# NEW: InfoButton handlers
-# =========================
 
 func _on_info_button_mouse_entered() -> void:
 	Cursor.set_hover()

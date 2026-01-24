@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://drrwoo1060smv"]
+
+[ext_resource type="Script" uid="uid://kojinywpwe1t" path="res://Assets/Scripts/ShopCard.gd" id="1_7mcja"]
+
+[node name="ShopCard" type="Button"]
+script = ExtResource("1_7mcja")
+
+[node name="Preview" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PriceLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

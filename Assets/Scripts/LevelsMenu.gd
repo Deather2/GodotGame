@@ -35,7 +35,6 @@ func _ready() -> void:
 	confirm_yes.pressed.connect(_on_reset_confirmed)
 	confirm_no.pressed.connect(_on_reset_canceled)
 
-	# start hidden
 	dim.visible = false
 	dim.modulate.a = 0.0
 
@@ -93,22 +92,17 @@ func _on_level_pressed(i: int) -> void:
 func _on_back_pressed() -> void:
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
 
-
-# ---------------- Confirm dialog (code animation) ----------------
-
 func _show_confirm() -> void:
 	if confirm_animating:
 		return
 	confirm_animating = true
 
-	# block clicks behind
 	dim.mouse_filter = Control.MOUSE_FILTER_STOP
 	confirm_reset.mouse_filter = Control.MOUSE_FILTER_STOP
 
 	dim.visible = true
 	confirm_reset.visible = true
 
-	# start state
 	dim.modulate.a = 0.0
 	confirm_reset.modulate.a = 0.0
 	confirm_reset.scale = Vector2(0.1, 0.1)
@@ -148,9 +142,6 @@ func _hide_confirm() -> void:
 
 	confirm_animating = false
 
-
-# ---------------- Reset flow ----------------
-
 func _on_reset_pressed() -> void:
 	await _show_confirm()
 
@@ -165,9 +156,6 @@ func _on_reset_confirmed() -> void:
 
 func _on_reset_canceled() -> void:
 	await _hide_confirm()
-
-
-# ---------------- Paging ----------------
 
 func _on_button_mouse_entered() -> void:
 	Cursor.set_hover()
