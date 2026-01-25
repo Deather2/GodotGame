@@ -5,8 +5,10 @@ extends Control
 @export var prices: Array[int] = []
 
 @onready var stars_count: Label = $Background/StarsUI/StarsCount
+@onready var top_star_icon: TextureRect = $Background/StarsUI/StarBox/StarIcon
+
 @onready var back_button: Button = $Background/BackButton
-@onready var grid: GridContainer = $Background/Grid
+@onready var grid: GridContainer = $Background/GridCenter/Grid
 
 @onready var details_popup: Control = $Background/DetailsPopup
 @onready var details_sprite: TextureRect = $Background/DetailsPopup/Panel/CharacterSprite
@@ -26,11 +28,14 @@ extends Control
 var current_id: int = 0
 var pending_buy_id: int = -1
 
+const OWNED_TEXT := "Ir nopirkts"
+
 
 func _ready() -> void:
 	if db == null or card_scene == null:
 		return
 
+	# Подгоняем prices под кол-во персонажей
 	if prices.size() < db.textures.size():
 		var old := prices.duplicate()
 		prices.resize(db.textures.size())
@@ -41,6 +46,7 @@ func _ready() -> void:
 	_refresh_top()
 
 	back_button.pressed.connect(_on_back_pressed)
+
 	close_button.pressed.connect(_close_details)
 	left_arrow.pressed.connect(_prev_character)
 	right_arrow.pressed.connect(_next_character)
@@ -73,19 +79,21 @@ func _build_grid() -> void:
 	for c in grid.get_children():
 		c.queue_free()
 
+	var star_tex: Texture2D = top_star_icon.texture
+
 	for id in range(db.textures.size()):
 		var card := card_scene.instantiate() as ShopCard
 		grid.add_child(card)
 
-		card.setup(id, db.textures[id], _card_text(id))
+		card.setup(id, db.textures[id], _card_text(id), star_tex)
 		card.card_pressed.connect(_open_details)
 
 
 func _card_text(id: int) -> String:
 	if GameState.is_character_unlocked(id):
-		return "KUPLENO"
+		return OWNED_TEXT
 	var price := prices[id] if id < prices.size() else 0
-	return str(price) + " ★"
+	return str(price)
 
 
 func _open_details(id: int) -> void:
@@ -101,31 +109,27 @@ func _show_details(id: int) -> void:
 	details_story.text = db.stories[id] if id < db.stories.size() else ""
 
 	if GameState.is_character_unlocked(id):
-		details_status.text = "KUPLENO"
+		details_status.text = OWNED_TEXT
 		buy_button.disabled = true
 	else:
 		var price := prices[id] if id < prices.size() else 0
 		details_status.text = str(price) + " ★"
 		buy_button.disabled = not GameState.can_afford(price)
 
-
 func _close_details() -> void:
 	details_popup.visible = false
 	confirm_popup.visible = false
 	pending_buy_id = -1
-
 
 func _prev_character() -> void:
 	var count := db.textures.size()
 	current_id = (current_id - 1 + count) % count
 	_show_details(current_id)
 
-
 func _next_character() -> void:
 	var count := db.textures.size()
 	current_id = (current_id + 1) % count
 	_show_details(current_id)
-
 
 func _on_buy_pressed() -> void:
 	if GameState.is_character_unlocked(current_id):
@@ -138,7 +142,6 @@ func _on_buy_pressed() -> void:
 	pending_buy_id = current_id
 	confirm_label.text = "Pirkt par " + str(price) + " ★ ?"
 	confirm_popup.visible = true
-
 
 func _confirm_yes() -> void:
 	if pending_buy_id == -1:
@@ -157,11 +160,15 @@ func _confirm_yes() -> void:
 	_build_grid()
 	_refresh_top()
 
-
 func _confirm_no() -> void:
 	pending_buy_id = -1
 	confirm_popup.visible = false
 
-
 func _on_back_pressed() -> void:
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
+
+func _on_button_mouse_entered() -> void:
+	Cursor.set_hover()
+
+func _on_button_mouse_exited() -> void:
+	Cursor.set_normal()

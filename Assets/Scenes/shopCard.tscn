@@ -1,16 +1,83 @@
-[gd_scene load_steps=2 format=3 uid="uid://drrwoo1060smv"]
+[gd_scene load_steps=5 format=3 uid="uid://drrwoo1060smv"]
 
 [ext_resource type="Script" uid="uid://kojinywpwe1t" path="res://Assets/Scripts/ShopCard.gd" id="1_7mcja"]
+[ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_aa7hu"]
+[ext_resource type="Texture2D" uid="uid://dyaj26n6q7ovb" path="res://Assets/Icons/Sprites/RPG_Stat_MP_Mana_Full_Star.png" id="3_7fhbm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7mcja"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.16862746, 0.101960786, 0.078431375, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.5529412, 0.3529412, 0.23137255, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [node name="ShopCard" type="Button"]
+custom_minimum_size = Vector2(120, 160)
+focus_mode = 0
+flat = true
 script = ExtResource("1_7mcja")
 
-[node name="Preview" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="BgPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7mcja")
 
-[node name="PriceLabel" type="Label" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+[node name="VBox" type="VBoxContainer" parent="BgPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -56.0
+offset_top = -72.5
+offset_right = 56.0
+offset_bottom = 72.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="Preview" type="TextureRect" parent="BgPanel/VBox"]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PriceUI" type="HBoxContainer" parent="BgPanel/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="PriceCount" type="Label" parent="BgPanel/VBox/PriceUI"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_aa7hu")
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+
+[node name="StarBox" type="AspectRatioContainer" parent="BgPanel/VBox/PriceUI"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+
+[node name="StarIcon" type="TextureRect" parent="BgPanel/VBox/PriceUI/StarBox"]
+layout_mode = 2
+texture = ExtResource("3_7fhbm")
+stretch_mode = 5

@@ -124,11 +124,6 @@ layout_mode = 2
 layout_mode = 2
 texture = ExtResource("8_dciiy")
 
-[node name="Grid" type="GridContainer" parent="Background"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
 [node name="DetailsPopup" type="Control" parent="Background"]
 anchors_preset = 0
 offset_right = 40.0
@@ -203,3 +198,21 @@ offset_bottom = 8.0
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
+
+[node name="GridCenter" type="CenterContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Grid" type="GridContainer" parent="Background/GridCenter"]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 4
+
+[connection signal="mouse_entered" from="Background/BackButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Background/BackButton" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Background/BackButton" to="." method="_on_back_pressed"]
