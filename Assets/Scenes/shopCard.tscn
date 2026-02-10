@@ -81,3 +81,6 @@ layout_mode = 2
 layout_mode = 2
 texture = ExtResource("3_7fhbm")
 stretch_mode = 5
+
+[connection signal="mouse_entered" from="." to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_button_mouse_exited"]

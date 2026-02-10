@@ -33,3 +33,9 @@ func setup(id: int, tex: Texture2D, text: String, star_tex: Texture2D) -> void:
 
 func _pressed() -> void:
 	emit_signal("card_pressed", character_id)
+
+func _on_button_mouse_entered() -> void:
+	Cursor.set_hover()
+	
+func _on_button_mouse_exited() -> void:
+	Cursor.set_normal()

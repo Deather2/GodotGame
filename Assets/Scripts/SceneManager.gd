@@ -85,7 +85,6 @@ func goto_settings(tr: int = Transition.FADE) -> void:
 	_go(SETTINGS, tr)
 
 func back() -> void:
-	# обычный “назад” если ты именно overlay-стеком пользуешься
 	if _busy:
 		return
 	_busy = true
@@ -101,19 +100,16 @@ func _go(path: String, tr: int) -> void:
 		return
 	_busy = true
 
-	# OVERLAY ВХОД (сверху поверх)
 	if tr == Transition.DROP_DOWN:
 		await _push_overlay_from_top(path)
 		_busy = false
 		return
 
-	# OVERLAY ВЫХОД (подгружаем ПОД текущую, потом текущая уезжает вверх)
 	if tr == Transition.DROP_UP:
 		await _back_load_under_and_slide_up(path)
 		_busy = false
 		return
 
-	# REPLACE (старая уезжает/фейд, и удаляется)
 	var packed: PackedScene = load(path) as PackedScene
 	var next: Node = packed.instantiate()
 	_stage.add_child(next)
@@ -143,13 +139,10 @@ func _go(path: String, tr: int) -> void:
 	_busy = false
 
 
-# ---------- OVERLAY (вход) ----------
-
 func _push_overlay_from_top(path: String) -> void:
 	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
 	_fade.modulate.a = 0.0
 
-	# на всякий случай
 	if _stack.is_empty() and _current != null and is_instance_valid(_current):
 		_stack.append(_current)
 
@@ -173,15 +166,11 @@ func _push_overlay_from_top(path: String) -> void:
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-# ---------- OVERLAY (выход) ----------
-
 func _back_load_under_and_slide_up(path: String) -> void:
-	# Если есть подложка в стеке — просто уезжаем верхом и открываем её
 	if _stack.size() >= 2:
 		await _pop_overlay_up()
 		return
 
-	# Иначе: создаём нужную сцену ПОД текущей, потом текущая уезжает вверх
 	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
 	_fade.modulate.a = 0.0
 
@@ -194,7 +183,6 @@ func _back_load_under_and_slide_up(path: String) -> void:
 	var under: Node = packed.instantiate()
 	_stage.add_child(under)
 
-	# ВАЖНО: вставляем under ПЕРЕД top, чтобы он был под ним
 	_stage.move_child(under, top.get_index())
 
 	under.visible = true
@@ -238,8 +226,6 @@ func _pop_overlay_up() -> void:
 
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-
-# ---------- REPLACE transitions ----------
 
 func _tr_fade(old: Node, next: Node) -> void:
 	next.visible = false

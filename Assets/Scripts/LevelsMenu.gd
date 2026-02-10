@@ -44,6 +44,8 @@ func _ready() -> void:
 
 	_build_grid()
 	reset_btn.visible = GameState.has_any_progress()
+	
+	GameState.set_level_stars(0, 3)
 
 
 func _page_count() -> int:
