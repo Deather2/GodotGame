@@ -44,8 +44,6 @@ func _ready() -> void:
 
 	_build_grid()
 	reset_btn.visible = GameState.has_any_progress()
-	
-	GameState.set_level_stars(0, 3)
 
 
 func _page_count() -> int:
@@ -87,9 +85,10 @@ func _build_grid() -> void:
 
 	_update_arrows_for(page)
 
-#ZDESJ SDELATJ
 func _on_level_pressed(i: int) -> void:
-	print("level pressed:", i)
+	if animating or confirm_animating:
+		return
+	SceneManager.goto_level(i, SceneManager.Transition.FADE)
 
 func _on_back_pressed() -> void:
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)

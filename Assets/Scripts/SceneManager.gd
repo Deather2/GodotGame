@@ -5,6 +5,7 @@ const LEVELS_MENU := "res://Assets/Scenes/levels_menu.tscn"
 const SHOP       := "res://Assets/Scenes/shop.tscn"
 const LOCKER     := "res://Assets/Scenes/locker.tscn"
 const SETTINGS   := "res://Assets/Scenes/settings.tscn"
+const LEVELS_DIR := "res://Assets/Scenes/Levels/"
 
 const SLIDE_DUR := 0.35
 const FADE_OUT_DUR := 0.45
@@ -83,6 +84,11 @@ func goto_locker(tr: int = Transition.FADE) -> void:
 
 func goto_settings(tr: int = Transition.FADE) -> void:
 	_go(SETTINGS, tr)
+	
+func goto_level(i: int, tr: int = Transition.FADE) -> void:
+	clear_stack_keep_top()
+	var path := "%sLevel_%d.tscn" % [LEVELS_DIR, i + 1]
+	_go(path, tr)
 
 func back() -> void:
 	if _busy:
@@ -270,3 +276,16 @@ func _set_pos(n: Node, p: Vector2) -> void:
 		n.set_position(p)
 	elif "position" in n:
 		n.position = p
+
+func clear_stack_keep_top() -> void:
+	if _stack.size() <= 1:
+		return
+
+	for idx in range(_stack.size() - 1):
+		var n: Node = _stack[idx]
+		if n != null and is_instance_valid(n):
+			n.queue_free()
+
+	var top := _stack[_stack.size() - 1]
+	_stack.clear()
+	_stack.append(top)
