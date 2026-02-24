@@ -64,3 +64,7 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		
 	move_and_slide()
+
+func die() -> void:
+	global_position = get_parent().get_node("SpawnPoint").global_position
+	velocity = Vector2.ZERO
