@@ -59,16 +59,18 @@ func _adopt_initial_scene() -> void:
 	if cs == null or cs == self:
 		return
 
-	if cs.get_parent() != null and cs.get_parent() != _stage:
+	if cs.get_parent() != null:
 		cs.get_parent().remove_child(cs)
 
-	_stage.add_child(cs)
-	_current = cs
-	_set_pos(_current, Vector2.ZERO)
+	if cs.scene_file_path.contains("/Levels/"):
+		get_tree().root.add_child(cs)
+	else:
+		_stage.add_child(cs)
+		_set_pos(cs, Vector2.ZERO)
 
+	_current = cs
 	_stack.clear()
 	_stack.append(_current)
-
 
 func goto_main_menu(tr: int = Transition.FADE) -> void:
 	_go(MAIN_MENU, tr)
@@ -118,7 +120,11 @@ func _go(path: String, tr: int) -> void:
 
 	var packed: PackedScene = load(path) as PackedScene
 	var next: Node = packed.instantiate()
-	_stage.add_child(next)
+
+	if path.contains("/Levels/"):
+		get_tree().root.add_child(next)
+	else:
+		_stage.add_child(next)
 
 	var size := get_viewport().get_visible_rect().size
 	var old := _current
@@ -137,7 +143,9 @@ func _go(path: String, tr: int) -> void:
 		old.queue_free()
 
 	_current = next
-	_set_pos(_current, Vector2.ZERO)
+
+	if not path.contains("/Levels/"):
+		_set_pos(_current, Vector2.ZERO)
 
 	_stack.clear()
 	_stack.append(_current)
@@ -235,7 +243,8 @@ func _pop_overlay_up() -> void:
 
 func _tr_fade(old: Node, next: Node) -> void:
 	next.visible = false
-	_set_pos(next, Vector2.ZERO)
+	if not next.scene_file_path.contains("/Levels/"):
+		_set_pos(next, Vector2.ZERO)
 
 	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
 	_fade.modulate.a = 0.0
