@@ -14,7 +14,9 @@ extends Control
 @onready var details_dim: ColorRect = $Background/DetailsPopup/Dim
 @onready var details_panel: Control = $Background/DetailsPopup/Panel
 
-@onready var details_sprite: TextureRect = $Background/DetailsPopup/Panel/CharacterSprite
+@onready var details_preview_center: Control = $Background/DetailsPopup/Panel/CharacterPreviewCenter
+@onready var details_preview_sprite: Sprite2D = $Background/DetailsPopup/Panel/CharacterPreviewCenter/CharacterPreviewSprite
+
 @onready var details_name: Label = $Background/DetailsPopup/Panel/Name
 @onready var details_story: Label = $Background/DetailsPopup/Panel/StoryBox/Story
 @onready var story_scroll: ScrollContainer = $Background/DetailsPopup/Panel/StoryBox
@@ -41,6 +43,10 @@ const POP_DUR := 0.6
 const DIM_ALPHA := 0.65
 const POP_FROM_SCALE := 0.1
 
+# details preview tuning
+const DETAILS_PREVIEW_TARGET_H := 180.0
+const DETAILS_PREVIEW_Y_BIAS := -20.0
+
 var _details_anim := false
 var _confirm_anim := false
 
@@ -58,12 +64,6 @@ func _ready() -> void:
 	_build_grid()
 	_refresh_top()
 
-	back_button.pressed.connect(_on_back_pressed)
-	close_button.pressed.connect(_close_details)
-	buy_button.pressed.connect(_on_buy_pressed)
-
-	yes_button.pressed.connect(_confirm_yes)
-	no_button.pressed.connect(_confirm_no)
 
 	if GameState.has_signal("unlocks_changed"):
 		GameState.connect("unlocks_changed", Callable(self, "_refresh_all"))
@@ -138,7 +138,9 @@ func _open_details(id: int) -> void:
 
 
 func _show_details(id: int) -> void:
-	details_sprite.texture = db.textures[id]
+	details_preview_sprite.texture = db.textures[id]
+	_apply_details_preview()
+
 	details_name.text = db.names[id] if id < db.names.size() else ""
 	details_story.text = db.stories[id] if id < db.stories.size() else ""
 
@@ -152,6 +154,26 @@ func _show_details(id: int) -> void:
 		_set_buy_button_state(BUY_TEXT + " (" + str(price) + " ★)", false)
 	else:
 		_set_buy_button_state(NOT_ENOUGH_TEXT, true)
+
+
+func _apply_details_preview() -> void:
+	call_deferred("_apply_details_preview_deferred")
+
+
+func _apply_details_preview_deferred() -> void:
+	if details_preview_center.size == Vector2.ZERO:
+		call_deferred("_apply_details_preview_deferred")
+		return
+
+	details_preview_sprite.centered = true
+	details_preview_sprite.position = details_preview_center.size * 0.5 + Vector2(0.0, DETAILS_PREVIEW_Y_BIAS)
+
+	var tex := details_preview_sprite.texture
+	if tex != null:
+		var k := (details_preview_center.size.y * 0.85) / 64.0
+		details_preview_sprite.scale = Vector2(k, k)
+	else:
+		details_preview_sprite.scale = Vector2.ONE
 
 
 func _set_buy_button_state(text_value: String, disabled_value: bool) -> void:

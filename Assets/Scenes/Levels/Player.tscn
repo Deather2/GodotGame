@@ -2,22 +2,24 @@
 
 [ext_resource type="Script" uid="uid://b5towj76s0dll" path="res://Assets/Scripts/player.gd" id="1_1iq5p"]
 [ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_mqbe8"]
-[ext_resource type="SpriteFrames" uid="uid://dxu0k46qid04c" path="res://Assets/Animations/Char0.tres" id="3_mqbe8"]
+[ext_resource type="SpriteFrames" uid="uid://doyekqs7quhfp" path="res://Assets/Animations/Char1.tres" id="3_mqbe8"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gv6bx"]
 radius = 7.0
 height = 26.0
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
+z_index = 10
+floor_snap_length = 12.0
 script = ExtResource("1_1iq5p")
 db = ExtResource("2_mqbe8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(3, -13)
 shape = SubResource("CapsuleShape2D_gv6bx")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, -13)
+[node name="SpritePivot" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="SpritePivot"]
 sprite_frames = ExtResource("3_mqbe8")
 animation = &"idle"
 
@@ -27,6 +29,5 @@ process_callback = 0
 limit_left = 0
 limit_top = 0
 limit_bottom = 1050
-position_smoothing_enabled = true
 
 [node name="Feet" type="Marker2D" parent="."]

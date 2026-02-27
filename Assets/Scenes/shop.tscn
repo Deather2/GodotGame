@@ -141,7 +141,6 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_fm1ei")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_0dywe")
 
 [node name="DetailsPopup" type="Control" parent="Background"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -188,16 +187,21 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_v0t5h")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_v0t5h")
 theme_override_styles/hover = SubResource("StyleBoxTexture_v0t5h")
 
-[node name="CharacterSprite" type="TextureRect" parent="Background/DetailsPopup/Panel"]
-custom_minimum_size = Vector2(145, 170)
-layout_mode = 0
-offset_left = 377.0
-offset_top = 175.0
-offset_right = 522.0
-offset_bottom = 345.0
-size_flags_horizontal = 6
-size_flags_vertical = 4
-stretch_mode = 5
+[node name="CharacterPreviewCenter" type="CenterContainer" parent="Background/DetailsPopup/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -181.25
+offset_top = -290.5
+offset_right = 181.25
+offset_bottom = 134.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CharacterPreviewSprite" type="Sprite2D" parent="Background/DetailsPopup/Panel/CharacterPreviewCenter"]
 
 [node name="NameLabel" type="Label" parent="Background/DetailsPopup/Panel"]
 layout_mode = 1

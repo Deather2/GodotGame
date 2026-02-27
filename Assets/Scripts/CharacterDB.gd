@@ -7,5 +7,4 @@ class_name CharacterDB
 @export var idle_frames: Array[SpriteFrames] = []
 @export var sprite_offsets: Array[Vector2] = []
 @export var hitbox_offsets: Array[Vector2] = []
-@export var hitbox_radii: Array[float] = []
-@export var hitbox_heights: Array[float] = []
+@export var sprite_scales: Array[float] = []
