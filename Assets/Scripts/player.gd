@@ -6,6 +6,7 @@ extends CharacterBody2D
 @onready var sprite: AnimatedSprite2D = $SpritePivot/AnimatedSprite2D
 @onready var collision: CollisionShape2D = $CollisionShape2D
 @onready var cam: Camera2D = $Camera2D
+@onready var stand_check: ShapeCast2D = $StandCheck
 
 @onready var capsule: CapsuleShape2D = collision.shape as CapsuleShape2D
 
@@ -39,6 +40,11 @@ func _ready() -> void:
 		stand_h = capsule.height
 		stand_r = capsule.radius
 	stand_y = collision.position.y
+	
+	var sc_shape := stand_check.shape as CapsuleShape2D
+	if sc_shape != null:
+		sc_shape.height = stand_h
+		sc_shape.radius = stand_r
 
 	if GameState.has_signal("selected_character_changed"):
 		GameState.selected_character_changed.connect(func(_i): _apply_selected())
@@ -74,14 +80,30 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-		jump_anim_playing = true
-		if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("jump"):
-			sprite.play("jump")
-
 	var direction := Input.get_axis("move_left", "move_right")
-	crouching = Input.is_action_pressed("crouch")
+
+	var want_crouch := Input.is_action_pressed("crouch")
+
+	if not is_on_floor():
+		crouching = false
+	else:
+		if want_crouch:
+			crouching = true
+		else:
+			crouching = not _can_stand()
+
+	var jump_pressed := Input.is_action_just_pressed("jump")
+	var jump_requested := false
+
+	if jump_pressed and is_on_floor():
+		if crouching and not _can_stand():
+			pass
+		else:
+			if crouching and _can_stand():
+				crouching = false
+
+			velocity.y = JUMP_VELOCITY
+			jump_requested = true
 
 	if crouching != _was_crouching:
 		_apply_crouch_collision(crouching)
@@ -100,6 +122,13 @@ func _physics_process(delta: float) -> void:
 	sprite.flip_h = face_dir < 0
 
 	move_and_slide()
+
+	if jump_requested and not is_on_floor():
+		jump_anim_playing = true
+		if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("jump"):
+			sprite.play("jump")
+	elif jump_requested and is_on_floor():
+		jump_anim_playing = false
 
 	_update_slope_tilt()
 	_update_anim()
@@ -180,3 +209,7 @@ func die() -> void:
 
 func _process(_delta: float) -> void:
 	cam.global_position = cam.global_position.round()
+
+func _can_stand() -> bool:
+	stand_check.force_shapecast_update()
+	return not stand_check.is_colliding()

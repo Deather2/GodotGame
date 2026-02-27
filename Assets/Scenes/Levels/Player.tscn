@@ -1,10 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://cblv52lkscke7"]
+[gd_scene load_steps=6 format=3 uid="uid://cblv52lkscke7"]
 
 [ext_resource type="Script" uid="uid://b5towj76s0dll" path="res://Assets/Scripts/player.gd" id="1_1iq5p"]
 [ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_mqbe8"]
 [ext_resource type="SpriteFrames" uid="uid://doyekqs7quhfp" path="res://Assets/Animations/Char1.tres" id="3_mqbe8"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gv6bx"]
+radius = 7.0
+height = 26.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mqbe8"]
 radius = 7.0
 height = 26.0
 
@@ -31,3 +35,7 @@ limit_top = 0
 limit_bottom = 1050
 
 [node name="Feet" type="Marker2D" parent="."]
+
+[node name="StandCheck" type="ShapeCast2D" parent="."]
+shape = SubResource("CapsuleShape2D_mqbe8")
+target_position = Vector2(0, 0)
