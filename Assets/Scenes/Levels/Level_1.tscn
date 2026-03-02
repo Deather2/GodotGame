@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://d2a45n6c4n01a"]
+[gd_scene load_steps=11 format=3 uid="uid://d2a45n6c4n01a"]
 
 [ext_resource type="Script" uid="uid://bw3kifllw6s7a" path="res://Assets/Scripts/level_1.gd" id="1_rte66"]
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="2_vvh8y"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://82e4b4xmqqlk" path="res://Assets/backgrounds/background_layer_3.png" id="4_4fumf"]
 [ext_resource type="Texture2D" uid="uid://coh4xlti3qpdf" path="res://Assets/tilesets/oak_woods_tileset.png" id="4_rte66"]
 [ext_resource type="PackedScene" uid="uid://cblv52lkscke7" path="res://Assets/Scenes/Levels/Player.tscn" id="5_1waf6"]
+[ext_resource type="PackedScene" uid="uid://bf2t84k3wlg78" path="res://Assets/Scenes/Levels/HintText.tscn" id="7_1waf6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yd7pp"]
 texture = ExtResource("4_rte66")
@@ -291,6 +292,21 @@ position = Vector2(1050, 832)
 position = Vector2(972, -22)
 shape = SubResource("RectangleShape2D_1waf6")
 
+[node name="HintText" parent="." instance=ExtResource("7_1waf6")]
+position = Vector2(350, 200)
+template = "Lai pārvietotos pa kreisi un pa labi, izmanto {move_left} un {move_right}"
+
+[node name="HintText2" parent="." instance=ExtResource("7_1waf6")]
+position = Vector2(1120, 200)
+template = "Lai lēktu, nospied {jump}"
+
+[node name="HintText3" parent="." instance=ExtResource("7_1waf6")]
+position = Vector2(2700, 200)
+template = "Lai pietuptos, turi {crouch}"
+
 [connection signal="body_entered" from="KillZone" to="." method="_on_kill_zone_body_entered"]
 
 [editable path="Player"]
+[editable path="HintText"]
+[editable path="HintText2"]
+[editable path="HintText3"]
