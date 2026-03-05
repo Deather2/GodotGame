@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bf2t84k3wlg78"]
 
-[ext_resource type="Script" uid="uid://cy1iktgpq0gei" path="res://Assets/Scripts/hint_text.gd" id="1_m5gue"]
+[ext_resource type="Script" uid="uid://cy1iktgpq0gei" path="res://Assets/Scripts/Levels/hint_text.gd" id="1_m5gue"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="1_xexbo"]
 
 [node name="HintText" type="Node2D"]

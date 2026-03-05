@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://cblv52lkscke7"]
+[gd_scene load_steps=8 format=3 uid="uid://cblv52lkscke7"]
 
-[ext_resource type="Script" uid="uid://b5towj76s0dll" path="res://Assets/Scripts/player.gd" id="1_1iq5p"]
+[ext_resource type="Script" uid="uid://b5towj76s0dll" path="res://Assets/Scripts/Levels/player.gd" id="1_1iq5p"]
 [ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_mqbe8"]
 [ext_resource type="SpriteFrames" uid="uid://doyekqs7quhfp" path="res://Assets/Animations/Char1.tres" id="3_mqbe8"]
 
@@ -11,6 +11,15 @@ height = 26.0
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mqbe8"]
 radius = 7.0
 height = 26.0
+
+[sub_resource type="Gradient" id="Gradient_mqbe8"]
+offsets = PackedFloat32Array(0, 0.7235577)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kiw01"]
+gradient = SubResource("Gradient_mqbe8")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_index = 10
@@ -39,3 +48,6 @@ limit_bottom = 1050
 [node name="StandCheck" type="ShapeCast2D" parent="."]
 shape = SubResource("CapsuleShape2D_mqbe8")
 target_position = Vector2(0, 0)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+texture = SubResource("GradientTexture2D_kiw01")

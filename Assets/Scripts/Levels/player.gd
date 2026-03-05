@@ -32,6 +32,8 @@ var stand_h: float
 var stand_r: float
 var stand_y: float
 
+var cutscene_lock := false
+
 func _ready() -> void:
 	_apply_selected()
 	cam.make_current()
@@ -77,6 +79,12 @@ func _apply_selected() -> void:
 		sprite.play("idle")
 
 func _physics_process(delta: float) -> void:
+	if cutscene_lock:
+		velocity = Vector2.ZERO
+		sprite.play("idle")
+		move_and_slide()
+		return
+	
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
