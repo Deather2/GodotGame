@@ -92,6 +92,47 @@ func goto_level(i: int, tr: int = Transition.FADE) -> void:
 	var path := "%sLevel_%d.tscn" % [LEVELS_DIR, i + 1]
 	_go(path, tr)
 
+func reload_current_level() -> void:
+	if _busy:
+		return
+	if _current == null:
+		return
+	if _current.scene_file_path == "":
+		return
+
+	_busy = true
+
+	var path := _current.scene_file_path
+	var old := _current
+
+	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
+	_fade.modulate.a = 0.0
+
+	var t := create_tween()
+	t.tween_property(_fade, "modulate:a", 1.0, FADE_OUT_DUR)
+	await t.finished
+
+	var packed: PackedScene = load(path) as PackedScene
+	var next: Node = packed.instantiate()
+	get_tree().root.add_child(next)
+
+	if old != null and is_instance_valid(old):
+		old.queue_free()
+
+	_current = next
+	_stack.clear()
+	_stack.append(_current)
+
+	var t2 := create_tween()
+	t2.tween_property(_fade, "modulate:a", 0.0, FADE_IN_DUR)
+	await t2.finished
+
+	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_busy = false
+
+func goto_next_level(current_level_index: int, tr: int = Transition.FADE) -> void:
+	goto_level(current_level_index + 1, tr)
+
 func back() -> void:
 	if _busy:
 		return

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://d2a45n6c4n01a"]
+[gd_scene load_steps=17 format=3 uid="uid://d2a45n6c4n01a"]
 
 [ext_resource type="Script" uid="uid://bw3kifllw6s7a" path="res://Assets/Scripts/Levels/level_1.gd" id="1_rte66"]
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="2_vvh8y"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://dxge4oqvnxhyv" path="res://Assets/Scripts/Levels/cutscene1.gd" id="8_yd7pp"]
 [ext_resource type="Script" uid="uid://n010ik3ddvvd" path="res://Assets/Scripts/Levels/monologue.gd" id="9_sx2br"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="10_jhb4m"]
+[ext_resource type="PackedScene" uid="uid://kcb2g4k1jg4x" path="res://Assets/Scenes/UI/WinUI.tscn" id="11_nqm7r"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yd7pp"]
 texture = ExtResource("4_rte66")
@@ -310,6 +311,7 @@ scale = Vector2(2, 2)
 
 [node name="Camera2D" parent="Player" index="2"]
 limit_right = 5136
+limit_bottom = 648
 
 [node name="PointLight2D" parent="Player" index="5"]
 enabled = false
@@ -406,6 +408,8 @@ position = Vector2(3881, 433)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FinishArea"]
 position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_jhb4m")
+
+[node name="WinUi" parent="." instance=ExtResource("11_nqm7r")]
 
 [connection signal="body_entered" from="KillZone" to="." method="_on_kill_zone_body_entered"]
 [connection signal="body_entered" from="FinishArea" to="." method="_on_finish_area_body_entered"]

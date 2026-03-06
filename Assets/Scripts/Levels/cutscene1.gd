@@ -63,3 +63,6 @@ func play_end_cutscene() -> void:
 	var tw2 := create_tween()
 	tw2.tween_property(player_light, "energy", target_energy, 1.0) # 1 сек плавно
 	await tw2.finished
+	get_parent().call("save_win_result")
+	await get_tree().create_timer(2.0).timeout
+	get_parent().call("show_win_ui")

@@ -15,6 +15,8 @@ const LEVEL_COUNT := 13
 var selected_character_index: int = 0
 var stars_per_level: Array[int] = []
 
+var best_time_per_level: Array[float] = []
+
 var unlocked_characters: Array[int] = []
 var stars_spent: int = 0
 
@@ -51,10 +53,15 @@ func _init_default_progress() -> void:
 	for i in range(LEVEL_COUNT):
 		stars_per_level[i] = 0
 
+	best_time_per_level.resize(LEVEL_COUNT)
+	for i in range(LEVEL_COUNT):
+		best_time_per_level[i] = -1.0
+
 func _save_level_progress() -> void:
 	var cfg: ConfigFile = ConfigFile.new()
 	cfg.load(PROGRESS_PATH)
 	cfg.set_value(PROGRESS_SECTION, "stars_per_level", stars_per_level)
+	cfg.set_value(PROGRESS_SECTION, "best_time_per_level", best_time_per_level)
 	cfg.save(PROGRESS_PATH)
 
 func _load_level_progress() -> void:
@@ -77,11 +84,27 @@ func _load_level_progress() -> void:
 		_init_default_progress()
 		return
 
+	var times: Variant = cfg.get_value(PROGRESS_SECTION, "best_time_per_level", null)
+	if times is Array:
+		best_time_per_level.clear()
+		for v in (times as Array):
+			best_time_per_level.append(float(v))
+	else:
+		best_time_per_level.resize(LEVEL_COUNT)
+		for i in range(LEVEL_COUNT):
+			best_time_per_level[i] = -1.0
+
 	if stars_per_level.size() < LEVEL_COUNT:
 		while stars_per_level.size() < LEVEL_COUNT:
 			stars_per_level.append(0)
 	elif stars_per_level.size() > LEVEL_COUNT:
 		stars_per_level = stars_per_level.slice(0, LEVEL_COUNT)
+
+	if best_time_per_level.size() < LEVEL_COUNT:
+		while best_time_per_level.size() < LEVEL_COUNT:
+			best_time_per_level.append(-1.0)
+	elif best_time_per_level.size() > LEVEL_COUNT:
+		best_time_per_level = best_time_per_level.slice(0, LEVEL_COUNT)
 
 func is_level_unlocked(level_index: int) -> bool:
 	if level_index <= 0:
@@ -192,3 +215,25 @@ func has_any_progress() -> bool:
 		return true
 
 	return false
+
+func save_level_result(level_index: int, stars: int, time_sec: float) -> void:
+	if level_index < 0 or level_index >= LEVEL_COUNT:
+		return
+
+	stars = clamp(stars, 0, 3)
+
+	var old_stars := stars_per_level[level_index]
+	var old_time := best_time_per_level[level_index]
+
+	var should_update := false
+
+	if stars > old_stars:
+		should_update = true
+	elif stars == old_stars:
+		if old_time < 0.0 or time_sec < old_time:
+			should_update = true
+
+	if should_update:
+		stars_per_level[level_index] = stars
+		best_time_per_level[level_index] = time_sec
+		_save_level_progress()
