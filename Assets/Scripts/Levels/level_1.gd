@@ -1,15 +1,17 @@
 extends Node2D
 
 var finished := false
+var pending_finish := false
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+func _physics_process(_delta: float) -> void:
+	if finished or !pending_finish:
+		return
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	var p := $Player
+	if p is CharacterBody2D and (p as CharacterBody2D).is_on_floor():
+		pending_finish = false
+		finished = true
+		$Cutscene.play_end_cutscene()
 
 func _on_kill_zone_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):
@@ -20,6 +22,10 @@ func _on_finish_area_body_entered(body: Node2D) -> void:
 	if finished:
 		return
 	if !body.is_in_group("player"):
+		return
+
+	if body is CharacterBody2D and !(body as CharacterBody2D).is_on_floor():
+		pending_finish = true
 		return
 
 	finished = true
