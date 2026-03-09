@@ -19,6 +19,8 @@ extends CanvasLayer
 
 var panel_target_pos: Vector2
 
+var current_level_index := 0
+
 func _ready() -> void:
 	visible = false
 	dim.modulate.a = 0.0
@@ -41,7 +43,9 @@ func set_stars(count: int) -> void:
 func set_time_text(value: String) -> void:
 	time_label.text = "Laiks: " + value
 
-func setup_result(stars: int, time_text: String) -> void:
+func setup_result(stars: int, time_text: String, level_index: int) -> void:
+	current_level_index = level_index
+	next_button.visible = (current_level_index + 1) < GameState.LEVEL_COUNT
 	set_stars(stars)
 	set_time_text(time_text)
 
@@ -65,4 +69,4 @@ func retry_level() -> void:
 	SceneManager.reload_current_level()
 
 func go_to_next_level() -> void:
-	SceneManager.goto_next_level(0)
+	SceneManager.goto_next_level(current_level_index)

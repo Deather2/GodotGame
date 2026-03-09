@@ -180,35 +180,6 @@ text = "Laiks: 00:00"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RepeatButton" type="Button" parent="Panel/VBox"]
-custom_minimum_size = Vector2(174.6, 43.2)
-layout_mode = 2
-size_flags_horizontal = 4
-focus_mode = 0
-theme_override_styles/normal = SubResource("StyleBoxTexture_6txqx")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_tev45")
-theme_override_styles/hover = SubResource("StyleBoxTexture_3u4sp")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_83kp0")
-
-[node name="Label" type="Label" parent="Panel/VBox/RepeatButton"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
-theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_s2q11")
-theme_override_font_sizes/font_size = 20
-text = "Izspēlēt vēlreiz"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="NextButton" type="Button" parent="Panel/VBox"]
 custom_minimum_size = Vector2(174.6, 43.2)
 layout_mode = 2
@@ -235,6 +206,35 @@ theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("2_s2q11")
 theme_override_font_sizes/font_size = 20
 text = "Nākamais līmenis"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RepeatButton" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(174.6, 43.2)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_6txqx")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_tev45")
+theme_override_styles/hover = SubResource("StyleBoxTexture_3u4sp")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_83kp0")
+
+[node name="Label" type="Label" parent="Panel/VBox/RepeatButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_s2q11")
+theme_override_font_sizes/font_size = 20
+text = "Izspēlēt vēlreiz"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -267,12 +267,12 @@ text = "Izvēlne"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="mouse_entered" from="Panel/VBox/RepeatButton" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_exited" from="Panel/VBox/RepeatButton" to="." method="_on_button_mouse_exited"]
-[connection signal="pressed" from="Panel/VBox/RepeatButton" to="." method="retry_level"]
 [connection signal="mouse_entered" from="Panel/VBox/NextButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/VBox/NextButton" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Panel/VBox/NextButton" to="." method="go_to_next_level"]
+[connection signal="mouse_entered" from="Panel/VBox/RepeatButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/VBox/RepeatButton" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Panel/VBox/RepeatButton" to="." method="retry_level"]
 [connection signal="mouse_entered" from="Panel/VBox/MenuButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/VBox/MenuButton" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Panel/VBox/MenuButton" to="." method="go_to_menu"]
