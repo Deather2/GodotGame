@@ -7,6 +7,7 @@ var level_time := 0.0
 var timer_running := true
 
 @onready var level_timer_ui = $LevelTimer
+@onready var pause_menu: CanvasLayer = $PauseMenu
 
 func _physics_process(_delta: float) -> void:
 	if finished or !pending_finish:
@@ -64,3 +65,7 @@ func save_win_result() -> void:
 func show_win_ui() -> void:
 	$WinUi.setup_result(get_earned_stars(), get_level_time_text(), 0)
 	$WinUi.show_with_anim()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel") and not pause_menu.is_open:
+		pause_menu.open_pause()

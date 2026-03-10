@@ -25,6 +25,7 @@ var _fade: ColorRect
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_ui()
 	call_deferred("_adopt_initial_scene")
 
@@ -109,8 +110,11 @@ func reload_current_level() -> void:
 	_fade.modulate.a = 0.0
 
 	var t := create_tween()
+	t.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	t.tween_property(_fade, "modulate:a", 1.0, FADE_OUT_DUR)
 	await t.finished
+
+	get_tree().paused = false
 
 	var packed: PackedScene = load(path) as PackedScene
 	var next: Node = packed.instantiate()
@@ -124,6 +128,7 @@ func reload_current_level() -> void:
 	_stack.append(_current)
 
 	var t2 := create_tween()
+	t2.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	t2.tween_property(_fade, "modulate:a", 0.0, FADE_IN_DUR)
 	await t2.finished
 

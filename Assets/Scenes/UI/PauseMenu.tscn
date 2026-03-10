@@ -1,0 +1,209 @@
+[gd_scene load_steps=13 format=3 uid="uid://ck3f2fkk1o4me"]
+
+[ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="1_5t6jj"]
+[ext_resource type="Script" uid="uid://bvrsu2ijylo34" path="res://Assets/Scripts/pause_menu.gd" id="1_p62xk"]
+[ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_p62xk"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2ivcv"]
+texture = ExtResource("1_5t6jj")
+region_rect = Rect2(423, 629, 98, 85)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_e4nyn"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+texture = ExtResource("1_5t6jj")
+region_rect = Rect2(417.83246, 100.71987, 90.39563, 26.478867)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xvl1m"]
+texture = ExtResource("1_5t6jj")
+region_rect = Rect2(320.81204, 99.820404, 90.491455, 27.469383)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_a7b0q"]
+texture = ExtResource("1_5t6jj")
+region_rect = Rect2(320.81204, 99.820404, 90.491455, 27.469383)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_54wvh"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+texture = ExtResource("1_5t6jj")
+region_rect = Rect2(417.83246, 100.71987, 90.39563, 26.478867)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dwebg"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+texture = ExtResource("1_5t6jj")
+region_rect = Rect2(417.83246, 100.71987, 90.39563, 26.478867)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vog6b"]
+texture = ExtResource("1_5t6jj")
+region_rect = Rect2(320.81204, 99.820404, 90.491455, 27.469383)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yuwol"]
+texture = ExtResource("1_5t6jj")
+region_rect = Rect2(320.81204, 99.820404, 90.491455, 27.469383)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3i5xx"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+texture = ExtResource("1_5t6jj")
+region_rect = Rect2(417.83246, 100.71987, 90.39563, 26.478867)
+
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 2
+script = ExtResource("1_p62xk")
+
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.45000002)
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -176.4
+offset_top = -153.0
+offset_right = 176.4
+offset_bottom = 153.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_2ivcv")
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -117.00001
+offset_top = -116.5
+offset_right = 117.00001
+offset_bottom = 116.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 32
+text = "Pauze"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ContinueButton" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(174.6, 43.2)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_e4nyn")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_xvl1m")
+theme_override_styles/hover = SubResource("StyleBoxTexture_a7b0q")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_54wvh")
+
+[node name="Label" type="Label" parent="Panel/VBox/ContinueButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 20
+text = "Turpināt"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RestartButton" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(174.6, 43.2)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_e4nyn")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_xvl1m")
+theme_override_styles/hover = SubResource("StyleBoxTexture_a7b0q")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_54wvh")
+
+[node name="Label" type="Label" parent="Panel/VBox/RestartButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 20
+text = "Izspēlēt pa jaunu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuButton" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(174.6, 43.2)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_dwebg")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_vog6b")
+theme_override_styles/hover = SubResource("StyleBoxTexture_yuwol")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_3i5xx")
+
+[node name="Label" type="Label" parent="Panel/VBox/MenuButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 20
+text = "Izvēlne"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="mouse_entered" from="Panel/VBox/ContinueButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/VBox/ContinueButton" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Panel/VBox/ContinueButton" to="." method="close_pause"]
+[connection signal="mouse_entered" from="Panel/VBox/RestartButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/VBox/RestartButton" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Panel/VBox/RestartButton" to="." method="retry_level"]
+[connection signal="mouse_entered" from="Panel/VBox/MenuButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/VBox/MenuButton" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Panel/VBox/MenuButton" to="." method="go_to_menu"]

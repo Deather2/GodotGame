@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://d2a45n6c4n01a"]
+[gd_scene load_steps=19 format=3 uid="uid://d2a45n6c4n01a"]
 
 [ext_resource type="Script" uid="uid://bw3kifllw6s7a" path="res://Assets/Scripts/Levels/level_1.gd" id="1_rte66"]
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="2_vvh8y"]
@@ -12,6 +12,7 @@
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="10_jhb4m"]
 [ext_resource type="PackedScene" uid="uid://kcb2g4k1jg4x" path="res://Assets/Scenes/UI/WinUI.tscn" id="11_nqm7r"]
 [ext_resource type="PackedScene" uid="uid://7p3tfx1b6c73" path="res://Assets/Scenes/UI/LevelTimer.tscn" id="12_irhki"]
+[ext_resource type="PackedScene" uid="uid://ck3f2fkk1o4me" path="res://Assets/Scenes/UI/PauseMenu.tscn" id="13_3pw14"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yd7pp"]
 texture = ExtResource("4_rte66")
@@ -414,6 +415,9 @@ shape = SubResource("RectangleShape2D_jhb4m")
 visible = false
 
 [node name="LevelTimer" parent="." instance=ExtResource("12_irhki")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("13_3pw14")]
+visible = false
 
 [connection signal="body_entered" from="KillZone" to="." method="_on_kill_zone_body_entered"]
 [connection signal="body_entered" from="FinishArea" to="." method="_on_finish_area_body_entered"]
