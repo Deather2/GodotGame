@@ -3,13 +3,16 @@
 [ext_resource type="SpriteFrames" uid="uid://dxu0k46qid04c" path="res://Assets/Animations/Char0.tres" id="1_7d18p"]
 [ext_resource type="Script" uid="uid://b7mc5qhmvucnx" path="res://Assets/Scripts/CharacterDB.gd" id="1_i6avy"]
 [ext_resource type="SpriteFrames" uid="uid://doyekqs7quhfp" path="res://Assets/Animations/Char1.tres" id="2_bu7xg"]
-[ext_resource type="Texture2D" uid="uid://gueetxa54huo" path="res://Assets/characters/Adventurer/Individual Sprites/adventurer-idle-2-00.png" id="3_s6c3s"]
-[ext_resource type="Texture2D" uid="uid://c67sjuyte1xsp" path="res://Assets/characters/Blue_char/char_blue_idle_0.png" id="5_bu7xg"]
+[ext_resource type="Texture2D" uid="uid://dei0f7g27ws8r" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r05_c03.png" id="4_bu7xg"]
+[ext_resource type="Texture2D" uid="uid://cxrn68bov8ait" path="res://Assets/characters/char_blue/frames_padded_64x64/char_blue_r00_c00.png" id="5_efky2"]
 
 [resource]
 script = ExtResource("1_i6avy")
-textures = Array[Texture2D]([ExtResource("3_s6c3s"), ExtResource("5_bu7xg")])
+textures = Array[Texture2D]([ExtResource("4_bu7xg"), ExtResource("5_efky2")])
 names = Array[String](["Princis Artorius Valenhardt Aurelius", "Sers Cedric Vaneholt Ravenshield"])
 stories = Array[String](["Princis Artorius Valenhardt Aurelius nāk no senas karaļu dzimtas, kas gadsimtiem ilgi valdīja pār aukstu ziemeļu karalisti. Pēc nodevības karaliskajā galmā viņš zaudēja tiesības uz troni un zvērēja pats noskaidrot, kurš iznīcināja viņa ģimenes godu. Tagad Artorijs ceļo pa pasauli, palīdzot ciemiem un pilsētām, lai atgūtu uzticību vienkāršajiem ļaudīm un atrastu patiesību par savu dzimtu.", "Reiz viņš bija karaļa pavadoņu vienības karotājs, bet pēc Ziemeļu vārtu krišanas pazuda bez pēdām. Tagad viņš klīst kā kluss zobens algotņu rindās, saistīts ar senu zvērestu un parādu, ko viņš atsakās aizmirst."])
 idle_frames = Array[SpriteFrames]([ExtResource("1_7d18p"), ExtResource("2_bu7xg")])
+sprite_offsets = Array[Vector2]([Vector2(0, -16), Vector2(1, -14)])
+hitbox_offsets = Array[Vector2]([Vector2(0, -13), Vector2(0, -13)])
+sprite_scales = Array[float]([1.0, 0.8])
 metadata/_custom_type_script = "uid://b7mc5qhmvucnx"

@@ -3,7 +3,9 @@ extends Control
 @export var db: CharacterDB
 var characters: Array[Texture2D] = []
 
-@onready var character_sprite: TextureRect = $Background/BigSign/CharacterBox/CharacterSprite
+@onready var preview_center: Control = $Background/BigSign/CharacterBox/PreviewCenter
+@onready var preview_sprite: Sprite2D = $Background/BigSign/CharacterBox/PreviewCenter/PreviewSprite
+
 @onready var left_button: Button = $Background/LeftButton
 @onready var right_button: Button = $Background/RightButton
 @onready var select_button: Button = $Background/SelectButton
@@ -16,9 +18,12 @@ var characters: Array[Texture2D] = []
 @onready var info_bubble_text: Label = $Background/InfoBubble/Text
 
 var unlocked_ids: Array[int] = []
-var current_pos: int = 0 
-
+var current_pos: int = 0
 var info_pinned: bool = false
+
+const PREVIEW_BASE := 64.0
+const PREVIEW_FILL := 1.6
+const PREVIEW_Y_BIAS := -40.0
 
 
 func _ready() -> void:
@@ -85,13 +90,34 @@ func _get_current_id() -> int:
 func _update_character() -> void:
 	var id := _get_current_id()
 
-	character_sprite.texture = characters[id]
+	preview_sprite.texture = characters[id]
+	_apply_preview()
+
 	_update_select_button()
 
 	if db != null:
 		name_label.text = db.names[id] if id < db.names.size() else ""
 		story_label.text = db.stories[id] if id < db.stories.size() else ""
 
+
+func _apply_preview() -> void:
+	call_deferred("_apply_preview_deferred")
+
+
+func _apply_preview_deferred() -> void:
+	if preview_center.size == Vector2.ZERO:
+		call_deferred("_apply_preview_deferred")
+		return
+
+	preview_sprite.centered = true
+	preview_sprite.position = preview_center.size * 0.5 + Vector2(0.0, PREVIEW_Y_BIAS)
+
+	var tex := preview_sprite.texture
+	if tex != null:
+		var k := (preview_center.size.y * PREVIEW_FILL) / PREVIEW_BASE
+		preview_sprite.scale = Vector2(k, k)
+	else:
+		preview_sprite.scale = Vector2.ONE
 
 
 func _update_select_button() -> void:
@@ -133,27 +159,34 @@ func _on_select_button_pressed() -> void:
 	GameState.set_selected_character(id)
 	_update_select_button()
 
+
 func _on_button_mouse_entered() -> void:
 	Cursor.set_hover()
+
 
 func _on_button_mouse_exited() -> void:
 	Cursor.set_normal()
 
+
 func _on_back_pressed() -> void:
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
+
 
 func _on_info_button_mouse_entered() -> void:
 	Cursor.set_hover()
 	info_bubble.visible = true
+
 
 func _on_info_button_mouse_exited() -> void:
 	Cursor.set_normal()
 	if !info_pinned:
 		info_bubble.visible = false
 
+
 func _on_info_button_pressed() -> void:
 	info_pinned = !info_pinned
 	info_bubble.visible = info_pinned or info_button.is_hovered()
+
 
 func _input(event: InputEvent) -> void:
 	if !info_pinned:

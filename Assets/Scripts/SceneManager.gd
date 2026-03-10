@@ -5,6 +5,7 @@ const LEVELS_MENU := "res://Assets/Scenes/levels_menu.tscn"
 const SHOP       := "res://Assets/Scenes/shop.tscn"
 const LOCKER     := "res://Assets/Scenes/locker.tscn"
 const SETTINGS   := "res://Assets/Scenes/settings.tscn"
+const LEVELS_DIR := "res://Assets/Scenes/Levels/"
 
 const SLIDE_DUR := 0.35
 const FADE_OUT_DUR := 0.45
@@ -24,6 +25,7 @@ var _fade: ColorRect
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_ui()
 	call_deferred("_adopt_initial_scene")
 
@@ -58,16 +60,18 @@ func _adopt_initial_scene() -> void:
 	if cs == null or cs == self:
 		return
 
-	if cs.get_parent() != null and cs.get_parent() != _stage:
+	if cs.get_parent() != null:
 		cs.get_parent().remove_child(cs)
 
-	_stage.add_child(cs)
-	_current = cs
-	_set_pos(_current, Vector2.ZERO)
+	if cs.scene_file_path.contains("/Levels/"):
+		get_tree().root.add_child(cs)
+	else:
+		_stage.add_child(cs)
+		_set_pos(cs, Vector2.ZERO)
 
+	_current = cs
 	_stack.clear()
 	_stack.append(_current)
-
 
 func goto_main_menu(tr: int = Transition.FADE) -> void:
 	_go(MAIN_MENU, tr)
@@ -83,6 +87,56 @@ func goto_locker(tr: int = Transition.FADE) -> void:
 
 func goto_settings(tr: int = Transition.FADE) -> void:
 	_go(SETTINGS, tr)
+	
+func goto_level(i: int, tr: int = Transition.FADE) -> void:
+	clear_stack_keep_top()
+	var path := "%sLevel_%d.tscn" % [LEVELS_DIR, i + 1]
+	_go(path, tr)
+
+func reload_current_level() -> void:
+	if _busy:
+		return
+	if _current == null:
+		return
+	if _current.scene_file_path == "":
+		return
+
+	_busy = true
+
+	var path := _current.scene_file_path
+	var old := _current
+
+	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
+	_fade.modulate.a = 0.0
+
+	var t := create_tween()
+	t.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	t.tween_property(_fade, "modulate:a", 1.0, FADE_OUT_DUR)
+	await t.finished
+
+	get_tree().paused = false
+
+	var packed: PackedScene = load(path) as PackedScene
+	var next: Node = packed.instantiate()
+	get_tree().root.add_child(next)
+
+	if old != null and is_instance_valid(old):
+		old.queue_free()
+
+	_current = next
+	_stack.clear()
+	_stack.append(_current)
+
+	var t2 := create_tween()
+	t2.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	t2.tween_property(_fade, "modulate:a", 0.0, FADE_IN_DUR)
+	await t2.finished
+
+	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_busy = false
+
+func goto_next_level(current_level_index: int, tr: int = Transition.FADE) -> void:
+	goto_level(current_level_index + 1, tr)
 
 func back() -> void:
 	if _busy:
@@ -112,7 +166,11 @@ func _go(path: String, tr: int) -> void:
 
 	var packed: PackedScene = load(path) as PackedScene
 	var next: Node = packed.instantiate()
-	_stage.add_child(next)
+
+	if path.contains("/Levels/"):
+		get_tree().root.add_child(next)
+	else:
+		_stage.add_child(next)
 
 	var size := get_viewport().get_visible_rect().size
 	var old := _current
@@ -131,7 +189,9 @@ func _go(path: String, tr: int) -> void:
 		old.queue_free()
 
 	_current = next
-	_set_pos(_current, Vector2.ZERO)
+
+	if not path.contains("/Levels/"):
+		_set_pos(_current, Vector2.ZERO)
 
 	_stack.clear()
 	_stack.append(_current)
@@ -229,7 +289,8 @@ func _pop_overlay_up() -> void:
 
 func _tr_fade(old: Node, next: Node) -> void:
 	next.visible = false
-	_set_pos(next, Vector2.ZERO)
+	if not next.scene_file_path.contains("/Levels/"):
+		_set_pos(next, Vector2.ZERO)
 
 	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
 	_fade.modulate.a = 0.0
@@ -270,3 +331,16 @@ func _set_pos(n: Node, p: Vector2) -> void:
 		n.set_position(p)
 	elif "position" in n:
 		n.position = p
+
+func clear_stack_keep_top() -> void:
+	if _stack.size() <= 1:
+		return
+
+	for idx in range(_stack.size() - 1):
+		var n: Node = _stack[idx]
+		if n != null and is_instance_valid(n):
+			n.queue_free()
+
+	var top := _stack[_stack.size() - 1]
+	_stack.clear()
+	_stack.append(top)

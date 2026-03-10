@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://cblv52lkscke7"]
+
+[ext_resource type="Script" uid="uid://b5towj76s0dll" path="res://Assets/Scripts/Levels/player.gd" id="1_1iq5p"]
+[ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_mqbe8"]
+[ext_resource type="SpriteFrames" uid="uid://doyekqs7quhfp" path="res://Assets/Animations/Char1.tres" id="3_mqbe8"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gv6bx"]
+radius = 7.0
+height = 26.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mqbe8"]
+radius = 7.0
+height = 26.0
+
+[sub_resource type="Gradient" id="Gradient_mqbe8"]
+offsets = PackedFloat32Array(0, 0.7235577)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kiw01"]
+gradient = SubResource("Gradient_mqbe8")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+z_index = 10
+floor_snap_length = 12.0
+script = ExtResource("1_1iq5p")
+db = ExtResource("2_mqbe8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_gv6bx")
+
+[node name="SpritePivot" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="SpritePivot"]
+sprite_frames = ExtResource("3_mqbe8")
+animation = &"idle"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -200)
+process_callback = 0
+limit_left = 0
+limit_top = 0
+limit_bottom = 1050
+
+[node name="Feet" type="Marker2D" parent="."]
+
+[node name="StandCheck" type="ShapeCast2D" parent="."]
+shape = SubResource("CapsuleShape2D_mqbe8")
+target_position = Vector2(0, 0)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+texture = SubResource("GradientTexture2D_kiw01")

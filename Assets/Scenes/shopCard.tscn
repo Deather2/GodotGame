@@ -51,11 +51,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="Preview" type="TextureRect" parent="BgPanel/VBox"]
+[node name="PreviewCenter" type="CenterContainer" parent="BgPanel/VBox"]
 custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
-expand_mode = 1
-stretch_mode = 5
+
+[node name="PreviewSprite" type="Sprite2D" parent="BgPanel/VBox/PreviewCenter"]
 
 [node name="PriceUI" type="HBoxContainer" parent="BgPanel/VBox"]
 layout_mode = 2
