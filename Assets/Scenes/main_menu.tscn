@@ -315,7 +315,7 @@ custom_minimum_size = Vector2(194, 48)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hxcs8")
-theme_override_styles/hover = SubResource("StyleBoxTexture_hxcs8")
+theme_override_styles/hover = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6qsvb")
 
 [node name="Label" type="Label" parent="MenuContainer/Start"]
@@ -341,7 +341,7 @@ custom_minimum_size = Vector2(194, 48)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hxcs8")
-theme_override_styles/hover = SubResource("StyleBoxTexture_hxcs8")
+theme_override_styles/hover = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6qsvb")
 
 [node name="Label" type="Label" parent="MenuContainer/Shop"]
@@ -370,7 +370,7 @@ custom_minimum_size = Vector2(194, 48)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hxcs8")
-theme_override_styles/hover = SubResource("StyleBoxTexture_hxcs8")
+theme_override_styles/hover = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6qsvb")
 
 [node name="Label" type="Label" parent="MenuContainer/Locker"]
@@ -399,7 +399,7 @@ custom_minimum_size = Vector2(194, 48)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hxcs8")
-theme_override_styles/hover = SubResource("StyleBoxTexture_hxcs8")
+theme_override_styles/hover = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6qsvb")
 
 [node name="Label" type="Label" parent="MenuContainer/Settings"]
@@ -428,7 +428,7 @@ custom_minimum_size = Vector2(194, 48)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hxcs8")
-theme_override_styles/hover = SubResource("StyleBoxTexture_hxcs8")
+theme_override_styles/hover = SubResource("StyleBoxTexture_shbfh")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6qsvb")
 
 [node name="Label" type="Label" parent="MenuContainer/Quit"]
