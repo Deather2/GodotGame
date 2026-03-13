@@ -11,8 +11,9 @@ extends CenterContainer
 @onready var audio_title: Control = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioTitle
 
 @onready var window_mode_option: OptionButton = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ModeRow/ModeOption
-@onready var resolution_option: OptionButton = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ResolutionRow/ResolutionOption
+@onready var vsync_option: OptionButton = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow/VSyncOption
 
+@export var ui_font: Font
 
 func _ready() -> void:
 	video_tab.pressed.connect(func(): _scroll_to_section(video_title))
@@ -21,9 +22,11 @@ func _ready() -> void:
 
 	_fill_video_options()
 	_load_video_values_into_ui()
+	_style_option_button(window_mode_option)
+	_style_option_button(vsync_option)
 
 	window_mode_option.item_selected.connect(_on_window_mode_selected)
-	resolution_option.item_selected.connect(_on_resolution_selected)
+	vsync_option.item_selected.connect(_on_vsync_selected)
 
 	_style_scrollbar()
 
@@ -34,23 +37,26 @@ func _fill_video_options() -> void:
 	window_mode_option.add_item("Pilnekrāns", GameState.WINDOW_MODE_FULLSCREEN)
 	window_mode_option.add_item("Bez apmales", GameState.WINDOW_MODE_BORDERLESS)
 
-	resolution_option.clear()
-	resolution_option.add_item("16:9", GameState.RESOLUTION_MODE_16_9)
-	resolution_option.add_item("4:3", GameState.RESOLUTION_MODE_4_3)
-	resolution_option.add_item("1:1", GameState.RESOLUTION_MODE_1_1)
+	vsync_option.clear()
+	vsync_option.add_item("Izsl.", 0)
+	vsync_option.add_item("Iesl.", 1)
 
 
 func _load_video_values_into_ui() -> void:
 	window_mode_option.select(GameState.window_mode)
-	resolution_option.select(GameState.resolution_mode)
+
+	if GameState.vsync_enabled:
+		vsync_option.select(1)
+	else:
+		vsync_option.select(0)
 
 
 func _on_window_mode_selected(index: int) -> void:
 	GameState.set_window_mode_setting(index)
 
 
-func _on_resolution_selected(index: int) -> void:
-	GameState.set_resolution_mode_setting(index)
+func _on_vsync_selected(index: int) -> void:
+	GameState.set_vsync_enabled_setting(index == 1)
 
 
 func _scroll_to_section(section: Control) -> void:
@@ -102,3 +108,103 @@ func _style_scrollbar() -> void:
 	vbar.add_theme_stylebox_override("grabber_pressed", grabber_pressed)
 
 	vbar.custom_minimum_size.x = 10
+
+func _on_button_mouse_entered() -> void:
+	Cursor.set_hover()
+
+func _on_button_mouse_exited() -> void:
+	Cursor.set_normal()
+
+func _style_option_button(ob: OptionButton) -> void:
+	ob.alignment = HORIZONTAL_ALIGNMENT_LEFT
+
+	var normal := _make_box("1f1312", "6b4a46")
+	var hover := _make_box("2c1a18", "8a6258")
+	var pressed := _make_box("3a211f", "a97a6b")
+	var focus := _make_box("241614", "e8f3ff")
+
+	normal.content_margin_left = 12
+	normal.content_margin_right = 30
+	normal.content_margin_top = 6
+	normal.content_margin_bottom = 6
+
+	hover.content_margin_left = 12
+	hover.content_margin_right = 30
+	hover.content_margin_top = 6
+	hover.content_margin_bottom = 6
+
+	pressed.content_margin_left = 12
+	pressed.content_margin_right = 30
+	pressed.content_margin_top = 6
+	pressed.content_margin_bottom = 6
+
+	focus.content_margin_left = 12
+	focus.content_margin_right = 30
+	focus.content_margin_top = 6
+	focus.content_margin_bottom = 6
+
+	ob.add_theme_stylebox_override("normal", normal)
+	ob.add_theme_stylebox_override("hover", hover)
+	ob.add_theme_stylebox_override("pressed", pressed)
+	ob.add_theme_stylebox_override("focus", focus)
+
+	ob.add_theme_color_override("font_color", Color("f1f3ff"))
+	ob.add_theme_color_override("font_hover_color", Color("ffffff"))
+	ob.add_theme_color_override("font_pressed_color", Color("ffffff"))
+	ob.add_theme_color_override("font_focus_color", Color("ffffff"))
+	ob.add_theme_color_override("font_outline_color", Color("221210"))
+	ob.add_theme_font_size_override("font_size", 18)
+	ob.add_theme_constant_override("outline_size", 8)
+
+	ob.add_theme_constant_override("arrow_margin", 10)
+	ob.add_theme_constant_override("modulate_arrow", 1)
+
+	if ui_font != null:
+		ob.add_theme_font_override("font", ui_font)
+
+	var popup := ob.get_popup()
+	_style_option_popup(popup)
+
+
+func _style_option_popup(popup: PopupMenu) -> void:
+	var panel := _make_box("1b100f", "6b4a46")
+	panel.content_margin_left = 4
+	panel.content_margin_right = 4
+	panel.content_margin_top = 4
+	panel.content_margin_bottom = 4
+
+	var hover := _make_box("3a211f", "a97a6b")
+	hover.content_margin_left = 6
+	hover.content_margin_right = 6
+	hover.content_margin_top = 3
+	hover.content_margin_bottom = 3
+
+	popup.add_theme_stylebox_override("panel", panel)
+	popup.add_theme_stylebox_override("hover", hover)
+
+	popup.add_theme_color_override("font_color", Color("f1f3ff"))
+	popup.add_theme_color_override("font_hover_color", Color("ffffff"))
+	popup.add_theme_color_override("font_disabled_color", Color("9b8f8d"))
+	popup.add_theme_color_override("font_outline_color", Color("221210"))
+
+	popup.add_theme_font_size_override("font_size", 18)
+	popup.add_theme_constant_override("outline_size", 8)
+
+	popup.add_theme_constant_override("item_start_padding", 10)
+	popup.add_theme_constant_override("item_end_padding", 10)
+	popup.add_theme_constant_override("v_separation", 4)
+
+	if ui_font != null:
+		popup.add_theme_font_override("font", ui_font)
+
+
+func _make_box(bg_hex: String, border_hex: String) -> StyleBoxFlat:
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(bg_hex)
+	sb.border_color = Color(border_hex)
+	sb.set_border_width_all(2)
+	sb.corner_radius_top_left = 6
+	sb.corner_radius_top_right = 6
+	sb.corner_radius_bottom_left = 6
+	sb.corner_radius_bottom_right = 6
+	return sb

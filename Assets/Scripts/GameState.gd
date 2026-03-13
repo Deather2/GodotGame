@@ -17,10 +17,6 @@ const WINDOW_MODE_WINDOWED := 0
 const WINDOW_MODE_FULLSCREEN := 1
 const WINDOW_MODE_BORDERLESS := 2
 
-const RESOLUTION_MODE_16_9 := 0
-const RESOLUTION_MODE_4_3 := 1
-const RESOLUTION_MODE_1_1 := 2
-
 var selected_character_index: int = 0
 var stars_per_level: Array[int] = []
 var best_time_per_level: Array[float] = []
@@ -28,7 +24,7 @@ var unlocked_characters: Array[int] = []
 var stars_spent: int = 0
 
 var window_mode: int = WINDOW_MODE_WINDOWED
-var resolution_mode: int = RESOLUTION_MODE_16_9
+var vsync_enabled: bool = true
 
 var _window_apply_busy: bool = false
 var _window_reapply_requested: bool = false
@@ -39,7 +35,7 @@ func _ready() -> void:
 	_load_video_settings()
 
 	if not Engine.is_embedded_in_editor():
-		call_deferred("_apply_window_mode_setting")
+		call_deferred("_apply_video_settings")
 
 	_load_selected_character()
 	_load_level_progress()
@@ -48,14 +44,14 @@ func _ready() -> void:
 
 func _init_default_video_settings() -> void:
 	window_mode = WINDOW_MODE_WINDOWED
-	resolution_mode = RESOLUTION_MODE_16_9
+	vsync_enabled = true
 
 
 func _save_video_settings() -> void:
 	var cfg: ConfigFile = ConfigFile.new()
 	cfg.load(SETTINGS_PATH)
 	cfg.set_value(VIDEO_SECTION, "window_mode", window_mode)
-	cfg.set_value(VIDEO_SECTION, "resolution_mode", resolution_mode)
+	cfg.set_value(VIDEO_SECTION, "vsync_enabled", vsync_enabled)
 	cfg.save(SETTINGS_PATH)
 
 
@@ -69,13 +65,10 @@ func _load_video_settings() -> void:
 		return
 
 	window_mode = int(cfg.get_value(VIDEO_SECTION, "window_mode", WINDOW_MODE_WINDOWED))
-	resolution_mode = int(cfg.get_value(VIDEO_SECTION, "resolution_mode", RESOLUTION_MODE_16_9))
+	vsync_enabled = bool(cfg.get_value(VIDEO_SECTION, "vsync_enabled", true))
 
 	if window_mode < WINDOW_MODE_WINDOWED or window_mode > WINDOW_MODE_BORDERLESS:
 		window_mode = WINDOW_MODE_WINDOWED
-
-	if resolution_mode < RESOLUTION_MODE_16_9 or resolution_mode > RESOLUTION_MODE_1_1:
-		resolution_mode = RESOLUTION_MODE_16_9
 
 
 func set_window_mode_setting(mode: int) -> void:
@@ -94,23 +87,27 @@ func set_window_mode_setting(mode: int) -> void:
 		_apply_window_mode_setting()
 
 
-func set_resolution_mode_setting(mode: int) -> void:
-	if mode < RESOLUTION_MODE_16_9 or mode > RESOLUTION_MODE_1_1:
-		return
-
-	resolution_mode = mode
+func set_vsync_enabled_setting(enabled: bool) -> void:
+	vsync_enabled = enabled
 	_save_video_settings()
+
+	if not Engine.is_embedded_in_editor():
+		_apply_vsync_setting()
 
 
 func _apply_video_settings() -> void:
 	if Engine.is_embedded_in_editor():
 		return
 
+	_apply_vsync_setting()
 	_apply_window_mode_setting()
 
 
-func _apply_resolution_setting() -> void:
-	return
+func _apply_vsync_setting() -> void:
+	if vsync_enabled:
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
+	else:
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 
 
 func _wait_window_frames(count: int = 2) -> void:
@@ -143,19 +140,29 @@ func _apply_window_mode_setting() -> void:
 			int(usable_rect.size.y / 2)
 		)
 
+	if win.mode == Window.MODE_MAXIMIZED or win.mode == Window.MODE_FULLSCREEN:
+		win.mode = Window.MODE_WINDOWED
+		await _wait_window_frames(2)
+
+	if win.borderless:
+		win.borderless = false
+		await _wait_window_frames(1)
+
 	match window_mode:
 		WINDOW_MODE_WINDOWED:
 			win.mode = Window.MODE_WINDOWED
 			await _wait_window_frames(2)
 
-			win.borderless = false
 			win.unresizable = false
-			await _wait_window_frames(2)
+			await _wait_window_frames(1)
 
 			win.size = _last_windowed_size
 			await _wait_window_frames(2)
 
 			win.move_to_center()
+			await _wait_window_frames(1)
+
+			win.size = _last_windowed_size
 
 		WINDOW_MODE_FULLSCREEN:
 			win.borderless = false
@@ -179,19 +186,6 @@ func _apply_window_mode_setting() -> void:
 	if _window_reapply_requested:
 		_window_reapply_requested = false
 		call_deferred("_apply_window_mode_setting")
-
-
-func _get_resolution_base_size() -> Vector2i:
-	match resolution_mode:
-		RESOLUTION_MODE_16_9:
-			return Vector2i(320, 180)
-		RESOLUTION_MODE_4_3:
-			return Vector2i(240, 180)
-		RESOLUTION_MODE_1_1:
-			return Vector2i(180, 180)
-		_:
-			return Vector2i(320, 180)
-
 
 func set_selected_character(index: int) -> void:
 	if index == selected_character_index:
