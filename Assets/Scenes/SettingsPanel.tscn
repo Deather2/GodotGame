@@ -226,6 +226,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ModeOption" type="OptionButton" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ModeRow"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
@@ -250,9 +251,49 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="VSyncOption" type="OptionButton" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
+
+[node name="BrightnessRow" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="BrightnessLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_font_sizes/font_size = 22
+text = "Spilgtums"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BrightnessRight" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BrightnessSlider" type="HSlider" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
+value = 50.0
+
+[node name="BrightnessSpinBox" type="SpinBox" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight"]
+unique_name_in_owner = true
+layout_mode = 2
+value = 50.0
+alignment = 1
+suffix = "%"
+select_all_on_focus = true
 
 [node name="ControlsTitle" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections"]
 layout_mode = 2

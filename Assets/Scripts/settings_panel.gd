@@ -13,6 +13,9 @@ extends CenterContainer
 @onready var window_mode_option: OptionButton = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ModeRow/ModeOption
 @onready var vsync_option: OptionButton = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow/VSyncOption
 
+@onready var brightness_slider: HSlider = %BrightnessSlider
+@onready var brightness_spinbox: SpinBox = %BrightnessSpinBox
+
 @export var ui_font: Font
 
 func _ready() -> void:
@@ -24,6 +27,11 @@ func _ready() -> void:
 	_load_video_values_into_ui()
 	_style_option_button(window_mode_option)
 	_style_option_button(vsync_option)
+	_style_brightness_slider(brightness_slider)
+	_style_brightness_spinbox(brightness_spinbox)
+
+	brightness_slider.share(brightness_spinbox)
+	brightness_slider.value_changed.connect(_on_brightness_changed)
 
 	window_mode_option.item_selected.connect(_on_window_mode_selected)
 	vsync_option.item_selected.connect(_on_vsync_selected)
@@ -43,6 +51,14 @@ func _fill_video_options() -> void:
 
 
 func _load_video_values_into_ui() -> void:
+	window_mode_option.select(GameState.window_mode)
+
+	if GameState.vsync_enabled:
+		vsync_option.select(1)
+	else:
+		vsync_option.select(0)
+
+	brightness_slider.value = GameState.brightness_percent
 	window_mode_option.select(GameState.window_mode)
 
 	if GameState.vsync_enabled:
@@ -109,11 +125,14 @@ func _style_scrollbar() -> void:
 
 	vbar.custom_minimum_size.x = 10
 
+
 func _on_button_mouse_entered() -> void:
 	Cursor.set_hover()
 
+
 func _on_button_mouse_exited() -> void:
 	Cursor.set_normal()
+
 
 func _style_option_button(ob: OptionButton) -> void:
 	ob.alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -197,6 +216,83 @@ func _style_option_popup(popup: PopupMenu) -> void:
 	if ui_font != null:
 		popup.add_theme_font_override("font", ui_font)
 
+func _style_brightness_slider(sl: HSlider) -> void:
+	var track := StyleBoxFlat.new()
+	track.bg_color = Color("241614")
+	track.border_color = Color("4a302f")
+	track.set_border_width_all(2)
+	track.corner_radius_top_left = 4
+	track.corner_radius_top_right = 4
+	track.corner_radius_bottom_left = 4
+	track.corner_radius_bottom_right = 4
+
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = Color("6b4a46")
+	fill.border_color = Color("8a6258")
+	fill.set_border_width_all(2)
+	fill.corner_radius_top_left = 4
+	fill.corner_radius_top_right = 4
+	fill.corner_radius_bottom_left = 4
+	fill.corner_radius_bottom_right = 4
+
+	var fill_hover := StyleBoxFlat.new()
+	fill_hover.bg_color = Color("8a6258")
+	fill_hover.border_color = Color("a97a6b")
+	fill_hover.set_border_width_all(2)
+	fill_hover.corner_radius_top_left = 4
+	fill_hover.corner_radius_top_right = 4
+	fill_hover.corner_radius_bottom_left = 4
+	fill_hover.corner_radius_bottom_right = 4
+
+	sl.add_theme_stylebox_override("slider", track)
+	sl.add_theme_stylebox_override("grabber_area", fill)
+	sl.add_theme_stylebox_override("grabber_area_highlight", fill_hover)
+
+func _style_brightness_spinbox(sb: SpinBox) -> void:
+	var normal := _make_box("1f1312", "6b4a46")
+	var hover := _make_box("2c1a18", "8a6258")
+	var focus := _make_box("1f1312", "6b4a46") # такой же, как normal, чтобы убрать заметный focus
+
+	normal.content_margin_left = 8
+	normal.content_margin_right = 18
+	normal.content_margin_top = 4
+	normal.content_margin_bottom = 4
+
+	hover.content_margin_left = 8
+	hover.content_margin_right = 18
+	hover.content_margin_top = 4
+	hover.content_margin_bottom = 4
+
+	focus.content_margin_left = 8
+	focus.content_margin_right = 18
+	focus.content_margin_top = 4
+	focus.content_margin_bottom = 4
+
+	sb.add_theme_icon_override("updown", _make_spinbox_arrows(Color("f1f3ff")))
+
+	var line_edit := sb.get_line_edit()
+	if line_edit == null:
+		return
+
+	line_edit.add_theme_stylebox_override("normal", normal)
+	line_edit.add_theme_stylebox_override("hover", hover)
+	line_edit.add_theme_stylebox_override("focus", focus)
+	line_edit.add_theme_stylebox_override("read_only", normal)
+
+	line_edit.add_theme_color_override("font_color", Color("f1f3ff"))
+	line_edit.add_theme_color_override("font_hover_color", Color("ffffff"))
+	line_edit.add_theme_color_override("font_focus_color", Color("f1f3ff"))
+	line_edit.add_theme_color_override("font_selected_color", Color("ffffff"))
+	line_edit.add_theme_color_override("selection_color", Color("6b4a46"))
+	line_edit.add_theme_color_override("caret_color", Color("ffffff"))
+	line_edit.add_theme_color_override("font_outline_color", Color("221210"))
+
+	line_edit.add_theme_font_size_override("font_size", 16)
+	line_edit.add_theme_constant_override("outline_size", 8)
+	line_edit.alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+	if ui_font != null:
+		line_edit.add_theme_font_override("font", ui_font)
 
 func _make_box(bg_hex: String, border_hex: String) -> StyleBoxFlat:
 	var sb := StyleBoxFlat.new()
@@ -208,3 +304,45 @@ func _make_box(bg_hex: String, border_hex: String) -> StyleBoxFlat:
 	sb.corner_radius_bottom_left = 6
 	sb.corner_radius_bottom_right = 6
 	return sb
+
+func _make_spinbox_arrows(color: Color) -> Texture2D:
+	var img := Image.create(12, 18, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+
+	img.set_pixel(6, 3, color)
+	img.set_pixel(5, 4, color)
+	img.set_pixel(6, 4, color)
+	img.set_pixel(7, 4, color)
+	img.set_pixel(4, 5, color)
+	img.set_pixel(5, 5, color)
+	img.set_pixel(6, 5, color)
+	img.set_pixel(7, 5, color)
+	img.set_pixel(8, 5, color)
+
+	img.set_pixel(4, 12, color)
+	img.set_pixel(5, 12, color)
+	img.set_pixel(6, 12, color)
+	img.set_pixel(7, 12, color)
+	img.set_pixel(8, 12, color)
+	img.set_pixel(5, 13, color)
+	img.set_pixel(6, 13, color)
+	img.set_pixel(7, 13, color)
+	img.set_pixel(6, 14, color)
+
+	return ImageTexture.create_from_image(img)
+
+func _on_brightness_changed(value: float) -> void:
+	GameState.set_brightness_percent_setting(int(value))
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+
+		if mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
+			var spin_rect := Rect2(
+				brightness_spinbox.global_position,
+				brightness_spinbox.size
+			)
+
+			if not spin_rect.has_point(mb.global_position):
+				get_viewport().gui_release_focus()

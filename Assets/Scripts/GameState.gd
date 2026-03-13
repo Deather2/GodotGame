@@ -26,6 +26,12 @@ var stars_spent: int = 0
 var window_mode: int = WINDOW_MODE_WINDOWED
 var vsync_enabled: bool = true
 
+var brightness_percent: int = 50
+
+var _brightness_layer: CanvasLayer
+var _brightness_black: ColorRect
+var _brightness_white: ColorRect
+
 var _window_apply_busy: bool = false
 var _window_reapply_requested: bool = false
 var _last_windowed_size: Vector2i = Vector2i(1152, 648)
@@ -34,6 +40,8 @@ var _last_windowed_size: Vector2i = Vector2i(1152, 648)
 func _ready() -> void:
 	_load_video_settings()
 
+	call_deferred("_setup_brightness_overlay")
+
 	if not Engine.is_embedded_in_editor():
 		call_deferred("_apply_video_settings")
 
@@ -41,10 +49,15 @@ func _ready() -> void:
 	_load_level_progress()
 	_load_shop_progress()
 
+func _setup_brightness_overlay() -> void:
+	_ensure_brightness_overlay()
+	_apply_brightness_setting()
+
 
 func _init_default_video_settings() -> void:
 	window_mode = WINDOW_MODE_WINDOWED
 	vsync_enabled = true
+	brightness_percent = 50
 
 
 func _save_video_settings() -> void:
@@ -52,6 +65,7 @@ func _save_video_settings() -> void:
 	cfg.load(SETTINGS_PATH)
 	cfg.set_value(VIDEO_SECTION, "window_mode", window_mode)
 	cfg.set_value(VIDEO_SECTION, "vsync_enabled", vsync_enabled)
+	cfg.set_value(VIDEO_SECTION, "brightness_percent", brightness_percent)
 	cfg.save(SETTINGS_PATH)
 
 
@@ -66,6 +80,8 @@ func _load_video_settings() -> void:
 
 	window_mode = int(cfg.get_value(VIDEO_SECTION, "window_mode", WINDOW_MODE_WINDOWED))
 	vsync_enabled = bool(cfg.get_value(VIDEO_SECTION, "vsync_enabled", true))
+	brightness_percent = int(cfg.get_value(VIDEO_SECTION, "brightness_percent", 50))
+	brightness_percent = clamp(brightness_percent, 0, 100)
 
 	if window_mode < WINDOW_MODE_WINDOWED or window_mode > WINDOW_MODE_BORDERLESS:
 		window_mode = WINDOW_MODE_WINDOWED
@@ -418,3 +434,57 @@ func save_level_result(level_index: int, stars: int, time_sec: float) -> void:
 		stars_per_level[level_index] = stars
 		best_time_per_level[level_index] = time_sec
 		_save_level_progress()
+
+func set_brightness_percent_setting(value: int) -> void:
+	brightness_percent = clamp(value, 0, 100)
+	_save_video_settings()
+	_apply_brightness_setting()
+
+
+func _ensure_brightness_overlay() -> void:
+	if _brightness_layer != null and is_instance_valid(_brightness_layer):
+		return
+
+	var root := get_tree().root
+	if root == null:
+		return
+
+	_brightness_layer = CanvasLayer.new()
+	_brightness_layer.name = "BrightnessOverlayLayer"
+	_brightness_layer.layer = 1000
+
+	_brightness_black = ColorRect.new()
+	_brightness_black.name = "BrightnessBlack"
+	_brightness_black.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_brightness_black.color = Color(0, 0, 0, 0)
+	_brightness_black.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	_brightness_white = ColorRect.new()
+	_brightness_white.name = "BrightnessWhite"
+	_brightness_white.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_brightness_white.color = Color(1, 1, 1, 0)
+	_brightness_white.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	root.add_child(_brightness_layer)
+	root.move_child(_brightness_layer, root.get_child_count() - 1)
+	_brightness_layer.add_child(_brightness_black)
+	_brightness_layer.add_child(_brightness_white)
+
+
+func _apply_brightness_setting() -> void:
+	_ensure_brightness_overlay()
+
+	if _brightness_black == null or _brightness_white == null:
+		return
+
+	if brightness_percent < 50:
+		var t := float(50 - brightness_percent) / 50.0
+		_brightness_black.color = Color(0, 0, 0, t * 0.85)
+		_brightness_white.color = Color(1, 1, 1, 0.0)
+	elif brightness_percent > 50:
+		var t := float(brightness_percent - 50) / 50.0
+		_brightness_black.color = Color(0, 0, 0, 0.0)
+		_brightness_white.color = Color(1, 1, 1, t * 0.45)
+	else:
+		_brightness_black.color = Color(0, 0, 0, 0.0)
+		_brightness_white.color = Color(1, 1, 1, 0.0)
