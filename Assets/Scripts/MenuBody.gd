@@ -9,7 +9,7 @@ var gravity: float = 2000.0
 var _last_index: int = -1
 
 func _ready() -> void:
-	# чтобы не ловить двойные коннекты
+	
 	if not GameState.selected_character_changed.is_connected(_on_selected_changed):
 		GameState.selected_character_changed.connect(_on_selected_changed)
 
@@ -20,7 +20,7 @@ func _exit_tree() -> void:
 		GameState.selected_character_changed.disconnect(_on_selected_changed)
 
 func _process(_delta: float) -> void:
-	# железный fallback: если сигнал не дошёл из-за оверлея/паузы — всё равно обновим
+	
 	if GameState.selected_character_index != _last_index:
 		_refresh(false)
 
@@ -37,13 +37,6 @@ func _refresh(force: bool) -> void:
 	_last_index = GameState.selected_character_index
 
 	_setup_character()
-	# ВАЖНО: не двигаем sprite.position по размеру текстуры,
-	# иначе разные персонажи будут "стоять" на разной высоте.
-	#sprite.position = Vector2.ZERO
-
-	# Коллизию в меню лучше оставить фиксированной (как ты настроил руками).
-	# Если хочешь авто — вернём потом, но правильно (через отдельные offsets в DB).
-	# _setup_collider_from_texture()
 
 func _setup_character() -> void:
 	if character_db == null:
@@ -92,8 +85,6 @@ func _align_to_standpoint() -> void:
 
 	var h: float = tex.get_size().y * sprite.scale.y
 
-	# если Centered включён — низ = y + h/2
-	# если Centered выключен — низ = y + h
 	if sprite.centered:
 		sprite.position.y = -h * 0.5
 	else:

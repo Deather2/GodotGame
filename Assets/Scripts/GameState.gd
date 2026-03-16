@@ -38,8 +38,23 @@ var _last_windowed_size: Vector2i = Vector2i(1152, 648)
 
 var show_fps: bool = false
 
+const CONTROLS_SECTION := "controls"
+const CONTROLS_BINDS_KEY := "bindings"
+
+var _controls_actions: Array[StringName] = [
+	&"move_left",
+	&"move_right",
+	&"jump",
+	&"crouch",
+	&"ui_cancel"
+]
+
+var _default_controls: Dictionary = {}
+
 func _ready() -> void:
 	_load_video_settings()
+	_capture_default_controls()
+	_load_controls_settings()
 
 	call_deferred("_setup_brightness_overlay")
 
@@ -500,3 +515,170 @@ func set_show_fps_setting(enabled: bool) -> void:
 	show_fps = enabled
 	_save_video_settings()
 	SceneManager.update_fps_counter()
+
+
+func _capture_default_controls() -> void:
+	_default_controls.clear()
+
+	for action_name in _controls_actions:
+		_default_controls[String(action_name)] = _serialize_action_events(action_name)
+
+func _serialize_action_events(action_name: StringName) -> Array:
+	var result: Array = []
+
+	for event in InputMap.action_get_events(action_name):
+		var data := _event_to_data(event)
+		if not data.is_empty():
+			result.append(data)
+
+	return result
+
+func _event_to_data(event: InputEvent) -> Dictionary:
+	if event is InputEventKey:
+		var key_event := event as InputEventKey
+		return {
+			"type": "key",
+			"keycode": int(key_event.keycode),
+			"physical_keycode": int(key_event.physical_keycode),
+			"shift": key_event.shift_pressed,
+			"ctrl": key_event.ctrl_pressed,
+			"alt": key_event.alt_pressed,
+			"meta": key_event.meta_pressed
+		}
+
+	if event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		return {
+			"type": "mouse",
+			"button_index": int(mouse_event.button_index),
+			"shift": mouse_event.shift_pressed,
+			"ctrl": mouse_event.ctrl_pressed,
+			"alt": mouse_event.alt_pressed,
+			"meta": mouse_event.meta_pressed
+		}
+
+	return {}
+
+func _data_to_event(data: Dictionary) -> InputEvent:
+	var event_type := String(data.get("type", ""))
+
+	if event_type == "key":
+		var key_event := InputEventKey.new()
+		key_event.keycode = int(data.get("keycode", 0))
+		key_event.physical_keycode = int(data.get("physical_keycode", 0))
+		key_event.shift_pressed = bool(data.get("shift", false))
+		key_event.ctrl_pressed = bool(data.get("ctrl", false))
+		key_event.alt_pressed = bool(data.get("alt", false))
+		key_event.meta_pressed = bool(data.get("meta", false))
+		return key_event
+
+	if event_type == "mouse":
+		var mouse_event := InputEventMouseButton.new()
+		mouse_event.button_index = int(data.get("button_index", 0))
+		mouse_event.shift_pressed = bool(data.get("shift", false))
+		mouse_event.ctrl_pressed = bool(data.get("ctrl", false))
+		mouse_event.alt_pressed = bool(data.get("alt", false))
+		mouse_event.meta_pressed = bool(data.get("meta", false))
+		return mouse_event
+
+	return null
+
+
+func _apply_serialized_events(action_name: StringName, saved_events: Array) -> void:
+	var other_events: Array[InputEvent] = []
+
+	for event in InputMap.action_get_events(action_name):
+		if event is InputEventKey or event is InputEventMouseButton:
+			continue
+		other_events.append(event)
+
+	InputMap.action_erase_events(action_name)
+
+	for event in other_events:
+		InputMap.action_add_event(action_name, event)
+
+	for item in saved_events:
+		if item is Dictionary:
+			var restored_event := _data_to_event(item)
+			if restored_event != null:
+				InputMap.action_add_event(action_name, restored_event)
+
+func _bind_arrays_equal(a: Array, b: Array) -> bool:
+	if a.size() != b.size():
+		return false
+
+	for i in range(a.size()):
+		if not _bind_data_equal(a[i], b[i]):
+			return false
+
+	return true
+
+
+func _bind_data_equal(a: Variant, b: Variant) -> bool:
+	if not (a is Dictionary) or not (b is Dictionary):
+		return false
+
+	var da := a as Dictionary
+	var db := b as Dictionary
+
+	return (
+		String(da.get("type", "")) == String(db.get("type", "")) and
+		int(da.get("keycode", 0)) == int(db.get("keycode", 0)) and
+		int(da.get("physical_keycode", 0)) == int(db.get("physical_keycode", 0)) and
+		int(da.get("button_index", 0)) == int(db.get("button_index", 0)) and
+		bool(da.get("shift", false)) == bool(db.get("shift", false)) and
+		bool(da.get("ctrl", false)) == bool(db.get("ctrl", false)) and
+		bool(da.get("alt", false)) == bool(db.get("alt", false)) and
+		bool(da.get("meta", false)) == bool(db.get("meta", false))
+	)
+
+func save_controls_overrides() -> void:
+	var cfg := ConfigFile.new()
+	cfg.load(SETTINGS_PATH)
+
+	var overrides := {}
+
+	for action_name in _controls_actions:
+		var key := String(action_name)
+		var current_events := _serialize_action_events(action_name)
+		var default_events: Array = _default_controls.get(key, [])
+
+		if not _bind_arrays_equal(current_events, default_events):
+			overrides[key] = current_events
+
+	cfg.set_value(CONTROLS_SECTION, CONTROLS_BINDS_KEY, overrides)
+	cfg.save(SETTINGS_PATH)
+
+func _load_controls_settings() -> void:
+	var cfg := ConfigFile.new()
+	var err := cfg.load(SETTINGS_PATH)
+	if err != OK:
+		return
+
+	var overrides: Variant = cfg.get_value(CONTROLS_SECTION, CONTROLS_BINDS_KEY, {})
+	if not (overrides is Dictionary):
+		return
+
+	var binds_dict := overrides as Dictionary
+
+	for action_name in _controls_actions:
+		var key := String(action_name)
+
+		if not binds_dict.has(key):
+			continue
+
+		var saved_events: Variant = binds_dict[key]
+		if saved_events is Array:
+			_apply_serialized_events(action_name, saved_events as Array)
+
+func reset_controls_to_default() -> void:
+	for action_name in _controls_actions:
+		var key := String(action_name)
+		var default_events_variant: Variant = _default_controls.get(key, [])
+		var default_events: Array = default_events_variant as Array
+		_apply_serialized_events(action_name, default_events)
+
+	var cfg := ConfigFile.new()
+	cfg.load(SETTINGS_PATH)
+	cfg.set_value(CONTROLS_SECTION, CONTROLS_BINDS_KEY, {})
+	cfg.save(SETTINGS_PATH)

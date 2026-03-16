@@ -169,6 +169,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_2ngye")
 
 [node name="ContentScroll" type="ScrollContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel"]
 layout_mode = 2
+horizontal_scroll_mode = 0
 
 [node name="ContentPad" type="MarginContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll"]
 layout_mode = 2
@@ -337,6 +338,7 @@ vertical_alignment = 1
 [node name="ControlsSection" type="VBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 12
 
 [node name="ControlsList" type="VBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection"]
 layout_mode = 2
@@ -369,10 +371,12 @@ size_flags_horizontal = 3
 [node name="Bind1" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
+focus_mode = 0
 
 [node name="Bind2" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
+focus_mode = 0
 
 [node name="MoveRightRow" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList"]
 layout_mode = 2
@@ -400,10 +404,12 @@ size_flags_horizontal = 3
 [node name="Bind1" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
+focus_mode = 0
 
 [node name="Bind2" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
+focus_mode = 0
 
 [node name="JumpRow" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList"]
 layout_mode = 2
@@ -431,10 +437,12 @@ size_flags_horizontal = 3
 [node name="Bind1" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
+focus_mode = 0
 
 [node name="Bind2" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
+focus_mode = 0
 
 [node name="CrouchRow" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList"]
 layout_mode = 2
@@ -462,10 +470,12 @@ size_flags_horizontal = 3
 [node name="Bind1" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
+focus_mode = 0
 
 [node name="Bind2" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
+focus_mode = 0
 
 [node name="PauseRow" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList"]
 layout_mode = 2
@@ -493,10 +503,17 @@ size_flags_horizontal = 3
 [node name="Bind1" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
+focus_mode = 0
 
 [node name="Bind2" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
+focus_mode = 0
+
+[node name="ResetControlsButton" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection"]
+layout_mode = 2
+focus_mode = 0
+text = "Pēc noklusējuma"
 
 [node name="AudioTitle" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections"]
 layout_mode = 2
@@ -521,3 +538,35 @@ layout_mode = 2
 [connection signal="mouse_exited" from="Panel/Pad/Root/Body/LeftMenu/ControlsTab" to="." method="_on_button_mouse_exited"]
 [connection signal="mouse_entered" from="Panel/Pad/Root/Body/LeftMenu/AudioTab" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/Pad/Root/Body/LeftMenu/AudioTab" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ModeRow/ModeOption" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ModeRow/ModeOption" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow/VSyncOption" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow/VSyncOption" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight/BrightnessSlider" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight/BrightnessSlider" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight/BrightnessSpinBox" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight/BrightnessSpinBox" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ShowFpsRow/ShowFpsOption" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ShowFpsRow/ShowFpsOption" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="." method="_on_button_mouse_exited"]
