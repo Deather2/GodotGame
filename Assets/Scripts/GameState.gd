@@ -36,6 +36,7 @@ var _window_apply_busy: bool = false
 var _window_reapply_requested: bool = false
 var _last_windowed_size: Vector2i = Vector2i(1152, 648)
 
+var show_fps: bool = false
 
 func _ready() -> void:
 	_load_video_settings()
@@ -58,6 +59,7 @@ func _init_default_video_settings() -> void:
 	window_mode = WINDOW_MODE_WINDOWED
 	vsync_enabled = true
 	brightness_percent = 50
+	show_fps = false
 
 
 func _save_video_settings() -> void:
@@ -66,6 +68,7 @@ func _save_video_settings() -> void:
 	cfg.set_value(VIDEO_SECTION, "window_mode", window_mode)
 	cfg.set_value(VIDEO_SECTION, "vsync_enabled", vsync_enabled)
 	cfg.set_value(VIDEO_SECTION, "brightness_percent", brightness_percent)
+	cfg.set_value(VIDEO_SECTION, "show_fps", show_fps)
 	cfg.save(SETTINGS_PATH)
 
 
@@ -82,6 +85,7 @@ func _load_video_settings() -> void:
 	vsync_enabled = bool(cfg.get_value(VIDEO_SECTION, "vsync_enabled", true))
 	brightness_percent = int(cfg.get_value(VIDEO_SECTION, "brightness_percent", 50))
 	brightness_percent = clamp(brightness_percent, 0, 100)
+	show_fps = bool(cfg.get_value(VIDEO_SECTION, "show_fps", false))
 
 	if window_mode < WINDOW_MODE_WINDOWED or window_mode > WINDOW_MODE_BORDERLESS:
 		window_mode = WINDOW_MODE_WINDOWED
@@ -488,3 +492,11 @@ func _apply_brightness_setting() -> void:
 	else:
 		_brightness_black.color = Color(0, 0, 0, 0.0)
 		_brightness_white.color = Color(1, 1, 1, 0.0)
+
+func set_show_fps_setting(enabled: bool) -> void:
+	if show_fps == enabled:
+		return
+
+	show_fps = enabled
+	_save_video_settings()
+	SceneManager.update_fps_counter()

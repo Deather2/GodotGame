@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=3 uid="uid://c4ch6tymjwf5p"]
 
-[ext_resource type="Script" uid="uid://bjl61hvs2qrf8" path="res://Assets/Scripts/settings_panel.gd" id="1_2ngye"]
-[ext_resource type="Texture2D" uid="uid://dkq2tr5djjjur" path="res://Assets/ui/retro.png" id="1_mer7k"]
-[ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_2ngye"]
+[ext_resource type="Script" uid="uid://bjl61hvs2qrf8" path="res://Assets/Scripts/settings_panel.gd" id="1_4lvv2"]
+[ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_4g7x7"]
+[ext_resource type="Texture2D" uid="uid://dkq2tr5djjjur" path="res://Assets/ui/retro.png" id="3_o512t"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v2a54"]
-texture = ExtResource("1_mer7k")
+texture = ExtResource("3_o512t")
 region_rect = Rect2(419, 261, 87, 55)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v2a54"]
@@ -53,8 +53,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_2ngye")
-ui_font = ExtResource("2_2ngye")
+script = ExtResource("1_4lvv2")
+ui_font = ExtResource("2_4g7x7")
 
 [node name="Panel" type="Panel" parent="."]
 custom_minimum_size = Vector2(960, 540)
@@ -74,7 +74,7 @@ theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 56
 text = "Iestatījumi"
 horizontal_alignment = 1
@@ -116,7 +116,7 @@ theme_override_colors/font_hover_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxFlat_v2a54")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_65xqu")
@@ -134,7 +134,7 @@ theme_override_colors/font_hover_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxFlat_v2a54")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_65xqu")
@@ -152,7 +152,7 @@ theme_override_colors/font_hover_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxFlat_v2a54")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_65xqu")
@@ -193,7 +193,7 @@ theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 34
 text = "Video"
 horizontal_alignment = 1
@@ -219,7 +219,7 @@ theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 22
 text = "Režīms"
 horizontal_alignment = 1
@@ -244,7 +244,7 @@ theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 22
 text = "VSync"
 horizontal_alignment = 1
@@ -269,7 +269,7 @@ theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 22
 text = "Spilgtums"
 horizontal_alignment = 1
@@ -296,6 +296,30 @@ alignment = 1
 suffix = "%"
 select_all_on_focus = true
 
+[node name="ShowFpsRow" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="ShowFpsLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ShowFpsRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_4g7x7")
+theme_override_font_sizes/font_size = 22
+text = "Rādīt FPS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShowFpsOption" type="OptionButton" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ShowFpsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+
 [node name="ControlsTitle" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
@@ -304,7 +328,7 @@ theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 34
 text = "Vadība"
 horizontal_alignment = 1
@@ -332,7 +356,7 @@ theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 22
 text = "Iet pa kreisi"
 horizontal_alignment = 1
@@ -363,7 +387,7 @@ theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 22
 text = "Iet pa labi"
 horizontal_alignment = 1
@@ -394,7 +418,7 @@ theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 22
 text = "Lēkt"
 horizontal_alignment = 1
@@ -425,7 +449,7 @@ theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 22
 text = "Pietupties"
 horizontal_alignment = 1
@@ -456,7 +480,7 @@ theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 22
 text = "Pauze"
 horizontal_alignment = 1
@@ -482,7 +506,7 @@ theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_2ngye")
+theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 34
 text = "Audio"
 horizontal_alignment = 1

@@ -12,6 +12,7 @@ extends CenterContainer
 
 @onready var window_mode_option: OptionButton = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ModeRow/ModeOption
 @onready var vsync_option: OptionButton = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow/VSyncOption
+@onready var show_fps_option: OptionButton = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ShowFpsRow/ShowFpsOption
 
 @onready var brightness_slider: HSlider = %BrightnessSlider
 @onready var brightness_spinbox: SpinBox = %BrightnessSpinBox
@@ -27,6 +28,7 @@ func _ready() -> void:
 	_load_video_values_into_ui()
 	_style_option_button(window_mode_option)
 	_style_option_button(vsync_option)
+	_style_option_button(show_fps_option)
 	_style_brightness_slider(brightness_slider)
 	_style_brightness_spinbox(brightness_spinbox)
 
@@ -35,6 +37,7 @@ func _ready() -> void:
 
 	window_mode_option.item_selected.connect(_on_window_mode_selected)
 	vsync_option.item_selected.connect(_on_vsync_selected)
+	show_fps_option.item_selected.connect(_on_show_fps_selected)
 
 	_style_scrollbar()
 
@@ -48,6 +51,10 @@ func _fill_video_options() -> void:
 	vsync_option.clear()
 	vsync_option.add_item("Izsl.", 0)
 	vsync_option.add_item("Iesl.", 1)
+	
+	show_fps_option.clear()
+	show_fps_option.add_item("Izsl.", 0)
+	show_fps_option.add_item("Iesl.", 1)
 
 
 func _load_video_values_into_ui() -> void:
@@ -58,13 +65,12 @@ func _load_video_values_into_ui() -> void:
 	else:
 		vsync_option.select(0)
 
-	brightness_slider.value = GameState.brightness_percent
-	window_mode_option.select(GameState.window_mode)
-
-	if GameState.vsync_enabled:
-		vsync_option.select(1)
+	if GameState.show_fps:
+		show_fps_option.select(1)
 	else:
-		vsync_option.select(0)
+		show_fps_option.select(0)
+
+	brightness_slider.value = GameState.brightness_percent
 
 
 func _on_window_mode_selected(index: int) -> void:
@@ -74,6 +80,8 @@ func _on_window_mode_selected(index: int) -> void:
 func _on_vsync_selected(index: int) -> void:
 	GameState.set_vsync_enabled_setting(index == 1)
 
+func _on_show_fps_selected(index: int) -> void:
+	GameState.set_show_fps_setting(index == 1)
 
 func _scroll_to_section(section: Control) -> void:
 	content_scroll.scroll_vertical = int(section.position.y)
