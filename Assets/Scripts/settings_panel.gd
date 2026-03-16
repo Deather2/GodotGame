@@ -726,3 +726,6 @@ func _style_reset_button(btn: Button) -> void:
 
 	if ui_font != null:
 		btn.add_theme_font_override("font", ui_font)
+
+func _on_back_pressed() -> void:
+	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
