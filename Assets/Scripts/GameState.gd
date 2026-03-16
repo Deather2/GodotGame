@@ -4,6 +4,8 @@ signal selected_character_changed(new_index: int)
 signal unlocks_changed
 signal stars_spent_changed
 
+signal controls_changed
+
 const SETTINGS_PATH := "user://settings.cfg"
 const PROGRESS_PATH := "user://progress.cfg"
 
@@ -691,3 +693,6 @@ func reset_controls_to_default() -> void:
 	cfg.load(SETTINGS_PATH)
 	cfg.set_value(CONTROLS_SECTION, CONTROLS_BINDS_KEY, {})
 	cfg.save(SETTINGS_PATH)
+
+func notify_controls_changed() -> void:
+	controls_changed.emit()

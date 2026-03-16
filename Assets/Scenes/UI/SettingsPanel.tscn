@@ -251,6 +251,10 @@ theme_override_constants/separation = 250
 [node name="VSyncLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow"]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
+tooltip_text = "VSync sinhronizē spēles attēlu ar monitora atsvaidzes
+ātrumu. Tas var samazināt ekrāna plīsumus, bet dažreiz
+var palielināt ievades aizturi."
+mouse_filter = 0
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
 theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)

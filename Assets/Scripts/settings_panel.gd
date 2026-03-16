@@ -88,6 +88,7 @@ func _ready() -> void:
 	show_fps_option.item_selected.connect(_on_show_fps_selected)
 
 	_style_scrollbar()
+	_setup_tooltip_theme()
 	
 	var bind_buttons: Array[Button] = [
 		move_left_bind_1, move_left_bind_2,
@@ -324,7 +325,7 @@ func _style_brightness_slider(sl: HSlider) -> void:
 func _style_brightness_spinbox(sb: SpinBox) -> void:
 	var normal := _make_box("1f1312", "6b4a46")
 	var hover := _make_box("2c1a18", "8a6258")
-	var focus := _make_box("1f1312", "6b4a46") 
+	var focus := _make_box("1f1312", "6b4a46")
 
 	normal.content_margin_left = 8
 	normal.content_margin_right = 8
@@ -340,8 +341,6 @@ func _style_brightness_spinbox(sb: SpinBox) -> void:
 	focus.content_margin_right = 8
 	focus.content_margin_top = 4
 	focus.content_margin_bottom = 4
-
-	sb.add_theme_icon_override("updown", _make_spinbox_arrows(Color("f1f3ff")))
 
 	var line_edit := sb.get_line_edit()
 	if line_edit == null:
@@ -362,13 +361,83 @@ func _style_brightness_spinbox(sb: SpinBox) -> void:
 
 	line_edit.add_theme_font_size_override("font_size", 16)
 	line_edit.add_theme_constant_override("outline_size", 8)
-	sb.alignment = HORIZONTAL_ALIGNMENT_CENTER
-	
-	sb.add_theme_constant_override("buttons_width", 12)
-	sb.add_theme_constant_override("field_and_buttons_separation", 0)
 
 	if ui_font != null:
 		line_edit.add_theme_font_override("font", ui_font)
+
+	sb.alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+	sb.add_theme_constant_override("buttons_width", 26)
+	sb.add_theme_constant_override("field_and_buttons_separation", 6)
+	sb.add_theme_constant_override("buttons_vertical_separation", 2)
+	sb.add_theme_constant_override("set_min_buttons_width_from_icons", 0)
+
+	sb.add_theme_icon_override("up", _make_spin_arrow(true, Color("f1f3ff")))
+	sb.add_theme_icon_override("down", _make_spin_arrow(false, Color("f1f3ff")))
+
+	sb.add_theme_icon_override("up_hover", _make_spin_arrow(true, Color("ffffff")))
+	sb.add_theme_icon_override("down_hover", _make_spin_arrow(false, Color("ffffff")))
+
+	sb.add_theme_icon_override("up_pressed", _make_spin_arrow(true, Color("ffffff")))
+	sb.add_theme_icon_override("down_pressed", _make_spin_arrow(false, Color("ffffff")))
+
+	sb.add_theme_icon_override("up_disabled", _make_spin_arrow(true, Color("9b8f8d")))
+	sb.add_theme_icon_override("down_disabled", _make_spin_arrow(false, Color("9b8f8d")))
+
+	var btn_normal := _make_spin_btn_box("1a1110", "6b4a46")
+	var btn_hover := _make_spin_btn_box("241614", "8a6258")
+	var btn_pressed := _make_spin_btn_box("3a211f", "a97a6b")
+	var btn_disabled := _make_spin_btn_box("1a1110", "3e2a28")
+
+	sb.add_theme_stylebox_override("up_background", btn_normal)
+	sb.add_theme_stylebox_override("down_background", btn_normal)
+
+	sb.add_theme_stylebox_override("up_background_hovered", btn_hover)
+	sb.add_theme_stylebox_override("down_background_hovered", btn_hover)
+
+	sb.add_theme_stylebox_override("up_background_pressed", btn_pressed)
+	sb.add_theme_stylebox_override("down_background_pressed", btn_pressed)
+
+	sb.add_theme_stylebox_override("up_background_disabled", btn_disabled)
+	sb.add_theme_stylebox_override("down_background_disabled", btn_disabled)
+
+	var transparent_sep := StyleBoxFlat.new()
+	transparent_sep.bg_color = Color(0, 0, 0, 0)
+
+	sb.add_theme_stylebox_override("field_and_buttons_separator", transparent_sep)
+	sb.add_theme_stylebox_override("up_down_buttons_separator", transparent_sep)
+
+func _make_spin_btn_box(bg_hex: String, border_hex: String) -> StyleBoxFlat:
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(bg_hex)
+	sb.border_color = Color(border_hex)
+	sb.set_border_width_all(2)
+	sb.corner_radius_top_left = 4
+	sb.corner_radius_top_right = 4
+	sb.corner_radius_bottom_left = 4
+	sb.corner_radius_bottom_right = 4
+	return sb
+
+func _make_spin_arrow(is_up: bool, color: Color) -> Texture2D:
+	var img := Image.create(12, 11, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+
+	if is_up:
+		for x in range(5, 7):
+			img.set_pixel(x, 4, color)
+		for x in range(4, 8):
+			img.set_pixel(x, 5, color)
+		for x in range(3, 9):
+			img.set_pixel(x, 6, color)
+	else:
+		for x in range(3, 9):
+			img.set_pixel(x, 4, color)
+		for x in range(4, 8):
+			img.set_pixel(x, 5, color)
+		for x in range(5, 7):
+			img.set_pixel(x, 6, color)
+
+	return ImageTexture.create_from_image(img)
 
 func _make_box(bg_hex: String, border_hex: String) -> StyleBoxFlat:
 	var sb := StyleBoxFlat.new()
@@ -437,6 +506,7 @@ func _input(event: InputEvent) -> void:
 
 			_apply_input_rebind(_rebind_action, _rebind_slot, key_event)
 			GameState.save_controls_overrides()
+			GameState.notify_controls_changed()
 			_load_controls_values_into_ui()
 
 			_rebind_action = &""
@@ -469,6 +539,7 @@ func _input(event: InputEvent) -> void:
 
 			_apply_input_rebind(_rebind_action, _rebind_slot, mouse_event)
 			GameState.save_controls_overrides()
+			GameState.notify_controls_changed()
 			_load_controls_values_into_ui()
 
 			_rebind_action = &""
@@ -632,6 +703,7 @@ func _on_reset_controls_pressed() -> void:
 	_rebind_armed = false
 
 	GameState.reset_controls_to_default()
+	GameState.notify_controls_changed()
 	_load_controls_values_into_ui()
 
 func _style_bind_button(btn: Button) -> void:
@@ -729,3 +801,32 @@ func _style_reset_button(btn: Button) -> void:
 
 func _on_back_pressed() -> void:
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
+
+func _setup_tooltip_theme() -> void:
+	if theme == null:
+		theme = Theme.new()
+
+	var panel_sb := StyleBoxFlat.new()
+	panel_sb.bg_color = Color("241614")
+	panel_sb.border_color = Color("8a6258")
+	panel_sb.set_border_width_all(2)
+	panel_sb.corner_radius_top_left = 6
+	panel_sb.corner_radius_top_right = 6
+	panel_sb.corner_radius_bottom_left = 6
+	panel_sb.corner_radius_bottom_right = 6
+	panel_sb.content_margin_left = 10
+	panel_sb.content_margin_right = 10
+	panel_sb.content_margin_top = 6
+	panel_sb.content_margin_bottom = 6
+
+	theme.set_stylebox("panel", "TooltipPanel", panel_sb)
+	theme.set_color("font_color", "TooltipLabel", Color("e8f3ff"))
+	theme.set_color("font_outline_color", "TooltipLabel", Color("1a0d06"))
+	theme.set_color("font_shadow_color", "TooltipLabel", Color("0000007f"))
+	theme.set_constant("outline_size", "TooltipLabel", 2)
+	theme.set_constant("shadow_offset_x", "TooltipLabel", 2)
+	theme.set_constant("shadow_offset_y", "TooltipLabel", 2)
+	theme.set_font_size("font_size", "TooltipLabel", 16)
+
+	if ui_font != null:
+		theme.set_font("font", "TooltipLabel", ui_font)
