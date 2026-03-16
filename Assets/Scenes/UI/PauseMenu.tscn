@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://ck3f2fkk1o4me"]
+[gd_scene load_steps=16 format=3 uid="uid://ck3f2fkk1o4me"]
 
 [ext_resource type="Script" uid="uid://bvrsu2ijylo34" path="res://Assets/Scripts/pause_menu.gd" id="1_p62xk"]
 [ext_resource type="Texture2D" uid="uid://dkq2tr5djjjur" path="res://Assets/ui/retro.png" id="2_2ivcv"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_p62xk"]
+[ext_resource type="Script" uid="uid://bjl61hvs2qrf8" path="res://Assets/Scripts/settings_panel.gd" id="4_2ivcv"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rigmb"]
 texture = ExtResource("2_2ivcv")
@@ -15,6 +16,61 @@ region_rect = Rect2(99, 35, 90, 27)
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_clggo"]
 texture = ExtResource("2_2ivcv")
 region_rect = Rect2(196, 37, 90, 25)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v2a54"]
+texture = ExtResource("2_2ivcv")
+region_rect = Rect2(419, 261, 87, 55)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v2a54"]
+bg_color = Color(0.22745098, 0.14901961, 0.16862746, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.41960785, 0.2901961, 0.27450982, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_65xqu"]
+bg_color = Color(0.41960785, 0.2901961, 0.27450982, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6039216, 0.41568628, 0.3647059, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_of2i2"]
+bg_color = Color(0.2901961, 0.19215687, 0.21176471, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5411765, 0.38431373, 0.34509805, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ngye"]
+bg_color = Color(1, 1, 1, 0)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4lvv2"]
+texture = ExtResource("2_2ivcv")
+region_rect = Rect2(257, 289, 14, 14)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4g7x7"]
+texture = ExtResource("2_2ivcv")
+region_rect = Rect2(273, 290, 14, 13)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o512t"]
+texture = ExtResource("2_2ivcv")
+region_rect = Rect2(257, 289, 14, 14)
 
 [node name="PauseMenu" type="CanvasLayer"]
 process_mode = 2
@@ -191,6 +247,507 @@ text = "Izvēlne"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="SettingsPanel" type="CenterContainer" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_2ivcv")
+ui_font = ExtResource("2_p62xk")
+
+[node name="Panel" type="Panel" parent="SettingsPanel"]
+custom_minimum_size = Vector2(960, 540)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_v2a54")
+
+[node name="Title" type="Label" parent="SettingsPanel/Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 25.0
+offset_bottom = 81.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 56
+text = "Iestatījumi"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Pad" type="MarginContainer" parent="SettingsPanel/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 75
+theme_override_constants/margin_top = 110
+theme_override_constants/margin_right = 75
+theme_override_constants/margin_bottom = 90
+
+[node name="Root" type="VBoxContainer" parent="SettingsPanel/Panel/Pad"]
+layout_mode = 2
+
+[node name="Body" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="LeftMenu" type="VBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="VideoTab" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/LeftMenu"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_focus_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_hover_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxFlat_v2a54")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_65xqu")
+theme_override_styles/hover = SubResource("StyleBoxFlat_of2i2")
+text = "Video"
+
+[node name="ControlsTab" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/LeftMenu"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_focus_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_hover_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxFlat_v2a54")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_65xqu")
+theme_override_styles/hover = SubResource("StyleBoxFlat_of2i2")
+text = "Vadība"
+
+[node name="AudioTab" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/LeftMenu"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_focus_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_hover_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxFlat_v2a54")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_65xqu")
+theme_override_styles/hover = SubResource("StyleBoxFlat_of2i2")
+text = "Audio"
+
+[node name="RightWrap" type="MarginContainer" parent="SettingsPanel/Panel/Pad/Root/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ContentPanel" type="PanelContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2ngye")
+
+[node name="ContentScroll" type="ScrollContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="ContentPad" type="MarginContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 8
+
+[node name="Sections" type="VBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="VideoTitle" type="Label" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 34
+text = "Video"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VideoSection" type="VBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections"]
+layout_mode = 2
+
+[node name="VideoRows" type="VBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ModeRow" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="ModeLabel" type="Label" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ModeRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 22
+text = "Režīms"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ModeOption" type="OptionButton" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ModeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+
+[node name="VSyncRow" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="VSyncLabel" type="Label" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 22
+text = "VSync"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VSyncOption" type="OptionButton" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+
+[node name="BrightnessRow" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="BrightnessLabel" type="Label" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 22
+text = "Spilgtums"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BrightnessRight" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BrightnessSlider" type="HSlider" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
+value = 50.0
+
+[node name="BrightnessSpinBox" type="SpinBox" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+value = 50.0
+alignment = 1
+suffix = "%"
+select_all_on_focus = true
+
+[node name="ShowFpsRow" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="ShowFpsLabel" type="Label" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ShowFpsRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 22
+text = "Rādīt FPS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShowFpsOption" type="OptionButton" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ShowFpsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+
+[node name="ControlsTitle" type="Label" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 34
+text = "Vadība"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ControlsSection" type="VBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="ControlsList" type="VBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="MoveLeftRow" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="ActionLabel" type="Label" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 22
+text = "Iet pa kreisi"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Bind1" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+focus_mode = 0
+
+[node name="Bind2" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+focus_mode = 0
+
+[node name="MoveRightRow" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="ActionLabel" type="Label" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 22
+text = "Iet pa labi"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Bind1" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+focus_mode = 0
+
+[node name="Bind2" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+focus_mode = 0
+
+[node name="JumpRow" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="ActionLabel" type="Label" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 22
+text = "Lēkt"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Bind1" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+focus_mode = 0
+
+[node name="Bind2" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+focus_mode = 0
+
+[node name="CrouchRow" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="ActionLabel" type="Label" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 22
+text = "Pietupties"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Bind1" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+focus_mode = 0
+
+[node name="Bind2" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+focus_mode = 0
+
+[node name="PauseRow" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="ActionLabel" type="Label" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 22
+text = "Pauze"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Bind1" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+focus_mode = 0
+
+[node name="Bind2" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+focus_mode = 0
+
+[node name="ResetControlsButton" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection"]
+layout_mode = 2
+focus_mode = 0
+text = "Pēc noklusējuma"
+
+[node name="AudioTitle" type="Label" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_p62xk")
+theme_override_font_sizes/font_size = 34
+text = "Audio"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AudioSection" type="VBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="SettingsPanel/Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -68.0
+offset_top = 16.0
+offset_right = -20.0
+offset_bottom = 64.0
+grow_horizontal = 0
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_4lvv2")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_4g7x7")
+theme_override_styles/hover = SubResource("StyleBoxTexture_o512t")
+
 [connection signal="mouse_entered" from="Panel/VBox/ContinueButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/VBox/ContinueButton" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Panel/VBox/ContinueButton" to="." method="close_pause"]
@@ -199,7 +756,48 @@ vertical_alignment = 1
 [connection signal="pressed" from="Panel/VBox/RestartButton" to="." method="retry_level"]
 [connection signal="mouse_entered" from="Panel/VBox/SettingsButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/VBox/SettingsButton" to="." method="_on_button_mouse_exited"]
-[connection signal="pressed" from="Panel/VBox/SettingsButton" to="." method="retry_level"]
+[connection signal="pressed" from="Panel/VBox/SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="mouse_entered" from="Panel/VBox/MenuButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/VBox/MenuButton" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Panel/VBox/MenuButton" to="." method="go_to_menu"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/VideoTab" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/VideoTab" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/ControlsTab" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/ControlsTab" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/AudioTab" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/AudioTab" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ModeRow/ModeOption" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ModeRow/ModeOption" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow/VSyncOption" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow/VSyncOption" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight/BrightnessSlider" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight/BrightnessSlider" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight/BrightnessSpinBox" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight/BrightnessSpinBox" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ShowFpsRow/ShowFpsOption" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ShowFpsRow/ShowFpsOption" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="SettingsPanel/Panel/BackButton" to="SettingsPanel" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="SettingsPanel/Panel/BackButton" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/BackButton" to="." method="_on_back_button_pressed"]

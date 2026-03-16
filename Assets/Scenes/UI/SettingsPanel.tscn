@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c4ch6tymjwf5p"]
+[gd_scene load_steps=12 format=3 uid="uid://c4ch6tymjwf5p"]
 
 [ext_resource type="Script" uid="uid://bjl61hvs2qrf8" path="res://Assets/Scripts/settings_panel.gd" id="1_4lvv2"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_4g7x7"]
@@ -46,6 +46,18 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ngye"]
 bg_color = Color(1, 1, 1, 0)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4lvv2"]
+texture = ExtResource("3_o512t")
+region_rect = Rect2(257, 289, 14, 14)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4g7x7"]
+texture = ExtResource("3_o512t")
+region_rect = Rect2(273, 290, 14, 13)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o512t"]
+texture = ExtResource("3_o512t")
+region_rect = Rect2(257, 289, 14, 14)
 
 [node name="SettingsPanel" type="CenterContainer"]
 anchors_preset = 15
@@ -532,6 +544,21 @@ vertical_alignment = 1
 [node name="AudioSection" type="VBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections"]
 layout_mode = 2
 
+[node name="BackButton" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -68.0
+offset_top = 16.0
+offset_right = -20.0
+offset_bottom = 64.0
+grow_horizontal = 0
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_4lvv2")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_4g7x7")
+theme_override_styles/hover = SubResource("StyleBoxTexture_o512t")
+
 [connection signal="mouse_entered" from="Panel/Pad/Root/Body/LeftMenu/VideoTab" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/Pad/Root/Body/LeftMenu/VideoTab" to="." method="_on_button_mouse_exited"]
 [connection signal="mouse_entered" from="Panel/Pad/Root/Body/LeftMenu/ControlsTab" to="." method="_on_button_mouse_entered"]
@@ -570,3 +597,6 @@ layout_mode = 2
 [connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_exited"]
 [connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/BackButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/BackButton" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Panel/BackButton" to="." method="_on_back_pressed"]

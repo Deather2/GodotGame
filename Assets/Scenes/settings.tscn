@@ -1,19 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://csla1k56cue8t"]
+[gd_scene load_steps=2 format=3 uid="uid://csla1k56cue8t"]
 
 [ext_resource type="PackedScene" uid="uid://c4ch6tymjwf5p" path="res://Assets/Scenes/UI/SettingsPanel.tscn" id="1_7r48f"]
-[ext_resource type="Texture2D" uid="uid://dkq2tr5djjjur" path="res://Assets/ui/retro.png" id="2_nugfm"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jtp1d"]
-texture = ExtResource("2_nugfm")
-region_rect = Rect2(257, 289, 14, 14)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_36uk7"]
-texture = ExtResource("2_nugfm")
-region_rect = Rect2(273, 290, 14, 13)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hb0pr"]
-texture = ExtResource("2_nugfm")
-region_rect = Rect2(257, 289, 14, 14)
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -43,22 +30,3 @@ offset_left = -480.0
 offset_top = -270.0
 offset_right = 480.0
 offset_bottom = 270.0
-
-[node name="BackButton" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -164.0
-offset_top = 70.0
-offset_right = -116.0
-offset_bottom = 118.0
-grow_horizontal = 0
-focus_mode = 0
-theme_override_styles/normal = SubResource("StyleBoxTexture_jtp1d")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_36uk7")
-theme_override_styles/hover = SubResource("StyleBoxTexture_hb0pr")
-
-[connection signal="mouse_entered" from="BackButton" to="SettingsPanel" method="_on_button_mouse_entered"]
-[connection signal="mouse_exited" from="BackButton" to="SettingsPanel" method="_on_button_mouse_exited"]
-[connection signal="pressed" from="BackButton" to="SettingsPanel" method="_on_back_pressed"]
