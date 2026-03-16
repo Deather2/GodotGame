@@ -35,6 +35,7 @@ var _brightness_white: ColorRect
 var _window_apply_busy: bool = false
 var _window_reapply_requested: bool = false
 var _last_windowed_size: Vector2i = Vector2i(1152, 648)
+var _last_windowed_was_maximized: bool = false
 
 var show_fps: bool = false
 
@@ -111,9 +112,13 @@ func set_window_mode_setting(mode: int) -> void:
 		return
 
 	var win := get_tree().root
-	if win != null and win.mode == Window.MODE_WINDOWED and not win.borderless:
-		if win.size.x > 0 and win.size.y > 0:
-			_last_windowed_size = win.size
+	if win != null and not win.borderless:
+		if win.mode == Window.MODE_MAXIMIZED:
+			_last_windowed_was_maximized = true
+		elif win.mode == Window.MODE_WINDOWED:
+			_last_windowed_was_maximized = false
+			if win.size.x > 0 and win.size.y > 0:
+				_last_windowed_size = win.size
 
 	window_mode = mode
 	_save_video_settings()
@@ -188,16 +193,20 @@ func _apply_window_mode_setting() -> void:
 			win.mode = Window.MODE_WINDOWED
 			await _wait_window_frames(2)
 
+			win.borderless = false
 			win.unresizable = false
 			await _wait_window_frames(1)
 
-			win.size = _last_windowed_size
-			await _wait_window_frames(2)
+			if _last_windowed_was_maximized:
+				win.mode = Window.MODE_MAXIMIZED
+			else:
+				win.size = _last_windowed_size
+				await _wait_window_frames(2)
 
-			win.move_to_center()
-			await _wait_window_frames(1)
+				win.move_to_center()
+				await _wait_window_frames(1)
 
-			win.size = _last_windowed_size
+				win.size = _last_windowed_size
 
 		WINDOW_MODE_FULLSCREEN:
 			win.borderless = false
