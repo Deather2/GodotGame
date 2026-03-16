@@ -251,20 +251,20 @@ func _style_brightness_slider(sl: HSlider) -> void:
 func _style_brightness_spinbox(sb: SpinBox) -> void:
 	var normal := _make_box("1f1312", "6b4a46")
 	var hover := _make_box("2c1a18", "8a6258")
-	var focus := _make_box("1f1312", "6b4a46") # такой же, как normal, чтобы убрать заметный focus
+	var focus := _make_box("1f1312", "6b4a46") 
 
 	normal.content_margin_left = 8
-	normal.content_margin_right = 18
+	normal.content_margin_right = 8
 	normal.content_margin_top = 4
 	normal.content_margin_bottom = 4
 
 	hover.content_margin_left = 8
-	hover.content_margin_right = 18
+	hover.content_margin_right = 8
 	hover.content_margin_top = 4
 	hover.content_margin_bottom = 4
 
 	focus.content_margin_left = 8
-	focus.content_margin_right = 18
+	focus.content_margin_right = 8
 	focus.content_margin_top = 4
 	focus.content_margin_bottom = 4
 
@@ -289,7 +289,10 @@ func _style_brightness_spinbox(sb: SpinBox) -> void:
 
 	line_edit.add_theme_font_size_override("font_size", 16)
 	line_edit.add_theme_constant_override("outline_size", 8)
-	line_edit.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	sb.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	
+	sb.add_theme_constant_override("buttons_width", 12)
+	sb.add_theme_constant_override("field_and_buttons_separation", 0)
 
 	if ui_font != null:
 		line_edit.add_theme_font_override("font", ui_font)
