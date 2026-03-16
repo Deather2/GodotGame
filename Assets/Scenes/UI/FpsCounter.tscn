@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://cvrfrkyqbn7vr"]
+
+[ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="1_0y4m1"]
+[ext_resource type="Script" uid="uid://chbtv1qrb174g" path="res://Assets/Scripts/fps_counter.gd" id="1_thfs1"]
+
+[node name="FpsCounter" type="CanvasLayer"]
+layer = 1000
+script = ExtResource("1_thfs1")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 83.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(0.68235296, 0.7137255, 0.7490196, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.33333334)
+theme_override_colors/font_outline_color = Color(0.06666667, 0.06666667, 0.06666667, 0.53333336)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("1_0y4m1")
+theme_override_font_sizes/font_size = 18
+text = "FPS: 0"
+horizontal_alignment = 1
+vertical_alignment = 1

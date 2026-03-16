@@ -1,11 +1,14 @@
 extends Node2D
 
-@export_multiline var template := "Lai pārvietotos pa kreisi un pa labi, izmanto {move_left} un {move_right}."
+@export_multiline var template := "Lai pārvietotos pa labi, izmanto {move_right}. Lai pārvietotos pa kreisi, izmanto {move_left}."
 
 @onready var label: Label = $Label
 
 func _ready() -> void:
 	_refresh()
+	
+	if not GameState.controls_changed.is_connected(_refresh):
+		GameState.controls_changed.connect(_refresh)
 
 func _refresh() -> void:
 	label.text = _format_hint(template)

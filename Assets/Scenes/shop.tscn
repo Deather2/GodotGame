@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://t5unp2dvwmyd" path="res://Assets/Scripts/Shop.gd" id="1_88w0c"]
 [ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_17tq6"]
 [ext_resource type="Texture2D" uid="uid://cvgl420rq54qg" path="res://Assets/ui/locker_back.tres" id="2_w0ok4"]
-[ext_resource type="PackedScene" uid="uid://drrwoo1060smv" path="res://Assets/Scenes/shopCard.tscn" id="3_7ortk"]
+[ext_resource type="PackedScene" uid="uid://drrwoo1060smv" path="res://Assets/Scenes/UI/shopCard.tscn" id="3_7ortk"]
 [ext_resource type="Texture2D" uid="uid://c3blpwxp2fsws" path="res://Assets/ui/header.tres" id="3_17tq6"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="4_7ortk"]
 [ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="7_7ortk"]

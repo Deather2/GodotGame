@@ -328,7 +328,7 @@ shape = SubResource("RectangleShape2D_1waf6")
 
 [node name="HintText" parent="." instance=ExtResource("7_1waf6")]
 position = Vector2(350, 200)
-template = "Lai pārvietotos pa kreisi un pa labi, izmanto {move_left} un {move_right}"
+template = "Lai pārvietotos pa labi, izmanto {move_right}, bet lai pārvietotos pa kreisi, izmanto {move_left}."
 
 [node name="HintText2" parent="." instance=ExtResource("7_1waf6")]
 position = Vector2(1120, 200)

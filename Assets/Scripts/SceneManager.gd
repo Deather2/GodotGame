@@ -6,6 +6,9 @@ const SHOP       := "res://Assets/Scenes/shop.tscn"
 const LOCKER     := "res://Assets/Scenes/locker.tscn"
 const SETTINGS   := "res://Assets/Scenes/settings.tscn"
 const LEVELS_DIR := "res://Assets/Scenes/Levels/"
+const FPS_COUNTER_SCENE := preload("res://Assets/Scenes/UI/FpsCounter.tscn")
+
+var _fps_counter: CanvasLayer = null
 
 const SLIDE_DUR := 0.35
 const FADE_OUT_DUR := 0.45
@@ -27,6 +30,7 @@ var _fade: ColorRect
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_ui()
+	call_deferred("update_fps_counter")
 	call_deferred("_adopt_initial_scene")
 
 
@@ -344,3 +348,26 @@ func clear_stack_keep_top() -> void:
 	var top := _stack[_stack.size() - 1]
 	_stack.clear()
 	_stack.append(top)
+
+
+func _show_fps_counter() -> void:
+	if _fps_counter != null and is_instance_valid(_fps_counter):
+		return
+
+	_fps_counter = FPS_COUNTER_SCENE.instantiate()
+	_fps_counter.layer = 1001
+	get_tree().root.add_child(_fps_counter)
+
+
+func _hide_fps_counter() -> void:
+	if _fps_counter == null or not is_instance_valid(_fps_counter):
+		return
+
+	_fps_counter.queue_free()
+	_fps_counter = null
+
+func update_fps_counter() -> void:
+	if GameState.show_fps:
+		_show_fps_counter()
+	else:
+		_hide_fps_counter()
