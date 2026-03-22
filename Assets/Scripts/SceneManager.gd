@@ -150,6 +150,7 @@ func back() -> void:
 	_busy = false
 
 func quit_game() -> void:
+	await get_tree().create_timer(0.15).timeout
 	get_tree().quit()
 
 

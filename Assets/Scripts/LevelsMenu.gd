@@ -3,6 +3,7 @@ extends Control
 const PER_PAGE := 6
 
 var page: int = 0
+var target_page: int = 0
 var animating: bool = false
 var current_container: Control
 
@@ -23,6 +24,11 @@ var confirm_animating: bool = false
 @onready var confirm_yes: Button = $ConfirmReset/Panel/VBoxContainer/Buttons/YesButton
 @onready var confirm_no: Button = $ConfirmReset/Panel/VBoxContainer/Buttons/NoButton
 
+@onready var UIButtonSound = $UIButtonSound
+
+@onready var UIConfirmationSound = $UIConfirmationSound
+
+@onready var UICloseSound = $UICloseSound
 
 func _ready() -> void:
 	current_container = $PagesHolder/LevelsContainer
@@ -43,6 +49,7 @@ func _ready() -> void:
 	confirm_reset.scale = Vector2(0.9, 0.9)
 
 	_build_grid()
+	target_page = page
 	reset_btn.visible = GameState.has_any_progress()
 
 
@@ -91,6 +98,7 @@ func _on_level_pressed(i: int) -> void:
 	SceneManager.goto_level(i, SceneManager.Transition.FADE)
 
 func _on_back_pressed() -> void:
+	UIButtonSound.play()
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
 
 func _show_confirm() -> void:
@@ -121,6 +129,7 @@ func _show_confirm() -> void:
 
 
 func _hide_confirm() -> void:
+	UICloseSound.play()
 	if confirm_animating:
 		return
 	confirm_animating = true
@@ -144,10 +153,12 @@ func _hide_confirm() -> void:
 	confirm_animating = false
 
 func _on_reset_pressed() -> void:
+	UIButtonSound.play()
 	await _show_confirm()
 
 
 func _on_reset_confirmed() -> void:
+	UIConfirmationSound.play()
 	await _hide_confirm()
 	GameState.reset_all_progress_keep_settings()
 	page = 0
@@ -165,14 +176,28 @@ func _on_button_mouse_exited() -> void:
 	Cursor.set_normal()
 
 func _on_prev_page() -> void:
-	if page <= 0:
+	if confirm_animating:
 		return
-	_animate_to_page(page - 1, -1)
+	if target_page <= 0:
+		return
+
+	target_page -= 1
+	UIButtonSound.play()
+
+	if not animating:
+		_animate_to_page(target_page, -1)
 
 func _on_next_page() -> void:
-	if page >= _page_count() - 1:
+	if confirm_animating:
 		return
-	_animate_to_page(page + 1, +1)
+	if target_page >= _page_count() - 1:
+		return
+
+	target_page += 1
+	UIButtonSound.play()
+
+	if not animating:
+		_animate_to_page(target_page, +1)
 
 func _animate_to_page(new_page: int, dir: int) -> void:
 	if animating:
@@ -229,4 +254,8 @@ func _animate_to_page(new_page: int, dir: int) -> void:
 		old_container.queue_free()
 		current_container = new_container
 		animating = false
+
+		if target_page != page:
+			var dir1 := 1 if target_page > page else -1
+			_animate_to_page(target_page, dir1)
 	)

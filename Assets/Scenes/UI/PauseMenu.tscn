@@ -1,9 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://ck3f2fkk1o4me"]
+[gd_scene load_steps=17 format=3 uid="uid://ck3f2fkk1o4me"]
 
 [ext_resource type="Script" uid="uid://bvrsu2ijylo34" path="res://Assets/Scripts/pause_menu.gd" id="1_p62xk"]
 [ext_resource type="Texture2D" uid="uid://dkq2tr5djjjur" path="res://Assets/ui/retro.png" id="2_2ivcv"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_p62xk"]
 [ext_resource type="Script" uid="uid://bjl61hvs2qrf8" path="res://Assets/Scripts/settings_panel.gd" id="4_2ivcv"]
+[ext_resource type="AudioStream" uid="uid://cydyxtlgq6jro" path="res://Assets/Sounds/UI/zapsplat_multimedia_button_click_fast_short_002_79286.mp3" id="5_e4nyn"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rigmb"]
 texture = ExtResource("2_2ivcv")
@@ -248,7 +249,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="SettingsPanel" type="CenterContainer" parent="."]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -440,6 +440,10 @@ theme_override_constants/separation = 250
 [node name="VSyncLabel" type="Label" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow"]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
+tooltip_text = "VSync sinhronizē spēles attēlu ar monitora atsvaidzes
+ātrumu. Tas var samazināt ekrāna plīsumus, bet dažreiz
+var palielināt ievades aizturi."
+mouse_filter = 0
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
 theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
@@ -748,6 +752,10 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_4lvv2")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_4g7x7")
 theme_override_styles/hover = SubResource("StyleBoxTexture_o512t")
 
+[node name="UIButtonSound" type="AudioStreamPlayer" parent="SettingsPanel"]
+stream = ExtResource("5_e4nyn")
+bus = &"UI"
+
 [connection signal="mouse_entered" from="Panel/VBox/ContinueButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/VBox/ContinueButton" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Panel/VBox/ContinueButton" to="." method="close_pause"]
@@ -762,14 +770,18 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_o512t")
 [connection signal="pressed" from="Panel/VBox/MenuButton" to="." method="go_to_menu"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/VideoTab" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/VideoTab" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/VideoTab" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/ControlsTab" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/ControlsTab" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/ControlsTab" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/AudioTab" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/AudioTab" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/LeftMenu/AudioTab" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ModeRow/ModeOption" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ModeRow/ModeOption" to="SettingsPanel" method="_on_button_mouse_exited"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow/VSyncOption" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow/VSyncOption" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="drag_started" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight/BrightnessSlider" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight/BrightnessSlider" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight/BrightnessSlider" to="SettingsPanel" method="_on_button_mouse_exited"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow/BrightnessRight/BrightnessSpinBox" to="SettingsPanel" method="_on_button_mouse_entered"]
@@ -778,26 +790,36 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_o512t")
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ShowFpsRow/ShowFpsOption" to="SettingsPanel" method="_on_button_mouse_exited"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind1" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer/Bind2" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind1" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer/Bind2" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind1" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer/Bind2" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind1" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind2" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind2" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="SettingsPanel" method="_on_button_mouse_exited"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/BackButton" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/BackButton" to="SettingsPanel" method="_on_button_mouse_exited"]
-[connection signal="pressed" from="SettingsPanel/Panel/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="SettingsPanel/Panel/BackButton" to="." method="close_settings_screen"]

@@ -32,6 +32,12 @@ extends Control
 @onready var yes_button: TextureButton = $Background/ConfirmPopup/Panel/YesButton
 @onready var no_button: TextureButton = $Background/ConfirmPopup/Panel/NoButton
 
+@onready var UIButtonSound = $UIButtonSound
+@onready var PanelPopUpSound = $PanelPopUpSound
+
+@onready var UICloseSound = $UICloseSound
+@onready var UIConfirmationSound = $UIConfirmationSound
+
 var current_id: int = 0
 var pending_buy_id: int = -1
 
@@ -138,6 +144,7 @@ func _open_details(id: int) -> void:
 
 
 func _show_details(id: int) -> void:
+	PanelPopUpSound.play()
 	details_preview_sprite.texture = db.textures[id]
 	_apply_details_preview()
 
@@ -178,6 +185,11 @@ func _apply_details_preview_deferred() -> void:
 
 func _set_buy_button_state(text_value: String, disabled_value: bool) -> void:
 	buy_button.disabled = disabled_value
+	buy_button.mouse_filter = Control.MOUSE_FILTER_IGNORE if disabled_value else Control.MOUSE_FILTER_STOP
+
+	if disabled_value:
+		Cursor.set_normal()
+
 	if is_instance_valid(buy_button_label):
 		buy_button_label.text = text_value
 	else:
@@ -185,6 +197,7 @@ func _set_buy_button_state(text_value: String, disabled_value: bool) -> void:
 
 
 func _close_details() -> void:
+	UICloseSound.play()
 	if _details_anim:
 		return
 	pending_buy_id = -1
@@ -203,6 +216,7 @@ func _on_buy_pressed() -> void:
 
 
 func _confirm_yes() -> void:
+	UIConfirmationSound.play()
 	if pending_buy_id == -1:
 		return
 
@@ -221,11 +235,13 @@ func _confirm_yes() -> void:
 
 
 func _confirm_no() -> void:
+	UICloseSound.play()
 	pending_buy_id = -1
 	_hide_popup(confirm_popup, confirm_dim, confirm_panel)
 
 
 func _on_back_pressed() -> void:
+	UIButtonSound.play()
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
 
 

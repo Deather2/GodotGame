@@ -11,6 +11,8 @@ extends CanvasLayer
 
 @onready var back_button: Button = $SettingsPanel/Panel/BackButton
 
+@onready var UIButtonSound = $SettingsPanel/UIButtonSound
+
 var panel_target_pos: Vector2
 var settings_target_pos: Vector2
 
@@ -128,6 +130,7 @@ func open_settings() -> void:
 
 
 func close_settings_screen() -> void:
+	UIButtonSound.play()
 	if not is_open or not showing_settings or switching:
 		return
 

@@ -10,12 +10,18 @@ var characters: Array[Texture2D] = []
 @onready var right_button: Button = $Background/RightButton
 @onready var select_button: Button = $Background/SelectButton
 @onready var name_label: Label = $Background/Name
-@onready var story_label: Label = $Background/StoryBox/Story
+@onready var story_label: Label = $Background/StoryBox/StoryPad/Story
 @onready var info_label: Label = $Background/InfoLabel
 
 @onready var info_button: Button = $Background/InfoButton
 @onready var info_bubble: Control = $Background/InfoBubble
 @onready var info_bubble_text: Label = $Background/InfoBubble/Text
+
+@onready var story_scroll: ScrollContainer = $Background/StoryBox
+
+@onready var UIButtonSound = $UIButtonSound
+
+@onready var UIConfirmationSound = $UIConfirmationSound
 
 var unlocked_ids: Array[int] = []
 var current_pos: int = 0
@@ -45,6 +51,7 @@ func _ready() -> void:
 		current_pos = 0
 
 	_update_character()
+	_style_story_scrollbar()
 
 	info_bubble.visible = false
 	info_bubble_text.text = "Tēla izskats neietekmē spēles gaitu, grūtību vai spējas. Tas ir tikai vizuāls noformējums — izvēlies to, kas patīk!"
@@ -142,6 +149,7 @@ func _on_left_button_pressed() -> void:
 		return
 
 	current_pos = (current_pos - 1 + unlocked_ids.size()) % unlocked_ids.size()
+	UIButtonSound.play()
 	_update_character()
 
 
@@ -151,10 +159,12 @@ func _on_right_button_pressed() -> void:
 		return
 
 	current_pos = (current_pos + 1) % unlocked_ids.size()
+	UIButtonSound.play()
 	_update_character()
 
 
 func _on_select_button_pressed() -> void:
+	UIConfirmationSound.play()
 	var id := _get_current_id()
 	GameState.set_selected_character(id)
 	_update_select_button()
@@ -169,6 +179,7 @@ func _on_button_mouse_exited() -> void:
 
 
 func _on_back_pressed() -> void:
+	UIButtonSound.play()
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
 
 
@@ -184,6 +195,7 @@ func _on_info_button_mouse_exited() -> void:
 
 
 func _on_info_button_pressed() -> void:
+	UIButtonSound.play()
 	info_pinned = !info_pinned
 	info_bubble.visible = info_pinned or info_button.is_hovered()
 
@@ -203,3 +215,60 @@ func _input(event: InputEvent) -> void:
 			if !on_button and !on_bubble:
 				info_pinned = false
 				info_bubble.visible = false
+
+func _style_story_scrollbar() -> void:
+	var vbar := story_scroll.get_v_scroll_bar()
+
+	var track := StyleBoxFlat.new()
+	track.bg_color = Color("4a2416")
+	track.border_color = Color("8a4a1f")
+	track.set_border_width_all(2)
+	track.corner_radius_top_left = 3
+	track.corner_radius_top_right = 3
+	track.corner_radius_bottom_left = 3
+	track.corner_radius_bottom_right = 3
+
+	var grabber := StyleBoxFlat.new()
+	grabber.bg_color = Color("c56a1f")
+	grabber.border_color = Color("f0b05a")
+	grabber.set_border_width_all(2)
+	grabber.corner_radius_top_left = 3
+	grabber.corner_radius_top_right = 3
+	grabber.corner_radius_bottom_left = 3
+	grabber.corner_radius_bottom_right = 3
+
+	var grabber_hover := StyleBoxFlat.new()
+	grabber_hover.bg_color = Color("dc7c28")
+	grabber_hover.border_color = Color("ffd27a")
+	grabber_hover.set_border_width_all(2)
+	grabber_hover.corner_radius_top_left = 3
+	grabber_hover.corner_radius_top_right = 3
+	grabber_hover.corner_radius_bottom_left = 3
+	grabber_hover.corner_radius_bottom_right = 3
+
+	var grabber_pressed := StyleBoxFlat.new()
+	grabber_pressed.bg_color = Color("e39136")
+	grabber_pressed.border_color = Color("fff0b0")
+	grabber_pressed.set_border_width_all(2)
+	grabber_pressed.corner_radius_top_left = 3
+	grabber_pressed.corner_radius_top_right = 3
+	grabber_pressed.corner_radius_bottom_left = 3
+	grabber_pressed.corner_radius_bottom_right = 3
+
+	vbar.add_theme_stylebox_override("scroll", track)
+	vbar.add_theme_stylebox_override("grabber", grabber)
+	vbar.add_theme_stylebox_override("grabber_highlight", grabber_hover)
+	vbar.add_theme_stylebox_override("grabber_pressed", grabber_pressed)
+
+	vbar.custom_minimum_size.x = 12
+	
+	vbar.mouse_entered.connect(_on_button_mouse_entered)
+	vbar.mouse_exited.connect(_on_button_mouse_exited)
+	
+	vbar.gui_input.connect(_on_story_scrollbar_gui_input)
+
+func _on_story_scrollbar_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		if mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
+			UIButtonSound.play()

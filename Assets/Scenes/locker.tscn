@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://brs4xwnhiytl"]
+[gd_scene load_steps=19 format=3 uid="uid://brs4xwnhiytl"]
 
 [ext_resource type="Texture2D" uid="uid://cvgl420rq54qg" path="res://Assets/ui/locker_back.tres" id="1_53tuw"]
 [ext_resource type="Script" uid="uid://j1yooegh3ii6" path="res://Assets/Scripts/locker.gd" id="1_vtrg8"]
@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://cym52mg2u2n1d" path="res://Assets/ui/big_sign.tres" id="4_6aab2"]
 [ext_resource type="Texture2D" uid="uid://cku3k8km5g3ql" path="res://Assets/ui/tall_box.tres" id="5_3sstc"]
 [ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="6_d76on"]
+[ext_resource type="AudioStream" uid="uid://cydyxtlgq6jro" path="res://Assets/Sounds/UI/zapsplat_multimedia_button_click_fast_short_002_79286.mp3" id="9_1my43"]
+[ext_resource type="AudioStream" uid="uid://cutr7u3ppi5st" path="res://Assets/Sounds/UI/miraclei-sample_confirm_success01_kofi_by_miraclei-360153.mp3" id="10_xt3uu"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vtrg8"]
 texture = ExtResource("6_d76on")
@@ -302,7 +304,13 @@ grow_horizontal = 0
 grow_vertical = 2
 horizontal_scroll_mode = 0
 
-[node name="Story" type="Label" parent="Background/StoryBox"]
+[node name="StoryPad" type="MarginContainer" parent="Background/StoryBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_right = 5
+
+[node name="Story" type="Label" parent="Background/StoryBox/StoryPad"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
@@ -385,6 +393,14 @@ vertical_alignment = 1
 autowrap_mode = 2
 clip_text = true
 
+[node name="UIButtonSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_1my43")
+bus = &"UI"
+
+[node name="UIConfirmationSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_xt3uu")
+bus = &"UI"
+
 [connection signal="mouse_entered" from="Background/LeftButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Background/LeftButton" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Background/LeftButton" to="." method="_on_left_button_pressed"]
@@ -399,6 +415,6 @@ clip_text = true
 [connection signal="pressed" from="Background/SelectButton" to="." method="_on_select_button_pressed"]
 [connection signal="mouse_entered" from="Background/InfoButton" to="." method="_on_info_button_mouse_entered"]
 [connection signal="mouse_entered" from="Background/InfoButton" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_exited" from="Background/InfoButton" to="." method="_on_button_mouse_exited"]
 [connection signal="mouse_exited" from="Background/InfoButton" to="." method="_on_info_button_mouse_exited"]
+[connection signal="mouse_exited" from="Background/InfoButton" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Background/InfoButton" to="." method="_on_info_button_pressed"]

@@ -34,6 +34,8 @@ extends CenterContainer
 
 @onready var reset_controls_button: Button = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton
 
+@onready var UIButtonSound = $UIButtonSound
+
 var _rebind_action: StringName = &""
 var _rebind_slot: int = -1
 var _rebind_button: Button = null
@@ -46,6 +48,8 @@ var _controls_actions: Array[StringName] = [
 	&"crouch",
 	&"ui_cancel"
 ]
+
+var _ui_sounds_enabled: bool = false
 
 @export var ui_font: Font
 
@@ -71,6 +75,11 @@ func _ready() -> void:
 	
 	reset_controls_button.pressed.connect(_on_reset_controls_pressed)
 
+	var vbar := content_scroll.get_v_scroll_bar()
+	vbar.mouse_entered.connect(_on_button_mouse_entered)
+	vbar.mouse_exited.connect(_on_button_mouse_exited)
+	vbar.gui_input.connect(_on_scrollbar_gui_input)
+
 	_fill_video_options()
 	_load_video_values_into_ui()
 	_load_controls_values_into_ui()
@@ -90,6 +99,11 @@ func _ready() -> void:
 	_style_scrollbar()
 	_setup_tooltip_theme()
 	
+	var spin_le := brightness_spinbox.get_line_edit()
+	spin_le.gui_input.connect(_on_spinbox_line_edit_gui_input)
+	
+	brightness_spinbox.gui_input.connect(_on_brightness_spinbox_gui_input)
+	
 	var bind_buttons: Array[Button] = [
 		move_left_bind_1, move_left_bind_2,
 		move_right_bind_1, move_right_bind_2,
@@ -102,6 +116,7 @@ func _ready() -> void:
 		_style_bind_button(b)
 
 	_style_reset_button(reset_controls_button)
+	_ui_sounds_enabled = true
 
 
 func _fill_video_options() -> void:
@@ -136,13 +151,19 @@ func _load_video_values_into_ui() -> void:
 
 
 func _on_window_mode_selected(index: int) -> void:
+	if _ui_sounds_enabled:
+		UIButtonSound.play()
 	GameState.set_window_mode_setting(index)
 
 
 func _on_vsync_selected(index: int) -> void:
+	if _ui_sounds_enabled:
+		UIButtonSound.play()
 	GameState.set_vsync_enabled_setting(index == 1)
 
 func _on_show_fps_selected(index: int) -> void:
+	if _ui_sounds_enabled:
+		UIButtonSound.play()
 	GameState.set_show_fps_setting(index == 1)
 
 func _scroll_to_section(section: Control) -> void:
@@ -697,6 +718,7 @@ func _show_bind_busy(button: Button) -> void:
 	_load_controls_values_into_ui()
 
 func _on_reset_controls_pressed() -> void:
+	UIButtonSound.play()
 	_rebind_action = &""
 	_rebind_slot = -1
 	_rebind_button = null
@@ -800,7 +822,11 @@ func _style_reset_button(btn: Button) -> void:
 		btn.add_theme_font_override("font", ui_font)
 
 func _on_back_pressed() -> void:
+	UIButtonSound.play()
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
+
+func on_button_pressed() -> void:
+	UIButtonSound.play()
 
 func _setup_tooltip_theme() -> void:
 	if theme == null:
@@ -830,3 +856,30 @@ func _setup_tooltip_theme() -> void:
 
 	if ui_font != null:
 		theme.set_font("font", "TooltipLabel", ui_font)
+
+func _on_scrollbar_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		if mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
+			UIButtonSound.play()
+
+func _on_spinbox_line_edit_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		if mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
+			UIButtonSound.play()
+
+func _on_brightness_spinbox_gui_input(event: InputEvent) -> void:
+	if not _ui_sounds_enabled:
+		return
+
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		if mb.button_index != MOUSE_BUTTON_LEFT or not mb.pressed:
+			return
+
+		var local_pos := brightness_spinbox.get_local_mouse_position()
+		var buttons_width := brightness_spinbox.get_theme_constant("buttons_width")
+
+		if local_pos.x >= brightness_spinbox.size.x - buttons_width:
+			UIButtonSound.play()
