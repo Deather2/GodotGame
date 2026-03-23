@@ -51,6 +51,9 @@ var _controls_actions: Array[StringName] = [
 
 var _ui_sounds_enabled: bool = false
 
+var _option_arrow_down: Texture2D
+var _option_arrow_up: Texture2D
+
 @export var ui_font: Font
 
 func _ready() -> void:
@@ -83,6 +86,8 @@ func _ready() -> void:
 	_fill_video_options()
 	_load_video_values_into_ui()
 	_load_controls_values_into_ui()
+	_option_arrow_down = _make_option_arrow(false)
+	_option_arrow_up = _make_option_arrow(true)
 	_style_option_button(window_mode_option)
 	_style_option_button(vsync_option)
 	_style_option_button(show_fps_option)
@@ -117,7 +122,24 @@ func _ready() -> void:
 
 	_style_reset_button(reset_controls_button)
 	_ui_sounds_enabled = true
+	
+	if not window_mode_option.pressed.is_connected(_on_window_mode_pressed):
+		window_mode_option.pressed.connect(_on_window_mode_pressed)
 
+	if not vsync_option.pressed.is_connected(_on_vsync_pressed):
+		vsync_option.pressed.connect(_on_vsync_pressed)
+
+	if not show_fps_option.pressed.is_connected(_on_showFps_pressed):
+		show_fps_option.pressed.connect(_on_showFps_pressed)
+
+func _on_window_mode_pressed() -> void:
+	UIButtonSound.play()
+
+func _on_vsync_pressed() -> void:
+	UIButtonSound.play()
+
+func _on_showFps_pressed() -> void:
+	UIButtonSound.play()
 
 func _fill_video_options() -> void:
 	window_mode_option.clear()
@@ -268,17 +290,48 @@ func _style_option_button(ob: OptionButton) -> void:
 
 	ob.add_theme_constant_override("arrow_margin", 10)
 	ob.add_theme_constant_override("modulate_arrow", 1)
+	ob.add_theme_icon_override("arrow", _option_arrow_down)
 
 	if ui_font != null:
 		ob.add_theme_font_override("font", ui_font)
 
 	var popup := ob.get_popup()
 	_style_option_popup(popup)
-	
+
 	popup.mouse_entered.connect(_on_button_mouse_entered)
 	popup.mouse_exited.connect(_on_button_mouse_exited)
-	popup.popup_hide.connect(_on_button_mouse_exited)
 
+	popup.about_to_popup.connect(func():
+		ob.add_theme_icon_override("arrow", _option_arrow_up)
+	)
+
+	popup.popup_hide.connect(func():
+		ob.add_theme_icon_override("arrow", _option_arrow_down)
+		_on_button_mouse_exited()
+	)
+
+func _make_option_arrow(is_up: bool) -> Texture2D:
+	var img := Image.create(12, 8, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+
+	var c := Color.WHITE
+
+	if is_up:
+		for x in range(5, 7):
+			img.set_pixel(x, 2, c)
+		for x in range(4, 8):
+			img.set_pixel(x, 3, c)
+		for x in range(3, 9):
+			img.set_pixel(x, 4, c)
+	else:
+		for x in range(3, 9):
+			img.set_pixel(x, 2, c)
+		for x in range(4, 8):
+			img.set_pixel(x, 3, c)
+		for x in range(5, 7):
+			img.set_pixel(x, 4, c)
+
+	return ImageTexture.create_from_image(img)
 
 func _style_option_popup(popup: PopupMenu) -> void:
 	var panel := _make_box("1b100f", "6b4a46")

@@ -30,3 +30,5 @@ offset_left = -480.0
 offset_top = -270.0
 offset_right = 480.0
 offset_bottom = 270.0
+
+[editable path="SettingsPanel"]
