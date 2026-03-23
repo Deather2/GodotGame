@@ -79,9 +79,11 @@ func _adopt_initial_scene() -> void:
 
 func goto_main_menu(tr: int = Transition.FADE) -> void:
 	_go(MAIN_MENU, tr)
+	MusicManager.play_menu_music_delayed(0.5)
 
 func goto_levels_menu(tr: int = Transition.FADE) -> void:
 	_go(LEVELS_MENU, tr)
+	MusicManager.play_menu_music_delayed(0.5)
 
 func goto_shop(tr: int = Transition.FADE) -> void:
 	_go(SHOP, tr)
@@ -93,6 +95,7 @@ func goto_settings(tr: int = Transition.FADE) -> void:
 	_go(SETTINGS, tr)
 	
 func goto_level(i: int, tr: int = Transition.FADE) -> void:
+	MusicManager.stop_menu_music()
 	clear_stack_keep_top()
 	var path := "%sLevel_%d.tscn" % [LEVELS_DIR, i + 1]
 	_go(path, tr)
