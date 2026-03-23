@@ -25,10 +25,9 @@ var confirm_animating: bool = false
 @onready var confirm_no: Button = $ConfirmReset/Panel/VBoxContainer/Buttons/NoButton
 
 @onready var UIButtonSound = $UIButtonSound
-
 @onready var UIConfirmationSound = $UIConfirmationSound
-
 @onready var UICloseSound = $UICloseSound
+@onready var UILevelSelect = $UILevelSelect
 
 func _ready() -> void:
 	current_container = $PagesHolder/LevelsContainer
@@ -95,6 +94,10 @@ func _build_grid() -> void:
 func _on_level_pressed(i: int) -> void:
 	if animating or confirm_animating:
 		return
+
+	animating = true
+	UILevelSelect.play()
+	await get_tree().create_timer(0.05).timeout
 	SceneManager.goto_level(i, SceneManager.Transition.FADE)
 
 func _on_back_pressed() -> void:

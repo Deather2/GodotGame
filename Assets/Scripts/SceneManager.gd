@@ -169,6 +169,11 @@ func _go(path: String, tr: int) -> void:
 		_busy = false
 		return
 
+	if tr == Transition.FADE:
+		await _go_fade_load(path)
+		_busy = false
+		return
+
 	var packed: PackedScene = load(path) as PackedScene
 	var next: Node = packed.instantiate()
 
@@ -181,8 +186,6 @@ func _go(path: String, tr: int) -> void:
 	var old := _current
 
 	match tr:
-		Transition.FADE:
-			await _tr_fade(old, next)
 		Transition.SLIDE_LEFT:
 			await _tr_slide(old, next, Vector2(-size.x, 0), Vector2(size.x, 0))
 		Transition.SLIDE_RIGHT:
@@ -203,6 +206,37 @@ func _go(path: String, tr: int) -> void:
 
 	_busy = false
 
+func _go_fade_load(path: String) -> void:
+	var old := _current
+
+	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
+	_fade.modulate.a = 0.0
+
+	var t := create_tween()
+	t.tween_property(_fade, "modulate:a", 1.0, FADE_OUT_DUR)
+	await t.finished
+
+	var packed: PackedScene = load(path) as PackedScene
+	var next: Node = packed.instantiate()
+
+	if path.contains("/Levels/"):
+		get_tree().root.add_child(next)
+	else:
+		_stage.add_child(next)
+		_set_pos(next, Vector2.ZERO)
+
+	if old != null and is_instance_valid(old):
+		old.queue_free()
+
+	_current = next
+	_stack.clear()
+	_stack.append(_current)
+
+	var t2 := create_tween()
+	t2.tween_property(_fade, "modulate:a", 0.0, FADE_IN_DUR)
+	await t2.finished
+
+	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func _push_overlay_from_top(path: String) -> void:
 	_fade.mouse_filter = Control.MOUSE_FILTER_STOP

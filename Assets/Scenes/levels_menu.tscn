@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://ru6my31iays2"]
+[gd_scene load_steps=21 format=3 uid="uid://ru6my31iays2"]
 
 [ext_resource type="Script" uid="uid://ds6pa7yu56gah" path="res://Assets/Scripts/LevelsMenu.gd" id="1_bvbgm"]
 [ext_resource type="PackedScene" uid="uid://c3retqugyu8ab" path="res://Assets/Scenes/UI/level_button.tscn" id="2_2018i"]
@@ -10,6 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://cydyxtlgq6jro" path="res://Assets/Sounds/UI/zapsplat_multimedia_button_click_fast_short_002_79286.mp3" id="8_0ouis"]
 [ext_resource type="AudioStream" uid="uid://cutr7u3ppi5st" path="res://Assets/Sounds/UI/miraclei-sample_confirm_success01_kofi_by_miraclei-360153.mp3" id="9_5humi"]
 [ext_resource type="AudioStream" uid="uid://sobo82wq6xsu" path="res://Assets/Sounds/UI/47313572-ui-sound-off-270300.mp3" id="10_t6xiy"]
+[ext_resource type="AudioStream" uid="uid://bqcmuvyv1aj76" path="res://Assets/Sounds/UI/floraphonic-arcade-ui-6-229503.mp3" id="11_firr7"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t6v1y"]
 texture = ExtResource("5_ovywt")
@@ -292,6 +293,10 @@ bus = &"UI"
 
 [node name="UICloseSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_t6xiy")
+bus = &"UI"
+
+[node name="UILevelSelect" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_firr7")
 bus = &"UI"
 
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]

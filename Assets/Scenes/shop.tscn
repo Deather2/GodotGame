@@ -49,13 +49,13 @@ corner_radius_bottom_left = 12
 texture = ExtResource("7_7ortk")
 region_rect = Rect2(408, 728, 15, 15)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ydhgn"]
-texture = ExtResource("7_7ortk")
-region_rect = Rect2(321, 100, 90, 27)
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g7qtd"]
 texture = ExtResource("7_7ortk")
 region_rect = Rect2(418, 101, 90, 26)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ydhgn"]
+texture = ExtResource("7_7ortk")
+region_rect = Rect2(321, 100, 90, 27)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s5gg0"]
 content_margin_left = 24.0
@@ -291,7 +291,13 @@ grow_horizontal = 0
 grow_vertical = 2
 horizontal_scroll_mode = 0
 
-[node name="Story" type="Label" parent="Background/DetailsPopup/Panel/StoryBox"]
+[node name="StoryPad" type="MarginContainer" parent="Background/DetailsPopup/Panel/StoryBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_right = 5
+
+[node name="Story" type="Label" parent="Background/DetailsPopup/Panel/StoryBox/StoryPad"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
@@ -320,9 +326,9 @@ offset_bottom = -32.0
 grow_horizontal = 2
 grow_vertical = 0
 focus_mode = 0
-theme_override_styles/normal = SubResource("StyleBoxTexture_ydhgn")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_g7qtd")
-theme_override_styles/hover = SubResource("StyleBoxTexture_ydhgn")
+theme_override_styles/normal = SubResource("StyleBoxTexture_g7qtd")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ydhgn")
+theme_override_styles/hover = SubResource("StyleBoxTexture_g7qtd")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_ydhgn")
 
 [node name="ButtonLabel" type="Label" parent="Background/DetailsPopup/Panel/BuyButton"]

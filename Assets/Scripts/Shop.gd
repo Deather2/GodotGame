@@ -18,7 +18,7 @@ extends Control
 @onready var details_preview_sprite: Sprite2D = $Background/DetailsPopup/Panel/CharacterPreviewCenter/CharacterPreviewSprite
 
 @onready var details_name: Label = $Background/DetailsPopup/Panel/Name
-@onready var details_story: Label = $Background/DetailsPopup/Panel/StoryBox/Story
+@onready var details_story: Label = $Background/DetailsPopup/Panel/StoryBox/StoryPad/Story
 @onready var story_scroll: ScrollContainer = $Background/DetailsPopup/Panel/StoryBox
 
 @onready var buy_button: Button = $Background/DetailsPopup/Panel/BuyButton
@@ -34,7 +34,6 @@ extends Control
 
 @onready var UIButtonSound = $UIButtonSound
 @onready var PanelPopUpSound = $PanelPopUpSound
-
 @onready var UICloseSound = $UICloseSound
 @onready var UIConfirmationSound = $UIConfirmationSound
 
@@ -49,7 +48,6 @@ const POP_DUR := 0.6
 const DIM_ALPHA := 0.65
 const POP_FROM_SCALE := 0.1
 
-# details preview tuning
 const DETAILS_PREVIEW_TARGET_H := 180.0
 const DETAILS_PREVIEW_Y_BIAS := -20.0
 
@@ -79,6 +77,7 @@ func _ready() -> void:
 	_prepare_popup(details_popup, details_dim, details_panel)
 	_prepare_popup(confirm_popup, confirm_dim, confirm_panel)
 
+	_style_story_scrollbar()
 
 func _center_pivot(c: Control) -> void:
 	await get_tree().process_frame
@@ -140,11 +139,11 @@ func _open_details(id: int) -> void:
 	_reset_story_scroll()
 
 	confirm_popup.visible = false
+	PanelPopUpSound.play()
 	_show_popup(details_popup, details_dim, details_panel)
 
 
 func _show_details(id: int) -> void:
-	PanelPopUpSound.play()
 	details_preview_sprite.texture = db.textures[id]
 	_apply_details_preview()
 
@@ -206,6 +205,7 @@ func _close_details() -> void:
 
 
 func _on_buy_pressed() -> void:
+	UIButtonSound.play()
 	if buy_button.disabled or _confirm_anim:
 		return
 
@@ -313,3 +313,73 @@ func _hide_popup(popup: Control, dim: ColorRect, panel: Control) -> void:
 		_details_anim = false
 	if popup == confirm_popup:
 		_confirm_anim = false
+
+func _style_story_scrollbar() -> void:
+	story_scroll.add_theme_constant_override("scrollbar_v_separation", 6)
+
+	var vbar := story_scroll.get_v_scroll_bar()
+	if vbar == null:
+		return
+
+	vbar.mouse_filter = Control.MOUSE_FILTER_STOP
+	vbar.custom_minimum_size.x = 12
+
+	var track := StyleBoxFlat.new()
+	track.bg_color = Color("4a2416")
+	track.border_color = Color("8a4a1f")
+	track.set_border_width_all(2)
+	track.corner_radius_top_left = 3
+	track.corner_radius_top_right = 3
+	track.corner_radius_bottom_left = 3
+	track.corner_radius_bottom_right = 3
+
+	var grabber := StyleBoxFlat.new()
+	grabber.bg_color = Color("c56a1f")
+	grabber.border_color = Color("f0b05a")
+	grabber.set_border_width_all(2)
+	grabber.corner_radius_top_left = 3
+	grabber.corner_radius_top_right = 3
+	grabber.corner_radius_bottom_left = 3
+	grabber.corner_radius_bottom_right = 3
+
+	var grabber_hover := StyleBoxFlat.new()
+	grabber_hover.bg_color = Color("dc7c28")
+	grabber_hover.border_color = Color("ffd27a")
+	grabber_hover.set_border_width_all(2)
+	grabber_hover.corner_radius_top_left = 3
+	grabber_hover.corner_radius_top_right = 3
+	grabber_hover.corner_radius_bottom_left = 3
+	grabber_hover.corner_radius_bottom_right = 3
+
+	var grabber_pressed := StyleBoxFlat.new()
+	grabber_pressed.bg_color = Color("e39136")
+	grabber_pressed.border_color = Color("fff0b0")
+	grabber_pressed.set_border_width_all(2)
+	grabber_pressed.corner_radius_top_left = 3
+	grabber_pressed.corner_radius_top_right = 3
+	grabber_pressed.corner_radius_bottom_left = 3
+	grabber_pressed.corner_radius_bottom_right = 3
+
+	vbar.add_theme_stylebox_override("scroll", track)
+	vbar.add_theme_stylebox_override("grabber", grabber)
+	vbar.add_theme_stylebox_override("grabber_highlight", grabber_hover)
+	vbar.add_theme_stylebox_override("grabber_pressed", grabber_pressed)
+
+	vbar.mouse_entered.connect(_on_story_scrollbar_mouse_entered)
+	vbar.mouse_exited.connect(_on_story_scrollbar_mouse_exited)
+	vbar.gui_input.connect(_on_story_scrollbar_gui_input)
+
+
+func _on_story_scrollbar_mouse_entered() -> void:
+	Cursor.set_hover()
+
+
+func _on_story_scrollbar_mouse_exited() -> void:
+	Cursor.set_normal()
+
+
+func _on_story_scrollbar_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		if mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
+			UIButtonSound.play()
