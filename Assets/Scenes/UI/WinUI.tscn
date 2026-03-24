@@ -1,10 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://kcb2g4k1jg4x"]
+[gd_scene load_steps=14 format=3 uid="uid://kcb2g4k1jg4x"]
 
 [ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="1_62q4l"]
 [ext_resource type="Script" uid="uid://cx1avye2wroh5" path="res://Assets/Scripts/Levels/win_ui.gd" id="1_s2q11"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_s2q11"]
 [ext_resource type="Texture2D" uid="uid://wxmuyaddrjyx" path="res://Assets/ui/star_filled.png" id="4_6txqx"]
 [ext_resource type="Texture2D" uid="uid://240iwd36ftvd" path="res://Assets/ui/star_empty.png" id="5_tev45"]
+[ext_resource type="AudioStream" uid="uid://cydyxtlgq6jro" path="res://Assets/Sounds/UI/zapsplat_multimedia_button_click_fast_short_002_79286.mp3" id="6_tev45"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v3kd2"]
 texture = ExtResource("1_62q4l")
@@ -19,10 +20,6 @@ texture = ExtResource("1_62q4l")
 region_rect = Rect2(417.83246, 100.71987, 90.39563, 26.478867)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tev45"]
-texture = ExtResource("1_62q4l")
-region_rect = Rect2(320.81204, 99.820404, 90.491455, 27.469383)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3u4sp"]
 texture = ExtResource("1_62q4l")
 region_rect = Rect2(320.81204, 99.820404, 90.491455, 27.469383)
 
@@ -43,10 +40,6 @@ texture = ExtResource("1_62q4l")
 region_rect = Rect2(417.83246, 100.71987, 90.39563, 26.478867)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kd7rw"]
-texture = ExtResource("1_62q4l")
-region_rect = Rect2(320.81204, 99.820404, 90.491455, 27.469383)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7qoyo"]
 texture = ExtResource("1_62q4l")
 region_rect = Rect2(320.81204, 99.820404, 90.491455, 27.469383)
 
@@ -187,7 +180,7 @@ size_flags_horizontal = 4
 focus_mode = 0
 theme_override_styles/normal = SubResource("StyleBoxTexture_6txqx")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_tev45")
-theme_override_styles/hover = SubResource("StyleBoxTexture_3u4sp")
+theme_override_styles/hover = SubResource("StyleBoxTexture_6txqx")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_83kp0")
 
 [node name="Label" type="Label" parent="Panel/VBox/NextButton"]
@@ -216,7 +209,7 @@ size_flags_horizontal = 4
 focus_mode = 0
 theme_override_styles/normal = SubResource("StyleBoxTexture_6txqx")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_tev45")
-theme_override_styles/hover = SubResource("StyleBoxTexture_3u4sp")
+theme_override_styles/hover = SubResource("StyleBoxTexture_6txqx")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_83kp0")
 
 [node name="Label" type="Label" parent="Panel/VBox/RepeatButton"]
@@ -245,7 +238,7 @@ size_flags_horizontal = 4
 focus_mode = 0
 theme_override_styles/normal = SubResource("StyleBoxTexture_5d70p")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_kd7rw")
-theme_override_styles/hover = SubResource("StyleBoxTexture_7qoyo")
+theme_override_styles/hover = SubResource("StyleBoxTexture_6txqx")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_htet0")
 
 [node name="Label" type="Label" parent="Panel/VBox/MenuButton"]
@@ -266,6 +259,10 @@ theme_override_font_sizes/font_size = 20
 text = "Izvēlne"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="UIButtonSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_tev45")
+bus = &"UI"
 
 [connection signal="mouse_entered" from="Panel/VBox/NextButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/VBox/NextButton" to="." method="_on_button_mouse_exited"]

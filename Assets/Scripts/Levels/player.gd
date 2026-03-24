@@ -10,6 +10,8 @@ extends CharacterBody2D
 
 @onready var capsule: CapsuleShape2D = collision.shape as CapsuleShape2D
 
+@onready var JumpSound: AudioStreamPlayer2D = $JumpSound
+
 const SPEED := 300.0
 const JUMP_VELOCITY := -400.0
 const CROUCH_SPEED_MULT := 0.45
@@ -107,6 +109,7 @@ func _physics_process(delta: float) -> void:
 		if crouching and not _can_stand():
 			pass
 		else:
+			JumpSound.play()
 			if crouching and _can_stand():
 				crouching = false
 

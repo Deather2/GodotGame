@@ -24,10 +24,10 @@ var confirm_animating: bool = false
 @onready var confirm_yes: Button = $ConfirmReset/Panel/VBoxContainer/Buttons/YesButton
 @onready var confirm_no: Button = $ConfirmReset/Panel/VBoxContainer/Buttons/NoButton
 
-@onready var UIButtonSound = $UIButtonSound
-@onready var UIConfirmationSound = $UIConfirmationSound
-@onready var UICloseSound = $UICloseSound
-@onready var UILevelSelect = $UILevelSelect
+@onready var UIButtonSound: AudioStreamPlayer = $UIButtonSound
+@onready var UIConfirmationSound: AudioStreamPlayer = $UIConfirmationSound
+@onready var UICloseSound: AudioStreamPlayer = $UICloseSound
+@onready var UILevelSelect: AudioStreamPlayer = $UILevelSelect
 
 func _ready() -> void:
 	current_container = $PagesHolder/LevelsContainer

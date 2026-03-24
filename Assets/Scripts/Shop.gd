@@ -32,10 +32,10 @@ extends Control
 @onready var yes_button: TextureButton = $Background/ConfirmPopup/Panel/YesButton
 @onready var no_button: TextureButton = $Background/ConfirmPopup/Panel/NoButton
 
-@onready var UIButtonSound = $UIButtonSound
-@onready var PanelPopUpSound = $PanelPopUpSound
-@onready var UICloseSound = $UICloseSound
-@onready var UIConfirmationSound = $UIConfirmationSound
+@onready var UIButtonSound: AudioStreamPlayer = $UIButtonSound
+@onready var PanelPopUpSound: AudioStreamPlayer = $PanelPopUpSound
+@onready var UICloseSound: AudioStreamPlayer = $UICloseSound
+@onready var UIConfirmationSound: AudioStreamPlayer = $UIConfirmationSound
 
 var current_id: int = 0
 var pending_buy_id: int = -1

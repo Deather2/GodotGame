@@ -1,6 +1,6 @@
 extends Control
 
-@onready var UIButtonSound = $UIButtonSound
+@onready var UIButtonSound: AudioStreamPlayer = $UIButtonSound
 
 func _ready() -> void:
 	Cursor.set_normal()

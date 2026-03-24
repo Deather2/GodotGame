@@ -19,9 +19,8 @@ var characters: Array[Texture2D] = []
 
 @onready var story_scroll: ScrollContainer = $Background/StoryBox
 
-@onready var UIButtonSound = $UIButtonSound
-
-@onready var UIConfirmationSound = $UIConfirmationSound
+@onready var UIButtonSound: AudioStreamPlayer = $UIButtonSound
+@onready var UIConfirmationSound: AudioStreamPlayer = $UIConfirmationSound
 
 var unlocked_ids: Array[int] = []
 var current_pos: int = 0

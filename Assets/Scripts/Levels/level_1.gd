@@ -9,6 +9,15 @@ var timer_running := true
 @onready var level_timer_ui = $LevelTimer
 @onready var pause_menu: CanvasLayer = $PauseMenu
 
+const LEVEL_MUSIC_GAP := 3.0
+
+var music_cycle_active := true
+
+@onready var level_music: AudioStreamPlayer = $LevelMusicPlayer
+
+func _ready() -> void:
+	_start_level_music_cycle()
+
 func _physics_process(_delta: float) -> void:
 	if finished or !pending_finish:
 		return
@@ -19,6 +28,7 @@ func _physics_process(_delta: float) -> void:
 		finished = true
 		timer_running = false
 		$LevelTimer.visible = false
+		stop_level_music()
 		$Cutscene.play_end_cutscene()
 
 func _on_kill_zone_body_entered(body: Node) -> void:
@@ -39,6 +49,7 @@ func _on_finish_area_body_entered(body: Node2D) -> void:
 	finished = true
 	timer_running = false
 	$LevelTimer.visible = false
+	stop_level_music()
 	$Cutscene.play_end_cutscene()
 
 func _process(delta: float) -> void:
@@ -67,5 +78,34 @@ func show_win_ui() -> void:
 	$WinUi.show_with_anim()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel") and not pause_menu.is_open:
-		pause_menu.open_pause()
+	if not event.is_action_pressed("ui_cancel") or event.is_echo():
+		return
+
+	if pause_menu.is_open:
+		return
+
+	if finished or pending_finish:
+		return
+
+	pause_menu.open_pause()
+	get_viewport().set_input_as_handled()
+
+func _exit_tree() -> void:
+	stop_level_music()
+
+func _start_level_music_cycle() -> void:
+	while music_cycle_active:
+		level_music.play()
+		await level_music.finished
+
+		if not music_cycle_active:
+			return
+
+		await get_tree().create_timer(LEVEL_MUSIC_GAP).timeout
+
+		if not music_cycle_active:
+			return
+
+func stop_level_music() -> void:
+	music_cycle_active = false
+	level_music.stop()

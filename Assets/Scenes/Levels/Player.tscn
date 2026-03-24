@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://cblv52lkscke7"]
+[gd_scene load_steps=9 format=3 uid="uid://cblv52lkscke7"]
 
 [ext_resource type="Script" uid="uid://b5towj76s0dll" path="res://Assets/Scripts/Levels/player.gd" id="1_1iq5p"]
 [ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_mqbe8"]
 [ext_resource type="SpriteFrames" uid="uid://doyekqs7quhfp" path="res://Assets/Animations/Char1.tres" id="3_mqbe8"]
+[ext_resource type="AudioStream" uid="uid://2tp2falvus5d" path="res://Assets/Sounds/SFX/Player/lumora_studios-pixel-jump-319167.mp3" id="4_kiw01"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gv6bx"]
 radius = 7.0
@@ -51,3 +52,7 @@ target_position = Vector2(0, 0)
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 texture = SubResource("GradientTexture2D_kiw01")
+
+[node name="JumpSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_kiw01")
+bus = &"SFX"

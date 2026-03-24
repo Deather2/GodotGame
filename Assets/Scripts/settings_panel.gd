@@ -34,7 +34,7 @@ extends CenterContainer
 
 @onready var reset_controls_button: Button = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton
 
-@onready var UIButtonSound = $UIButtonSound
+@onready var UIButtonSound: AudioStreamPlayer = $UIButtonSound
 
 var _rebind_action: StringName = &""
 var _rebind_slot: int = -1
