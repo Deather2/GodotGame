@@ -10,6 +10,8 @@ extends Control
 @export var hint_cps := 20.0
 
 @onready var target := get_node(target_path) as Node2D
+@onready var bubble: Control = $Bubble
+@onready var pad: Control = $Bubble/Pad
 @onready var text_label: Label = $Bubble/Pad/Text
 @onready var hint_label: Label = $Bubble/Pad/Hint
 
@@ -17,10 +19,20 @@ var done := false
 var waiting_close := false
 var skip_typing := false
 
+
+func _ready() -> void:
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	bubble.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	text_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hint_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
 func _process(_delta: float) -> void:
 	if !visible:
 		return
 	_update_follow_pos()
+
 
 func _update_follow_pos() -> void:
 	if target == null:
@@ -34,6 +46,7 @@ func _update_follow_pos() -> void:
 	p.y = clamp(p.y, 8.0, vp.y - size.y - 8.0)
 
 	global_position = p
+
 
 func start() -> void:
 	visible = false
@@ -76,13 +89,38 @@ func start() -> void:
 	done = true
 	waiting_close = true
 
-func _unhandled_input(event: InputEvent) -> void:
-	if !visible or !event.is_pressed():
-		return
 
+func _handle_continue_input() -> void:
 	if !done:
 		skip_typing = true
 		return
 
 	if waiting_close:
 		visible = false
+
+
+func _gui_input(event: InputEvent) -> void:
+	if !visible or !event.is_pressed():
+		return
+
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		if mb.button_index != MOUSE_BUTTON_LEFT:
+			return
+
+		_handle_continue_input()
+		accept_event()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if !visible or !event.is_pressed():
+		return
+
+	if event is InputEventMouseButton:
+		return
+
+	if event is InputEventKey and event.echo:
+		return
+
+	_handle_continue_input()
+	get_viewport().set_input_as_handled()

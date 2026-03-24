@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://d2a45n6c4n01a"]
+[gd_scene load_steps=21 format=3 uid="uid://d2a45n6c4n01a"]
 
 [ext_resource type="Script" uid="uid://bw3kifllw6s7a" path="res://Assets/Scripts/Levels/level_1.gd" id="1_rte66"]
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="2_vvh8y"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://7p3tfx1b6c73" path="res://Assets/Scenes/UI/LevelTimer.tscn" id="12_irhki"]
 [ext_resource type="PackedScene" uid="uid://ck3f2fkk1o4me" path="res://Assets/Scenes/UI/PauseMenu.tscn" id="13_3pw14"]
 [ext_resource type="AudioStream" uid="uid://kektlwdn85al" path="res://Assets/Sounds/LevelMusic/backgroundmusicmaster-pixel-adventure-382649.mp3" id="14_gxi2l"]
+[ext_resource type="AudioStream" uid="uid://c7n3hldp2f2td" path="res://Assets/Sounds/SFX/Level/freesound_community-cinematic-rumble-106063.mp3" id="15_2olyn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yd7pp"]
 texture = ExtResource("4_rte66")
@@ -404,6 +405,10 @@ theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_fonts/font = ExtResource("10_jhb4m")
 theme_override_font_sizes/font_size = 18
+
+[node name="EarthquakeSound" type="AudioStreamPlayer" parent="Cutscene"]
+stream = ExtResource("15_2olyn")
+bus = &"SFX"
 
 [node name="FinishArea" type="Area2D" parent="."]
 position = Vector2(3881, 433)
