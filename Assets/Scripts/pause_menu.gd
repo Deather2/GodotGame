@@ -50,6 +50,8 @@ func open_pause() -> void:
 	if is_open:
 		return
 
+	GameState.show_cursor()
+	
 	is_open = true
 	showing_settings = false
 	switching = false
@@ -80,6 +82,7 @@ func close_pause(play_sound := true) -> void:
 	if not is_open or switching:
 		return
 
+	GameState.hide_cursor()
 	is_open = false
 	switching = true
 
@@ -166,6 +169,7 @@ func close_settings_screen(play_sound := true) -> void:
 func retry_level() -> void:
 	UIButtonSound.play()
 	SceneManager.reload_current_level()
+	GameState.hide_cursor()
 
 
 func go_to_menu() -> void:
@@ -180,6 +184,7 @@ func go_to_menu() -> void:
 	showing_settings = false
 	switching = false
 	SceneManager.goto_levels_menu()
+	GameState.show_cursor()
 
 
 func _on_settings_button_pressed() -> void:

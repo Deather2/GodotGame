@@ -52,6 +52,7 @@ func setup_result(stars: int, time_text: String, level_index: int) -> void:
 	set_time_text(time_text)
 
 func show_with_anim() -> void:
+	GameState.show_cursor()
 	visible = true
 
 	panel.position = Vector2(panel_target_pos.x, -800)
@@ -68,11 +69,14 @@ func go_to_menu() -> void:
 	UIButtonSound.play()
 	await get_tree().create_timer(0.15).timeout
 	SceneManager.goto_levels_menu()
+	GameState.show_cursor()
 
 func retry_level() -> void:
 	UIButtonSound.play()
 	SceneManager.reload_current_level()
+	GameState.hide_cursor()
 
 func go_to_next_level() -> void:
 	UIButtonSound.play()
 	SceneManager.goto_next_level(current_level_index)
+	GameState.hide_cursor()

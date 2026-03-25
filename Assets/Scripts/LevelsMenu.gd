@@ -30,6 +30,7 @@ var confirm_animating: bool = false
 @onready var UILevelSelect: AudioStreamPlayer = $UILevelSelect
 
 func _ready() -> void:
+	GameState.show_cursor()
 	current_container = $PagesHolder/LevelsContainer
 
 	back_btn.pressed.connect(_on_back_pressed)

@@ -21,6 +21,7 @@ var finish_transition := false
 
 
 func _ready() -> void:
+	GameState.hide_cursor()
 	level_music_base_volume = level_music.volume_linear
 	_start_level_music_cycle()
 

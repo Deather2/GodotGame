@@ -3,6 +3,7 @@ extends Control
 @onready var UIButtonSound: AudioStreamPlayer = $UIButtonSound
 
 func _ready() -> void:
+	GameState.show_cursor()
 	Cursor.set_normal()
 
 func _on_menu_button_mouse_entered() -> void:

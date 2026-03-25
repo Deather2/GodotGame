@@ -32,6 +32,7 @@ const PREVIEW_Y_BIAS := -40.0
 
 
 func _ready() -> void:
+	GameState.show_cursor()
 	Cursor.set_normal()
 
 	if db != null:

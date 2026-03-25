@@ -56,6 +56,7 @@ var _confirm_anim := false
 
 
 func _ready() -> void:
+	GameState.show_cursor()
 	if db == null or card_scene == null:
 		return
 
