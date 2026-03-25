@@ -14,10 +14,12 @@ extends Control
 @onready var pad: Control = $Bubble/Pad
 @onready var text_label: Label = $Bubble/Pad/Text
 @onready var hint_label: Label = $Bubble/Pad/Hint
+@onready var type_sound: AudioStreamPlayer = $TypeSound
 
 var done := false
 var waiting_close := false
 var skip_typing := false
+var typing_sound_active := false
 
 
 func _ready() -> void:
@@ -26,6 +28,9 @@ func _ready() -> void:
 	pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	text_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hint_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	if not type_sound.finished.is_connected(_on_type_sound_finished):
+		type_sound.finished.connect(_on_type_sound_finished)
 
 
 func _process(_delta: float) -> void:
@@ -62,12 +67,19 @@ func start() -> void:
 	hint_label.text = ""
 	hint_label.visible = true
 
+	_stop_typing_sound()
+
 	var s := full_text
+	_start_typing_sound()
+
 	for i in s.length():
 		if skip_typing:
 			break
+
 		text_label.text = s.substr(0, i + 1)
 		await get_tree().create_timer(1.0 / cps).timeout
+
+	_stop_typing_sound()
 
 	if skip_typing:
 		text_label.text = full_text
@@ -93,9 +105,11 @@ func start() -> void:
 func _handle_continue_input() -> void:
 	if !done:
 		skip_typing = true
+		_stop_typing_sound()
 		return
 
 	if waiting_close:
+		_stop_typing_sound()
 		visible = false
 
 
@@ -124,3 +138,19 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	_handle_continue_input()
 	get_viewport().set_input_as_handled()
+
+
+func _start_typing_sound() -> void:
+	typing_sound_active = true
+	if not type_sound.playing:
+		type_sound.play()
+
+
+func _stop_typing_sound() -> void:
+	typing_sound_active = false
+	type_sound.stop()
+
+
+func _on_type_sound_finished() -> void:
+	if typing_sound_active:
+		type_sound.play()
