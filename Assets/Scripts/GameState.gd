@@ -696,3 +696,9 @@ func reset_controls_to_default() -> void:
 
 func notify_controls_changed() -> void:
 	controls_changed.emit()
+
+func show_cursor() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func hide_cursor() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN

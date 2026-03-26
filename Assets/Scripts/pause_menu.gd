@@ -11,6 +11,8 @@ extends CanvasLayer
 
 @onready var back_button: Button = $SettingsPanel/Panel/BackButton
 
+@onready var UIButtonSound: AudioStreamPlayer = $SettingsPanel/UIButtonSound
+
 var panel_target_pos: Vector2
 var settings_target_pos: Vector2
 
@@ -48,6 +50,8 @@ func open_pause() -> void:
 	if is_open:
 		return
 
+	GameState.show_cursor()
+	
 	is_open = true
 	showing_settings = false
 	switching = false
@@ -71,10 +75,14 @@ func open_pause() -> void:
 		.set_ease(Tween.EASE_IN_OUT)
 
 
-func close_pause() -> void:
+func close_pause(play_sound := true) -> void:
+	if play_sound:
+		UIButtonSound.play()
+
 	if not is_open or switching:
 		return
 
+	GameState.hide_cursor()
 	is_open = false
 	switching = true
 
@@ -127,7 +135,10 @@ func open_settings() -> void:
 	switching = false
 
 
-func close_settings_screen() -> void:
+func close_settings_screen(play_sound := true) -> void:
+	if play_sound:
+		UIButtonSound.play()
+
 	if not is_open or not showing_settings or switching:
 		return
 
@@ -156,18 +167,30 @@ func close_settings_screen() -> void:
 
 
 func retry_level() -> void:
+	UIButtonSound.play()
 	SceneManager.reload_current_level()
+	GameState.hide_cursor()
 
 
 func go_to_menu() -> void:
+	var level := get_parent()
+	if level != null and level.has_method("force_stop_level_music"):
+		level.force_stop_level_music()
+
+	UIButtonSound.play()
+	await get_tree().create_timer(0.15).timeout
+
 	get_tree().paused = false
 	is_open = false
 	showing_settings = false
 	switching = false
+
 	SceneManager.goto_levels_menu()
+	GameState.show_cursor()
 
 
 func _on_settings_button_pressed() -> void:
+	UIButtonSound.play()
 	open_settings()
 
 
@@ -179,10 +202,10 @@ func _input(event: InputEvent) -> void:
 	if not is_open or switching:
 		return
 
-	if event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("ui_cancel") and not event.is_echo():
 		get_viewport().set_input_as_handled()
 
 		if showing_settings:
-			close_settings_screen()
+			close_settings_screen(false)
 		else:
-			close_pause()
+			close_pause(false)

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://csla1k56cue8t"]
+[gd_scene load_steps=3 format=3 uid="uid://csla1k56cue8t"]
 
 [ext_resource type="PackedScene" uid="uid://c4ch6tymjwf5p" path="res://Assets/Scenes/UI/SettingsPanel.tscn" id="1_7r48f"]
+[ext_resource type="Script" uid="uid://bu0nd180k0ar4" path="res://Assets/Scripts/settings.gd" id="1_nugfm"]
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_nugfm")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -30,3 +32,5 @@ offset_left = -480.0
 offset_top = -270.0
 offset_right = 480.0
 offset_bottom = 270.0
+
+[editable path="SettingsPanel"]

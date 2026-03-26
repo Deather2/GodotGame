@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://d2a45n6c4n01a"]
+[gd_scene load_steps=24 format=3 uid="uid://d2a45n6c4n01a"]
 
 [ext_resource type="Script" uid="uid://bw3kifllw6s7a" path="res://Assets/Scripts/Levels/level_1.gd" id="1_rte66"]
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="2_vvh8y"]
@@ -10,9 +10,14 @@
 [ext_resource type="Script" uid="uid://dxge4oqvnxhyv" path="res://Assets/Scripts/Levels/cutscene1.gd" id="8_yd7pp"]
 [ext_resource type="Script" uid="uid://n010ik3ddvvd" path="res://Assets/Scripts/Levels/monologue.gd" id="9_sx2br"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="10_jhb4m"]
+[ext_resource type="AudioStream" uid="uid://drfajfx1w8b4x" path="res://Assets/Sounds/SFX/Level/textBlip.mp3" id="11_0f1i4"]
 [ext_resource type="PackedScene" uid="uid://kcb2g4k1jg4x" path="res://Assets/Scenes/UI/WinUI.tscn" id="11_nqm7r"]
 [ext_resource type="PackedScene" uid="uid://7p3tfx1b6c73" path="res://Assets/Scenes/UI/LevelTimer.tscn" id="12_irhki"]
+[ext_resource type="AudioStream" uid="uid://ccm87u6xytpbu" path="res://Assets/Sounds/SFX/Level/earthquake.mp3" id="12_yffv5"]
 [ext_resource type="PackedScene" uid="uid://ck3f2fkk1o4me" path="res://Assets/Scenes/UI/PauseMenu.tscn" id="13_3pw14"]
+[ext_resource type="AudioStream" uid="uid://bb5l2ro51vnsi" path="res://Assets/Sounds/SFX/Level/powerOff.mp3" id="13_i7gss"]
+[ext_resource type="AudioStream" uid="uid://c44jo8bvbp2p7" path="res://Assets/Sounds/SFX/Level/shine.mp3" id="14_yffv5"]
+[ext_resource type="AudioStream" uid="uid://byjx0d43tk6yb" path="res://Assets/Sounds/LevelMusic/levelMusic.mp3" id="17_pgj6d"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yd7pp"]
 texture = ExtResource("4_rte66")
@@ -319,6 +324,9 @@ limit_bottom = 648
 enabled = false
 range_layer_min = -100
 
+[node name="JumpSound" parent="Player" index="6"]
+stream = null
+
 [node name="KillZone" type="Area2D" parent="."]
 position = Vector2(1050, 832)
 
@@ -404,6 +412,21 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_fonts/font = ExtResource("10_jhb4m")
 theme_override_font_sizes/font_size = 18
 
+[node name="TypeSound" type="AudioStreamPlayer" parent="Cutscene/UI/Monologue"]
+stream = ExtResource("11_0f1i4")
+
+[node name="EarthquakeSound" type="AudioStreamPlayer" parent="Cutscene"]
+stream = ExtResource("12_yffv5")
+bus = &"SFX"
+
+[node name="BlackoutSound" type="AudioStreamPlayer" parent="Cutscene"]
+stream = ExtResource("13_i7gss")
+bus = &"SFX"
+
+[node name="LightOnSound" type="AudioStreamPlayer" parent="Cutscene"]
+stream = ExtResource("14_yffv5")
+bus = &"SFX"
+
 [node name="FinishArea" type="Area2D" parent="."]
 position = Vector2(3881, 433)
 
@@ -418,6 +441,10 @@ visible = false
 
 [node name="PauseMenu" parent="." instance=ExtResource("13_3pw14")]
 visible = false
+
+[node name="LevelMusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_pgj6d")
+bus = &"LevelMusic"
 
 [connection signal="body_entered" from="KillZone" to="." method="_on_kill_zone_body_entered"]
 [connection signal="body_entered" from="FinishArea" to="." method="_on_finish_area_body_entered"]

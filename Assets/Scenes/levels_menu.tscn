@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://ru6my31iays2"]
+[gd_scene load_steps=21 format=3 uid="uid://ru6my31iays2"]
 
 [ext_resource type="Script" uid="uid://ds6pa7yu56gah" path="res://Assets/Scripts/LevelsMenu.gd" id="1_bvbgm"]
 [ext_resource type="PackedScene" uid="uid://c3retqugyu8ab" path="res://Assets/Scenes/UI/level_button.tscn" id="2_2018i"]
@@ -7,6 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="4_2oixe"]
 [ext_resource type="Texture2D" uid="uid://dfli2ldbdrs7q" path="res://Assets/ui/newbuttons.png" id="5_ovywt"]
 [ext_resource type="Texture2D" uid="uid://b0215xlkibelg" path="res://Assets/ui/newbuttons2.png" id="6_t6v1y"]
+[ext_resource type="AudioStream" uid="uid://bw5bd3pck1ibt" path="res://Assets/Sounds/UI/buttonClick.mp3" id="8_firr7"]
+[ext_resource type="AudioStream" uid="uid://0kgtucvyp2jy" path="res://Assets/Sounds/UI/success.mp3" id="9_imeig"]
+[ext_resource type="AudioStream" uid="uid://ddrb8euap5atb" path="res://Assets/Sounds/UI/popUpOff.mp3" id="10_obegr"]
+[ext_resource type="AudioStream" uid="uid://dphmq6527amop" path="res://Assets/Sounds/UI/levelSelect.mp3" id="11_l1v83"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t6v1y"]
 texture = ExtResource("5_ovywt")
@@ -278,6 +282,22 @@ focus_mode = 0
 theme_override_styles/normal = SubResource("StyleBoxTexture_imeig")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_imeig")
 theme_override_styles/hover = SubResource("StyleBoxTexture_imeig")
+
+[node name="UIButtonSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_firr7")
+bus = &"UI"
+
+[node name="UIConfirmationSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_imeig")
+bus = &"UI"
+
+[node name="UICloseSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_obegr")
+bus = &"UI"
+
+[node name="UILevelSelect" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_l1v83")
+bus = &"UI"
 
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="BackButton" to="." method="_on_button_mouse_exited"]

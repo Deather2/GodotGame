@@ -14,6 +14,9 @@ extends CanvasLayer
 @onready var next_button = $Panel/VBox/NextButton
 @onready var menu_button = $Panel/VBox/MenuButton
 
+@onready var UIButtonSound: AudioStreamPlayer = $UIButtonSound
+@onready var ShowSound: AudioStreamPlayer = $ShowSound
+
 @export var star_filled: Texture2D
 @export var star_empty: Texture2D
 
@@ -50,6 +53,8 @@ func setup_result(stars: int, time_text: String, level_index: int) -> void:
 	set_time_text(time_text)
 
 func show_with_anim() -> void:
+	ShowSound.play()
+	GameState.show_cursor()
 	visible = true
 
 	panel.position = Vector2(panel_target_pos.x, -800)
@@ -63,10 +68,17 @@ func show_with_anim() -> void:
 	tw.tween_property(panel, "position", panel_target_pos, 0.35).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 
 func go_to_menu() -> void:
+	UIButtonSound.play()
+	await get_tree().create_timer(0.15).timeout
 	SceneManager.goto_levels_menu()
+	GameState.show_cursor()
 
 func retry_level() -> void:
+	UIButtonSound.play()
 	SceneManager.reload_current_level()
+	GameState.hide_cursor()
 
 func go_to_next_level() -> void:
+	UIButtonSound.play()
 	SceneManager.goto_next_level(current_level_index)
+	GameState.hide_cursor()

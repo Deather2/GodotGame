@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 Cursor="*res://Assets/Scripts/Cursor.gd"
 SceneManager="*res://Assets/Scripts/SceneManager.gd"
 GameState="*res://Assets/Scripts/GameState.gd"
+MusicManager="*res://Assets/Scenes/MusicManager.tscn"
 
 [display]
 

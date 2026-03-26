@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://b8uddhxmbitsr"]
+[gd_scene load_steps=27 format=3 uid="uid://b8uddhxmbitsr"]
 
 [ext_resource type="Script" uid="uid://t5unp2dvwmyd" path="res://Assets/Scripts/Shop.gd" id="1_88w0c"]
 [ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_17tq6"]
@@ -8,6 +8,10 @@
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="4_7ortk"]
 [ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="7_7ortk"]
 [ext_resource type="Texture2D" uid="uid://dyaj26n6q7ovb" path="res://Assets/Icons/Sprites/RPG_Stat_MP_Mana_Full_Star.png" id="8_dciiy"]
+[ext_resource type="AudioStream" uid="uid://bw5bd3pck1ibt" path="res://Assets/Sounds/UI/buttonClick.mp3" id="9_v0t5h"]
+[ext_resource type="AudioStream" uid="uid://do4pa5pf5ocfy" path="res://Assets/Sounds/UI/popUp.mp3" id="10_ydhgn"]
+[ext_resource type="AudioStream" uid="uid://ddrb8euap5atb" path="res://Assets/Sounds/UI/popUpOff.mp3" id="11_g7qtd"]
+[ext_resource type="AudioStream" uid="uid://0kgtucvyp2jy" path="res://Assets/Sounds/UI/success.mp3" id="12_0tssf"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dciiy"]
 texture = ExtResource("7_7ortk")
@@ -45,13 +49,13 @@ corner_radius_bottom_left = 12
 texture = ExtResource("7_7ortk")
 region_rect = Rect2(408, 728, 15, 15)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ydhgn"]
-texture = ExtResource("7_7ortk")
-region_rect = Rect2(321, 100, 90, 27)
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g7qtd"]
 texture = ExtResource("7_7ortk")
 region_rect = Rect2(418, 101, 90, 26)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ydhgn"]
+texture = ExtResource("7_7ortk")
+region_rect = Rect2(321, 100, 90, 27)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s5gg0"]
 content_margin_left = 24.0
@@ -287,7 +291,13 @@ grow_horizontal = 0
 grow_vertical = 2
 horizontal_scroll_mode = 0
 
-[node name="Story" type="Label" parent="Background/DetailsPopup/Panel/StoryBox"]
+[node name="StoryPad" type="MarginContainer" parent="Background/DetailsPopup/Panel/StoryBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_right = 5
+
+[node name="Story" type="Label" parent="Background/DetailsPopup/Panel/StoryBox/StoryPad"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
@@ -316,9 +326,9 @@ offset_bottom = -32.0
 grow_horizontal = 2
 grow_vertical = 0
 focus_mode = 0
-theme_override_styles/normal = SubResource("StyleBoxTexture_ydhgn")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_g7qtd")
-theme_override_styles/hover = SubResource("StyleBoxTexture_ydhgn")
+theme_override_styles/normal = SubResource("StyleBoxTexture_g7qtd")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ydhgn")
+theme_override_styles/hover = SubResource("StyleBoxTexture_g7qtd")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_ydhgn")
 
 [node name="ButtonLabel" type="Label" parent="Background/DetailsPopup/Panel/BuyButton"]
@@ -494,6 +504,22 @@ texture_pressed = SubResource("AtlasTexture_v0t5h")
 texture_hover = SubResource("AtlasTexture_ydhgn")
 texture_disabled = SubResource("AtlasTexture_g7qtd")
 stretch_mode = 4
+
+[node name="UIButtonSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_v0t5h")
+bus = &"UI"
+
+[node name="PanelPopUpSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_ydhgn")
+bus = &"UI"
+
+[node name="UICloseSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_g7qtd")
+bus = &"UI"
+
+[node name="UIConfirmationSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_0tssf")
+bus = &"UI"
 
 [connection signal="mouse_entered" from="Background/BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Background/BackButton" to="." method="_on_button_mouse_exited"]

@@ -10,6 +10,11 @@ extends CharacterBody2D
 
 @onready var capsule: CapsuleShape2D = collision.shape as CapsuleShape2D
 
+@onready var JumpSound: AudioStreamPlayer2D = $JumpSound
+
+var finish_auto_run := false
+const FINISH_AUTO_RUN_SPEED := 220.0
+
 const SPEED := 300.0
 const JUMP_VELOCITY := -400.0
 const CROUCH_SPEED_MULT := 0.45
@@ -88,9 +93,14 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	var direction := Input.get_axis("move_left", "move_right")
+	var direction := 0.0
 
-	var want_crouch := Input.is_action_pressed("crouch")
+	if finish_auto_run:
+		direction = 1.0
+	else:
+		direction = Input.get_axis("move_left", "move_right")
+
+	var want_crouch := false if finish_auto_run else Input.is_action_pressed("crouch")
 
 	if not is_on_floor():
 		crouching = false
@@ -100,13 +110,14 @@ func _physics_process(delta: float) -> void:
 		else:
 			crouching = not _can_stand()
 
-	var jump_pressed := Input.is_action_just_pressed("jump")
+	var jump_pressed := false if finish_auto_run else Input.is_action_just_pressed("jump")
 	var jump_requested := false
 
 	if jump_pressed and is_on_floor():
 		if crouching and not _can_stand():
 			pass
 		else:
+			JumpSound.play()
 			if crouching and _can_stand():
 				crouching = false
 
@@ -117,7 +128,7 @@ func _physics_process(delta: float) -> void:
 		_apply_crouch_collision(crouching)
 		_was_crouching = crouching
 
-	var speed := SPEED
+	var speed := FINISH_AUTO_RUN_SPEED if finish_auto_run else SPEED
 	if crouching:
 		speed *= CROUCH_SPEED_MULT
 
@@ -221,3 +232,10 @@ func _process(_delta: float) -> void:
 func _can_stand() -> bool:
 	stand_check.force_shapecast_update()
 	return not stand_check.is_colliding()
+
+func start_finish_auto_run() -> void:
+	finish_auto_run = true
+	crouching = false
+
+func stop_finish_auto_run() -> void:
+	finish_auto_run = false

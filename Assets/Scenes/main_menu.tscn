@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://i3f2fkc6gvdo"]
+[gd_scene load_steps=18 format=3 uid="uid://i3f2fkc6gvdo"]
 
 [ext_resource type="Script" uid="uid://3ap22gt4fg27" path="res://Assets/Scripts/MainMenu.gd" id="1_fadmi"]
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_x6jn2"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://coh4xlti3qpdf" path="res://Assets/tilesets/oak_woods_tileset.png" id="6_shbfh"]
 [ext_resource type="Script" uid="uid://b85gboidk5du0" path="res://Assets/Scripts/MenuBody.gd" id="8_xkmpe"]
 [ext_resource type="SpriteFrames" uid="uid://dxu0k46qid04c" path="res://Assets/Animations/Char0.tres" id="9_pd3f2"]
+[ext_resource type="AudioStream" uid="uid://bw5bd3pck1ibt" path="res://Assets/Sounds/UI/buttonClick.mp3" id="11_jkcs5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hxcs8"]
 texture = ExtResource("6_shbfh")
@@ -451,6 +452,10 @@ theme_override_font_sizes/font_size = 32
 text = "Iziet"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="UIButtonSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_jkcs5")
+bus = &"UI"
 
 [connection signal="mouse_entered" from="MenuContainer/Start" to="." method="_on_menu_button_mouse_entered"]
 [connection signal="mouse_exited" from="MenuContainer/Start" to="." method="_on_menu_button_mouse_exited"]
