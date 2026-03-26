@@ -174,15 +174,17 @@ func retry_level() -> void:
 
 func go_to_menu() -> void:
 	var level := get_parent()
-	if level != null and level.has_method("stop_level_music"):
-		level.stop_level_music()
-	
+	if level != null and level.has_method("force_stop_level_music"):
+		level.force_stop_level_music()
+
 	UIButtonSound.play()
 	await get_tree().create_timer(0.15).timeout
+
 	get_tree().paused = false
 	is_open = false
 	showing_settings = false
 	switching = false
+
 	SceneManager.goto_levels_menu()
 	GameState.show_cursor()
 

@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://coh4xlti3qpdf" path="res://Assets/tilesets/oak_woods_tileset.png" id="6_shbfh"]
 [ext_resource type="Script" uid="uid://b85gboidk5du0" path="res://Assets/Scripts/MenuBody.gd" id="8_xkmpe"]
 [ext_resource type="SpriteFrames" uid="uid://dxu0k46qid04c" path="res://Assets/Animations/Char0.tres" id="9_pd3f2"]
-[ext_resource type="AudioStream" uid="uid://cydyxtlgq6jro" path="res://Assets/Sounds/UI/zapsplat_multimedia_button_click_fast_short_002_79286.mp3" id="12_s067f"]
+[ext_resource type="AudioStream" uid="uid://bw5bd3pck1ibt" path="res://Assets/Sounds/UI/buttonClick.mp3" id="11_jkcs5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hxcs8"]
 texture = ExtResource("6_shbfh")
@@ -454,7 +454,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="UIButtonSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("12_s067f")
+stream = ExtResource("11_jkcs5")
 bus = &"UI"
 
 [connection signal="mouse_entered" from="MenuContainer/Start" to="." method="_on_menu_button_mouse_entered"]

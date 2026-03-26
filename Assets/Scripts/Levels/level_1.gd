@@ -131,6 +131,7 @@ func stop_level_music() -> void:
 		return
 
 	var tw := create_tween()
+	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tw.tween_property(level_music, "volume_linear", 0.001, LEVEL_MUSIC_FADE_OUT) \
 		.set_trans(Tween.TRANS_SINE) \
 		.set_ease(Tween.EASE_IN)
@@ -163,3 +164,9 @@ func _begin_finish_cutscene() -> void:
 	$LevelTimer.visible = false
 
 	$Cutscene.play_end_cutscene()
+
+func force_stop_level_music() -> void:
+	music_cycle_active = false
+	music_is_stopping = false
+	level_music.stop()
+	level_music.volume_linear = level_music_base_volume

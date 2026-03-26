@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dkq2tr5djjjur" path="res://Assets/ui/retro.png" id="2_2ivcv"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_p62xk"]
 [ext_resource type="Script" uid="uid://bjl61hvs2qrf8" path="res://Assets/Scripts/settings_panel.gd" id="4_2ivcv"]
-[ext_resource type="AudioStream" uid="uid://cydyxtlgq6jro" path="res://Assets/Sounds/UI/zapsplat_multimedia_button_click_fast_short_002_79286.mp3" id="5_e4nyn"]
+[ext_resource type="AudioStream" uid="uid://bw5bd3pck1ibt" path="res://Assets/Sounds/UI/buttonClick.mp3" id="5_e4nyn"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rigmb"]
 texture = ExtResource("2_2ivcv")

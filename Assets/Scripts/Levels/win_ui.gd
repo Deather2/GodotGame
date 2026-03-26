@@ -15,6 +15,7 @@ extends CanvasLayer
 @onready var menu_button = $Panel/VBox/MenuButton
 
 @onready var UIButtonSound: AudioStreamPlayer = $UIButtonSound
+@onready var ShowSound: AudioStreamPlayer = $ShowSound
 
 @export var star_filled: Texture2D
 @export var star_empty: Texture2D
@@ -52,6 +53,7 @@ func setup_result(stars: int, time_text: String, level_index: int) -> void:
 	set_time_text(time_text)
 
 func show_with_anim() -> void:
+	ShowSound.play()
 	GameState.show_cursor()
 	visible = true
 

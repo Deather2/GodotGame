@@ -8,8 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://cym52mg2u2n1d" path="res://Assets/ui/big_sign.tres" id="4_6aab2"]
 [ext_resource type="Texture2D" uid="uid://cku3k8km5g3ql" path="res://Assets/ui/tall_box.tres" id="5_3sstc"]
 [ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="6_d76on"]
-[ext_resource type="AudioStream" uid="uid://cydyxtlgq6jro" path="res://Assets/Sounds/UI/zapsplat_multimedia_button_click_fast_short_002_79286.mp3" id="9_1my43"]
-[ext_resource type="AudioStream" uid="uid://cutr7u3ppi5st" path="res://Assets/Sounds/UI/miraclei-sample_confirm_success01_kofi_by_miraclei-360153.mp3" id="10_xt3uu"]
+[ext_resource type="AudioStream" uid="uid://bw5bd3pck1ibt" path="res://Assets/Sounds/UI/buttonClick.mp3" id="9_xt3uu"]
+[ext_resource type="AudioStream" uid="uid://0kgtucvyp2jy" path="res://Assets/Sounds/UI/success.mp3" id="10_hrioe"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vtrg8"]
 texture = ExtResource("6_d76on")
@@ -394,11 +394,11 @@ autowrap_mode = 2
 clip_text = true
 
 [node name="UIButtonSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("9_1my43")
+stream = ExtResource("9_xt3uu")
 bus = &"UI"
 
 [node name="UIConfirmationSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("10_xt3uu")
+stream = ExtResource("10_hrioe")
 bus = &"UI"
 
 [connection signal="mouse_entered" from="Background/LeftButton" to="." method="_on_button_mouse_entered"]

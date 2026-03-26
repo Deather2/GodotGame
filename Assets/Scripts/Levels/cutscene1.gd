@@ -16,6 +16,8 @@ extends Node
 @onready var player_light := get_node(player_light_path) as PointLight2D
 
 @onready var earthquake_sound: AudioStreamPlayer = $EarthquakeSound
+@onready var blackout_sound: AudioStreamPlayer = $BlackoutSound
+@onready var light_on_sound: AudioStreamPlayer = $LightOnSound
 
 var earthquake_base_volume := 1.0
 
@@ -90,6 +92,8 @@ func play_end_cutscene() -> void:
 	world_dark.modulate.a = 0.0
 	parallax_dark.modulate.a = 0.0
 
+	blackout_sound.play()
+
 	var tw := create_tween()
 	tw.set_parallel(true)
 	tw.tween_property(world_dark, "modulate:a", 1.0, 0.8) \
@@ -107,6 +111,7 @@ func play_end_cutscene() -> void:
 
 	await get_tree().create_timer(1.0).timeout
 
+	light_on_sound.play()
 	player_light.enabled = true
 	var target_energy := player_light.energy
 	player_light.energy = 0.0

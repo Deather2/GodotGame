@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bjl61hvs2qrf8" path="res://Assets/Scripts/settings_panel.gd" id="1_4lvv2"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_4g7x7"]
 [ext_resource type="Texture2D" uid="uid://dkq2tr5djjjur" path="res://Assets/ui/retro.png" id="3_o512t"]
-[ext_resource type="AudioStream" uid="uid://cydyxtlgq6jro" path="res://Assets/Sounds/UI/zapsplat_multimedia_button_click_fast_short_002_79286.mp3" id="4_4g7x7"]
+[ext_resource type="AudioStream" uid="uid://bw5bd3pck1ibt" path="res://Assets/Sounds/UI/buttonClick.mp3" id="4_4g7x7"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v2a54"]
 texture = ExtResource("3_o512t")
