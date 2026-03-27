@@ -201,6 +201,16 @@ func _on_info_button_pressed() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel") and not event.is_echo():
+		get_viewport().set_input_as_handled()
+
+		if info_pinned:
+			info_pinned = false
+			info_bubble.visible = false
+		else:
+			SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
+		return
+
 	if !info_pinned:
 		return
 

@@ -384,3 +384,24 @@ func _on_story_scrollbar_gui_input(event: InputEvent) -> void:
 		var mb := event as InputEventMouseButton
 		if mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
 			UIButtonSound.play()
+
+func _input(event: InputEvent) -> void:
+	if not event.is_action_pressed("ui_cancel") or event.is_echo():
+		return
+
+	get_viewport().set_input_as_handled()
+
+	if _confirm_anim or _details_anim:
+		return
+
+	if confirm_popup.visible:
+		UICloseSound.play()
+		pending_buy_id = -1
+		await _hide_popup(confirm_popup, confirm_dim, confirm_panel)
+		return
+
+	if details_popup.visible:
+		_close_details()
+		return
+
+	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)

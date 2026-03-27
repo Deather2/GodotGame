@@ -263,3 +263,18 @@ func _animate_to_page(new_page: int, dir: int) -> void:
 			var dir1 := 1 if target_page > page else -1
 			_animate_to_page(target_page, dir1)
 	)
+
+func _input(event: InputEvent) -> void:
+	if not event.is_action_pressed("ui_cancel") or event.is_echo():
+		return
+
+	if animating or confirm_animating:
+		get_viewport().set_input_as_handled()
+		return
+
+	get_viewport().set_input_as_handled()
+
+	if confirm_reset.visible:
+		await _hide_confirm()
+	else:
+		SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
