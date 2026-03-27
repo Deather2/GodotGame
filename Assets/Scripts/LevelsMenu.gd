@@ -12,6 +12,8 @@ var confirm_animating: bool = false
 @export var level_button_scene: PackedScene
 @export var level_previews: Array[Texture2D] = []
 
+var auto_level_previews: Array[Texture2D] = []
+
 @onready var pages_holder: Control = $PagesHolder
 @onready var back_btn: Button = $BackButton
 @onready var reset_btn: Button = $ResetButton
@@ -32,6 +34,8 @@ var confirm_animating: bool = false
 func _ready() -> void:
 	GameState.show_cursor()
 	current_container = $PagesHolder/LevelsContainer
+	
+	auto_level_previews.resize(GameState.LEVEL_COUNT)
 
 	back_btn.pressed.connect(_on_back_pressed)
 	reset_btn.pressed.connect(_on_reset_pressed)
@@ -49,6 +53,7 @@ func _ready() -> void:
 	confirm_reset.scale = Vector2(0.9, 0.9)
 
 	_build_grid()
+	call_deferred("_generate_auto_previews")
 	target_page = page
 	reset_btn.visible = GameState.has_any_progress()
 
@@ -85,8 +90,9 @@ func _build_grid() -> void:
 
 		btn.setup(i)
 
-		if i < level_previews.size() and level_previews[i] != null:
-			btn.set_preview(level_previews[i])
+		var tex := _get_preview_for_level(i)
+		if tex != null:
+			btn.set_preview(tex)
 
 		btn.pressed.connect(func(): _on_level_pressed(i))
 
@@ -241,8 +247,9 @@ func _animate_to_page(new_page: int, dir: int) -> void:
 
 		btn.setup(i)
 
-		if i < level_previews.size() and level_previews[i] != null:
-			btn.set_preview(level_previews[i])
+		var tex := _get_preview_for_level(i)
+		if tex != null:
+			btn.set_preview(tex)
 
 		btn.pressed.connect(func(): _on_level_pressed(i))
 
@@ -278,3 +285,126 @@ func _input(event: InputEvent) -> void:
 		await _hide_confirm()
 	else:
 		SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
+
+func _get_preview_for_level(i: int) -> Texture2D:
+	if i < auto_level_previews.size() and auto_level_previews[i] != null:
+		return auto_level_previews[i]
+
+	if i < level_previews.size() and level_previews[i] != null:
+		return level_previews[i]
+
+	return null
+
+
+func _level_scene_path(i: int) -> String:
+	return "res://Assets/Scenes/Levels/Level_%d.tscn" % [i + 1]
+
+
+func _generate_auto_previews() -> void:
+	for i in range(GameState.LEVEL_COUNT):
+		var tex: Texture2D = await _render_level_preview(i)
+		if tex != null:
+			auto_level_previews[i] = tex
+
+			var page_start := page * PER_PAGE
+			var page_end := page_start + PER_PAGE
+			if i >= page_start and i < page_end and not animating and not confirm_animating:
+				_build_grid()
+
+
+func _render_level_preview(i: int) -> Texture2D:
+	var path := _level_scene_path(i)
+	if not ResourceLoader.exists(path):
+		return null
+
+	var packed := load(path) as PackedScene
+	if packed == null:
+		return null
+
+	var viewport := SubViewport.new()
+	var vp_w: int = int(ProjectSettings.get_setting("display/window/size/viewport_width", 1152))
+	var vp_h: int = int(ProjectSettings.get_setting("display/window/size/viewport_height", 648))
+	viewport.size = Vector2i(vp_w, vp_h)
+	viewport.transparent_bg = false
+	viewport.handle_input_locally = false
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
+	add_child(viewport)
+
+	GameState.preview_mode = true
+	var level := packed.instantiate()
+	viewport.add_child(level)
+	GameState.preview_mode = false
+
+	_hide_preview_only_nodes(level)
+	_try_activate_preview_camera(level)
+
+	await get_tree().process_frame
+	await get_tree().physics_frame
+	await get_tree().process_frame
+
+	_freeze_preview_tree(level)
+
+	await get_tree().process_frame
+
+	var img := viewport.get_texture().get_image()
+	if img == null or img.is_empty():
+		level.queue_free()
+		viewport.queue_free()
+		return null
+
+	var tex := ImageTexture.create_from_image(img)
+
+	level.queue_free()
+	viewport.queue_free()
+
+	return tex
+
+
+func _hide_preview_only_nodes(root: Node) -> void:
+	for node_name in ["PauseMenu", "WinUi", "LevelTimer"]:
+		var n := root.get_node_or_null(node_name)
+		if n is CanvasItem:
+			(n as CanvasItem).visible = false
+
+	for n in root.find_children("*", "AudioStreamPlayer", true, false):
+		var p := n as AudioStreamPlayer
+		if p != null:
+			p.stop()
+
+
+func _freeze_preview_tree(root: Node) -> void:
+	root.set_process(false)
+	root.set_physics_process(false)
+	root.set_process_input(false)
+	root.set_process_unhandled_input(false)
+	root.set_process_unhandled_key_input(false)
+	root.set_process_shortcut_input(false)
+
+	if root is Timer:
+		(root as Timer).stop()
+
+	if root is AudioStreamPlayer:
+		(root as AudioStreamPlayer).stop()
+
+	for child in root.get_children():
+		_freeze_preview_tree(child)
+
+
+func _try_activate_preview_camera(root: Node) -> void:
+	var cam := _find_first_camera(root)
+	if cam != null:
+		cam.enabled = true
+		cam.make_current()
+
+
+func _find_first_camera(node: Node) -> Camera2D:
+	if node is Camera2D:
+		return node as Camera2D
+
+	for child in node.get_children():
+		var found := _find_first_camera(child)
+		if found != null:
+			return found
+
+	return null

@@ -21,6 +21,10 @@ var finish_transition := false
 
 
 func _ready() -> void:
+	if GameState.preview_mode:
+		_prepare_preview_mode()
+		return
+
 	GameState.hide_cursor()
 	level_music_base_volume = level_music.volume_linear
 	_start_level_music_cycle()
@@ -170,3 +174,20 @@ func force_stop_level_music() -> void:
 	music_is_stopping = false
 	level_music.stop()
 	level_music.volume_linear = level_music_base_volume
+
+func _prepare_preview_mode() -> void:
+	var pause := get_node_or_null("PauseMenu")
+	if pause != null:
+		pause.visible = false
+
+	var win := get_node_or_null("WinUi")
+	if win != null:
+		win.visible = false
+
+	var timer := get_node_or_null("LevelTimer")
+	if timer != null:
+		timer.visible = false
+
+	var music := get_node_or_null("LevelMusicPlayer") as AudioStreamPlayer
+	if music != null:
+		music.stop()

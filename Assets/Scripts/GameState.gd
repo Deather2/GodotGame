@@ -61,6 +61,8 @@ var _controls_actions: Array[StringName] = [
 
 var _default_controls: Dictionary = {}
 
+var preview_mode: bool = false
+
 func _ready() -> void:
 	_load_video_settings()
 	_load_audio_settings()

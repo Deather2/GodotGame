@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c3retqugyu8ab"]
+[gd_scene load_steps=11 format=3 uid="uid://c3retqugyu8ab"]
 
 [ext_resource type="Script" uid="uid://boxmlyylr28a7" path="res://Assets/Scripts/LevelButton.gd" id="1_8ow85"]
 [ext_resource type="Texture2D" uid="uid://ugyhxh7vy0pf" path="res://Assets/Icons/Sprites/RPG_Stat_MP_Mana_Star.png" id="2_jqi7n"]
@@ -54,6 +54,13 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hwsfw"]
+bg_color = Color(0, 0, 0, 0.28)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [node name="LevelButton" type="Button"]
 custom_minimum_size = Vector2(250, 140)
 focus_mode = 0
@@ -65,7 +72,7 @@ script = ExtResource("1_8ow85")
 star_empty = ExtResource("2_jqi7n")
 star_full = ExtResource("3_4y0kg")
 
-[node name="Preview" type="TextureRect" parent="."]
+[node name="PreviewHolder" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -73,6 +80,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="Preview" type="TextureRect" parent="PreviewHolder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PreviewShade" type="Panel" parent="PreviewHolder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hwsfw")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
