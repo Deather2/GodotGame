@@ -36,6 +36,20 @@ extends CenterContainer
 
 @onready var UIButtonSound: AudioStreamPlayer = $UIButtonSound
 
+@onready var menu_music_slider: HSlider = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/MenuMusicRow/MenuMusicSlider
+@onready var ui_volume_slider: HSlider = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/UIRow/UISlider
+@onready var sfx_volume_slider: HSlider = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/SFXRow/SFXSlider
+@onready var level_music_slider: HSlider = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/LevelMusicRow/LevelMusicSlider
+
+const RIGHT_SIDE_WIDTH := 180
+const BIND_BUTTONS_GAP := 8
+
+@onready var move_left_hbox: HBoxContainer = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow/HBoxContainer
+@onready var move_right_hbox: HBoxContainer = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow/HBoxContainer
+@onready var jump_hbox: HBoxContainer = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer
+@onready var crouch_hbox: HBoxContainer = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer
+@onready var pause_hbox: HBoxContainer = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer
+
 var _rebind_action: StringName = &""
 var _rebind_slot: int = -1
 var _rebind_button: Button = null
@@ -86,6 +100,7 @@ func _ready() -> void:
 	_fill_video_options()
 	_load_video_values_into_ui()
 	_load_controls_values_into_ui()
+
 	_option_arrow_down = _make_option_arrow(false)
 	_option_arrow_up = _make_option_arrow(true)
 	_style_option_button(window_mode_option)
@@ -94,12 +109,31 @@ func _ready() -> void:
 	_style_brightness_slider(brightness_slider)
 	_style_brightness_spinbox(brightness_spinbox)
 
+	_setup_audio_slider(menu_music_slider)
+	_setup_audio_slider(ui_volume_slider)
+	_setup_audio_slider(sfx_volume_slider)
+	_setup_audio_slider(level_music_slider)
+	
+	_apply_uniform_right_side_widths()
+
+	_load_audio_values_into_ui()
+
 	brightness_slider.share(brightness_spinbox)
 	brightness_slider.value_changed.connect(_on_brightness_changed)
 
 	window_mode_option.item_selected.connect(_on_window_mode_selected)
 	vsync_option.item_selected.connect(_on_vsync_selected)
 	show_fps_option.item_selected.connect(_on_show_fps_selected)
+
+	menu_music_slider.value_changed.connect(_on_menu_music_slider_changed)
+	ui_volume_slider.value_changed.connect(_on_ui_volume_slider_changed)
+	sfx_volume_slider.value_changed.connect(_on_sfx_volume_slider_changed)
+	level_music_slider.value_changed.connect(_on_level_music_slider_changed)
+
+	menu_music_slider.gui_input.connect(_on_audio_slider_gui_input)
+	ui_volume_slider.gui_input.connect(_on_audio_slider_gui_input)
+	sfx_volume_slider.gui_input.connect(_on_audio_slider_gui_input)
+	level_music_slider.gui_input.connect(_on_audio_slider_gui_input)
 
 	_style_scrollbar()
 	_setup_tooltip_theme()
@@ -108,6 +142,13 @@ func _ready() -> void:
 	spin_le.gui_input.connect(_on_spinbox_line_edit_gui_input)
 	
 	brightness_spinbox.gui_input.connect(_on_brightness_spinbox_gui_input)
+	
+	brightness_slider.scrollable = false
+
+	menu_music_slider.scrollable = false
+	ui_volume_slider.scrollable = false
+	sfx_volume_slider.scrollable = false
+	level_music_slider.scrollable = false
 	
 	var bind_buttons: Array[Button] = [
 		move_left_bind_1, move_left_bind_2,
@@ -365,36 +406,7 @@ func _style_option_popup(popup: PopupMenu) -> void:
 		popup.add_theme_font_override("font", ui_font)
 
 func _style_brightness_slider(sl: HSlider) -> void:
-	var track := StyleBoxFlat.new()
-	track.bg_color = Color("241614")
-	track.border_color = Color("4a302f")
-	track.set_border_width_all(2)
-	track.corner_radius_top_left = 4
-	track.corner_radius_top_right = 4
-	track.corner_radius_bottom_left = 4
-	track.corner_radius_bottom_right = 4
-
-	var fill := StyleBoxFlat.new()
-	fill.bg_color = Color("6b4a46")
-	fill.border_color = Color("8a6258")
-	fill.set_border_width_all(2)
-	fill.corner_radius_top_left = 4
-	fill.corner_radius_top_right = 4
-	fill.corner_radius_bottom_left = 4
-	fill.corner_radius_bottom_right = 4
-
-	var fill_hover := StyleBoxFlat.new()
-	fill_hover.bg_color = Color("8a6258")
-	fill_hover.border_color = Color("a97a6b")
-	fill_hover.set_border_width_all(2)
-	fill_hover.corner_radius_top_left = 4
-	fill_hover.corner_radius_top_right = 4
-	fill_hover.corner_radius_bottom_left = 4
-	fill_hover.corner_radius_bottom_right = 4
-
-	sl.add_theme_stylebox_override("slider", track)
-	sl.add_theme_stylebox_override("grabber_area", fill)
-	sl.add_theme_stylebox_override("grabber_area_highlight", fill_hover)
+	_style_audio_slider(sl)
 
 func _style_brightness_spinbox(sb: SpinBox) -> void:
 	var normal := _make_box("1f1312", "6b4a46")
@@ -440,6 +452,7 @@ func _style_brightness_spinbox(sb: SpinBox) -> void:
 		line_edit.add_theme_font_override("font", ui_font)
 
 	sb.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	sb.custom_minimum_size = Vector2(95, 0)
 
 	sb.add_theme_constant_override("buttons_width", 26)
 	sb.add_theme_constant_override("field_and_buttons_separation", 6)
@@ -783,11 +796,11 @@ func _on_reset_controls_pressed() -> void:
 
 func _style_bind_button(btn: Button) -> void:
 	btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
-	btn.custom_minimum_size = Vector2(92, 42)
-	btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	btn.custom_minimum_size = Vector2(0, 42)
+	btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
-	var normal := _make_box("1a1110", "3e2a28")
-	var hover := _make_box("241614", "8a6258")
+	var normal := _make_box("1f1312", "6b4a46")
+	var hover := _make_box("2c1a18", "8a6258")
 	var pressed := _make_box("3a211f", "a97a6b")
 	var focus := _make_box("241614", "e8f3ff")
 
@@ -832,7 +845,7 @@ func _style_reset_button(btn: Button) -> void:
 	btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	btn.custom_minimum_size = Vector2(0, 44)
 
-	var normal := _make_box("1a1110", "4a302f")
+	var normal := _make_box("1f1312", "6b4a46")
 	var hover := _make_box("2c1a18", "8a6258")
 	var pressed := _make_box("3a211f", "a97a6b")
 	var focus := _make_box("241614", "e8f3ff")
@@ -936,3 +949,134 @@ func _on_brightness_spinbox_gui_input(event: InputEvent) -> void:
 
 		if local_pos.x >= brightness_spinbox.size.x - buttons_width:
 			UIButtonSound.play()
+
+func _setup_audio_slider(sl: HSlider) -> void:
+	sl.min_value = 0
+	sl.max_value = 100
+	sl.step = 1
+
+	sl.size_flags_horizontal = Control.SIZE_SHRINK_END
+	sl.custom_minimum_size = Vector2(180, 24)
+
+	_style_audio_slider(sl)
+
+
+func _load_audio_values_into_ui() -> void:
+	menu_music_slider.value = GameState.menu_music_volume_percent
+	ui_volume_slider.value = GameState.ui_volume_percent
+	sfx_volume_slider.value = GameState.sfx_volume_percent
+	level_music_slider.value = GameState.level_music_volume_percent
+
+
+func _on_menu_music_slider_changed(value: float) -> void:
+	GameState.set_menu_music_volume_setting(int(value))
+
+
+func _on_ui_volume_slider_changed(value: float) -> void:
+	GameState.set_ui_volume_setting(int(value))
+
+
+func _on_sfx_volume_slider_changed(value: float) -> void:
+	GameState.set_sfx_volume_setting(int(value))
+
+
+func _on_level_music_slider_changed(value: float) -> void:
+	GameState.set_level_music_volume_setting(int(value))
+
+
+func _on_audio_slider_gui_input(event: InputEvent) -> void:
+	if not _ui_sounds_enabled:
+		return
+
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		if mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
+			UIButtonSound.play()
+
+func _style_audio_slider(sl: HSlider) -> void:
+	var track := StyleBoxFlat.new()
+	track.bg_color = Color("241614")
+	track.border_color = Color("4a302f")
+	track.set_border_width_all(2)
+	track.corner_radius_top_left = 4
+	track.corner_radius_top_right = 4
+	track.corner_radius_bottom_left = 4
+	track.corner_radius_bottom_right = 4
+
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = Color("6b4a46")
+	fill.border_color = Color("8a6258")
+	fill.set_border_width_all(2)
+	fill.corner_radius_top_left = 4
+	fill.corner_radius_top_right = 4
+	fill.corner_radius_bottom_left = 4
+	fill.corner_radius_bottom_right = 4
+
+	var fill_hover := StyleBoxFlat.new()
+	fill_hover.bg_color = Color("8a6258")
+	fill_hover.border_color = Color("a97a6b")
+	fill_hover.set_border_width_all(2)
+	fill_hover.corner_radius_top_left = 4
+	fill_hover.corner_radius_top_right = 4
+	fill_hover.corner_radius_bottom_left = 4
+	fill_hover.corner_radius_bottom_right = 4
+
+	sl.add_theme_stylebox_override("slider", track)
+	sl.add_theme_stylebox_override("grabber_area", fill)
+	sl.add_theme_stylebox_override("grabber_area_highlight", fill_hover)
+
+	sl.add_theme_icon_override("grabber", _make_slider_grabber(Color("e8f3ff"), Color("221210")))
+	sl.add_theme_icon_override("grabber_highlight", _make_slider_grabber(Color("ffffff"), Color("8a6258")))
+	sl.add_theme_icon_override("grabber_pressed", _make_slider_grabber(Color("ffffff"), Color("a97a6b")))
+	sl.add_theme_icon_override("grabber_disabled", _make_slider_grabber(Color("9b8f8d"), Color("3e2a28")))
+
+func _make_slider_grabber(fill_color: Color, border_color: Color) -> Texture2D:
+	var img := Image.create(12, 12, false, Image.FORMAT_RGBA8)
+	img.fill(fill_color)
+
+	for x in range(12):
+		img.set_pixel(x, 0, border_color)
+		img.set_pixel(x, 11, border_color)
+
+	for y in range(12):
+		img.set_pixel(0, y, border_color)
+		img.set_pixel(11, y, border_color)
+
+	return ImageTexture.create_from_image(img)
+
+func _apply_uniform_right_side_widths() -> void:
+	# Video
+	window_mode_option.size_flags_horizontal = Control.SIZE_SHRINK_END
+	vsync_option.size_flags_horizontal = Control.SIZE_SHRINK_END
+	show_fps_option.size_flags_horizontal = Control.SIZE_SHRINK_END
+
+	window_mode_option.custom_minimum_size.x = RIGHT_SIDE_WIDTH
+	vsync_option.custom_minimum_size.x = RIGHT_SIDE_WIDTH
+	show_fps_option.custom_minimum_size.x = RIGHT_SIDE_WIDTH
+
+	# Audio
+	menu_music_slider.custom_minimum_size.x = RIGHT_SIDE_WIDTH
+	ui_volume_slider.custom_minimum_size.x = RIGHT_SIDE_WIDTH
+	sfx_volume_slider.custom_minimum_size.x = RIGHT_SIDE_WIDTH
+	level_music_slider.custom_minimum_size.x = RIGHT_SIDE_WIDTH
+
+	# Controls
+	_apply_bind_row_width(move_left_hbox)
+	_apply_bind_row_width(move_right_hbox)
+	_apply_bind_row_width(jump_hbox)
+	_apply_bind_row_width(crouch_hbox)
+	_apply_bind_row_width(pause_hbox)
+
+
+func _apply_bind_row_width(row: HBoxContainer) -> void:
+	row.size_flags_horizontal = Control.SIZE_SHRINK_END
+	row.custom_minimum_size.x = RIGHT_SIDE_WIDTH
+	row.add_theme_constant_override("separation", BIND_BUTTONS_GAP)
+
+	var button_width: int = int((RIGHT_SIDE_WIDTH - BIND_BUTTONS_GAP) / 2.0)
+
+	for child in row.get_children():
+		if child is Button:
+			var btn := child as Button
+			btn.custom_minimum_size.x = button_width
+			btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL

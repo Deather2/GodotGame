@@ -12,6 +12,8 @@ const PROGRESS_PATH := "user://progress.cfg"
 const PLAYER_SECTION := "player"
 const PROGRESS_SECTION := "progress"
 const VIDEO_SECTION := "video"
+const AUDIO_SECTION := "audio"
+const MIN_BUS_DB := -80.0
 
 const LEVEL_COUNT := 13
 
@@ -41,6 +43,11 @@ var _last_windowed_was_maximized: bool = false
 
 var show_fps: bool = false
 
+var menu_music_volume_percent: int = 100
+var ui_volume_percent: int = 100
+var sfx_volume_percent: int = 100
+var level_music_volume_percent: int = 100
+
 const CONTROLS_SECTION := "controls"
 const CONTROLS_BINDS_KEY := "bindings"
 
@@ -56,6 +63,7 @@ var _default_controls: Dictionary = {}
 
 func _ready() -> void:
 	_load_video_settings()
+	_load_audio_settings()
 	_capture_default_controls()
 	_load_controls_settings()
 
@@ -63,6 +71,8 @@ func _ready() -> void:
 
 	if not Engine.is_embedded_in_editor():
 		call_deferred("_apply_video_settings")
+
+	call_deferred("_apply_audio_settings")
 
 	_load_selected_character()
 	_load_level_progress()
@@ -78,6 +88,11 @@ func _init_default_video_settings() -> void:
 	vsync_enabled = true
 	brightness_percent = 50
 	show_fps = false
+
+	menu_music_volume_percent = 100
+	ui_volume_percent = 100
+	sfx_volume_percent = 100
+	level_music_volume_percent = 100
 
 
 func _save_video_settings() -> void:
@@ -702,3 +717,71 @@ func show_cursor() -> void:
 
 func hide_cursor() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+
+func _save_audio_settings() -> void:
+	var cfg: ConfigFile = ConfigFile.new()
+	cfg.load(SETTINGS_PATH)
+	cfg.set_value(AUDIO_SECTION, "menu_music_volume_percent", menu_music_volume_percent)
+	cfg.set_value(AUDIO_SECTION, "ui_volume_percent", ui_volume_percent)
+	cfg.set_value(AUDIO_SECTION, "sfx_volume_percent", sfx_volume_percent)
+	cfg.set_value(AUDIO_SECTION, "level_music_volume_percent", level_music_volume_percent)
+	cfg.save(SETTINGS_PATH)
+
+
+func _load_audio_settings() -> void:
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: int = cfg.load(SETTINGS_PATH)
+
+	if err != OK:
+		menu_music_volume_percent = 100
+		ui_volume_percent = 100
+		sfx_volume_percent = 100
+		level_music_volume_percent = 100
+		_save_audio_settings()
+		return
+
+	menu_music_volume_percent = clampi(int(cfg.get_value(AUDIO_SECTION, "menu_music_volume_percent", 100)), 0, 100)
+	ui_volume_percent = clampi(int(cfg.get_value(AUDIO_SECTION, "ui_volume_percent", 100)), 0, 100)
+	sfx_volume_percent = clampi(int(cfg.get_value(AUDIO_SECTION, "sfx_volume_percent", 100)), 0, 100)
+	level_music_volume_percent = clampi(int(cfg.get_value(AUDIO_SECTION, "level_music_volume_percent", 100)), 0, 100)
+
+
+func _apply_audio_settings() -> void:
+	_apply_bus_volume_percent("MenuMusic", menu_music_volume_percent)
+	_apply_bus_volume_percent("UI", ui_volume_percent)
+	_apply_bus_volume_percent("SFX", sfx_volume_percent)
+	_apply_bus_volume_percent("LevelMusic", level_music_volume_percent)
+
+
+func _apply_bus_volume_percent(bus_name: String, percent: int) -> void:
+	var bus_index: int = AudioServer.get_bus_index(bus_name)
+	if bus_index == -1:
+		return
+
+	var linear: float = clampf(float(percent) / 100.0, 0.0, 1.0)
+	var db: float = MIN_BUS_DB if linear <= 0.0 else linear_to_db(linear)
+	AudioServer.set_bus_volume_db(bus_index, db)
+
+
+func set_menu_music_volume_setting(value: int) -> void:
+	menu_music_volume_percent = clampi(value, 0, 100)
+	_apply_bus_volume_percent("MenuMusic", menu_music_volume_percent)
+	_save_audio_settings()
+
+
+func set_ui_volume_setting(value: int) -> void:
+	ui_volume_percent = clampi(value, 0, 100)
+	_apply_bus_volume_percent("UI", ui_volume_percent)
+	_save_audio_settings()
+
+
+func set_sfx_volume_setting(value: int) -> void:
+	sfx_volume_percent = clampi(value, 0, 100)
+	_apply_bus_volume_percent("SFX", sfx_volume_percent)
+	_save_audio_settings()
+
+
+func set_level_music_volume_setting(value: int) -> void:
+	level_music_volume_percent = clampi(value, 0, 100)
+	_apply_bus_volume_percent("LevelMusic", level_music_volume_percent)
+	_save_audio_settings()

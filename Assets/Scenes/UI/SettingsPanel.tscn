@@ -225,7 +225,7 @@ layout_mode = 2
 theme_override_constants/separation = 250
 
 [node name="ModeLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ModeRow"]
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
@@ -250,7 +250,7 @@ layout_mode = 2
 theme_override_constants/separation = 250
 
 [node name="VSyncLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/VSyncRow"]
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 tooltip_text = "VSync sinhronizē spēles attēlu ar monitora atsvaidzes
 ātrumu. Tas var samazināt ekrāna plīsumus, bet dažreiz
@@ -279,7 +279,7 @@ layout_mode = 2
 theme_override_constants/separation = 250
 
 [node name="BrightnessLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/BrightnessRow"]
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
@@ -319,7 +319,7 @@ layout_mode = 2
 theme_override_constants/separation = 250
 
 [node name="ShowFpsLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/VideoSection/VideoRows/ShowFpsRow"]
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
@@ -367,7 +367,7 @@ layout_mode = 2
 theme_override_constants/separation = 250
 
 [node name="ActionLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveLeftRow"]
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
@@ -400,7 +400,7 @@ layout_mode = 2
 theme_override_constants/separation = 250
 
 [node name="ActionLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/MoveRightRow"]
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
@@ -433,7 +433,7 @@ layout_mode = 2
 theme_override_constants/separation = 250
 
 [node name="ActionLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow"]
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
@@ -466,7 +466,7 @@ layout_mode = 2
 theme_override_constants/separation = 250
 
 [node name="ActionLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow"]
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
@@ -499,7 +499,7 @@ layout_mode = 2
 theme_override_constants/separation = 250
 
 [node name="ActionLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow"]
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
@@ -547,6 +547,98 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="AudioSection" type="VBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections"]
+layout_mode = 2
+
+[node name="AudioRows" type="VBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MenuMusicRow" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="MenuMusicLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/MenuMusicRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_4g7x7")
+theme_override_font_sizes/font_size = 22
+text = "Izvēlnes mūzika"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuMusicSlider" type="HSlider" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/MenuMusicRow"]
+layout_mode = 2
+
+[node name="UIRow" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="UILabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/UIRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_4g7x7")
+theme_override_font_sizes/font_size = 22
+text = "Saskarne"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UISlider" type="HSlider" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/UIRow"]
+layout_mode = 2
+
+[node name="SFXRow" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="SFXLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/SFXRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_4g7x7")
+theme_override_font_sizes/font_size = 22
+text = "Efekti"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SFXSlider" type="HSlider" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/SFXRow"]
+layout_mode = 2
+
+[node name="LevelMusicRow" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="LevelMusicLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/LevelMusicRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_4g7x7")
+theme_override_font_sizes/font_size = 22
+text = "Līmeņa mūzika"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelMusicSlider" type="HSlider" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/LevelMusicRow"]
 layout_mode = 2
 
 [node name="BackButton" type="Button" parent="Panel"]
@@ -620,6 +712,18 @@ bus = &"UI"
 [connection signal="pressed" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind2" to="." method="on_button_pressed"]
 [connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="." method="_on_button_mouse_exited"]
+[connection signal="drag_started" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/MenuMusicRow/MenuMusicSlider" to="." method="on_button_pressed"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/MenuMusicRow/MenuMusicSlider" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/MenuMusicRow/MenuMusicSlider" to="." method="_on_button_mouse_exited"]
+[connection signal="drag_started" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/UIRow/UISlider" to="." method="on_button_pressed"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/UIRow/UISlider" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/UIRow/UISlider" to="." method="_on_button_mouse_exited"]
+[connection signal="drag_started" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/SFXRow/SFXSlider" to="." method="on_button_pressed"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/SFXRow/SFXSlider" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/SFXRow/SFXSlider" to="." method="_on_button_mouse_exited"]
+[connection signal="drag_started" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/LevelMusicRow/LevelMusicSlider" to="." method="on_button_pressed"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/LevelMusicRow/LevelMusicSlider" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/LevelMusicRow/LevelMusicSlider" to="." method="_on_button_mouse_exited"]
 [connection signal="mouse_entered" from="Panel/BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/BackButton" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Panel/BackButton" to="." method="_on_back_pressed"]
