@@ -85,6 +85,52 @@ func goto_levels_menu(tr: int = Transition.FADE) -> void:
 	_go(LEVELS_MENU, tr)
 	MusicManager.play_menu_music_delayed(0.5)
 
+func goto_levels_menu_from_pause() -> void:
+	if _busy:
+		return
+
+	_busy = true
+	await _go_fade_load_from_pause(LEVELS_MENU)
+	_busy = false
+
+	MusicManager.play_menu_music_delayed(0.5)
+
+func _go_fade_load_from_pause(path: String) -> void:
+	var old := _current
+
+	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
+	_fade.modulate.a = 0.0
+
+	var t := create_tween()
+	t.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	t.tween_property(_fade, "modulate:a", 1.0, FADE_OUT_DUR)
+	await t.finished
+
+	get_tree().paused = false
+
+	var packed: PackedScene = load(path) as PackedScene
+	var next: Node = packed.instantiate()
+
+	if path.contains("/Levels/"):
+		get_tree().root.add_child(next)
+	else:
+		_stage.add_child(next)
+		_set_pos(next, Vector2.ZERO)
+
+	if old != null and is_instance_valid(old):
+		old.queue_free()
+
+	_current = next
+	_stack.clear()
+	_stack.append(_current)
+
+	var t2 := create_tween()
+	t2.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	t2.tween_property(_fade, "modulate:a", 0.0, FADE_IN_DUR)
+	await t2.finished
+
+	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 func goto_shop(tr: int = Transition.FADE) -> void:
 	_go(SHOP, tr)
 
