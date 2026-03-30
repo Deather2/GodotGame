@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://ukyvchk7ccjw"]
+
+[ext_resource type="Script" uid="uid://lj7g681r4hfl" path="res://Assets/Scripts/CharacterPreview.gd" id="1_0ledg"]
+[ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_lkrtq"]
+
+[node name="CharacterPreview" type="Control"]
+custom_minimum_size = Vector2(180, 180)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_0ledg")
+db = ExtResource("2_lkrtq")
+
+[node name="PreviewSprite" type="Sprite2D" parent="."]

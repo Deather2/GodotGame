@@ -14,9 +14,6 @@ extends Control
 @onready var details_dim: ColorRect = $Background/DetailsPopup/Dim
 @onready var details_panel: Control = $Background/DetailsPopup/Panel
 
-@onready var details_preview_center: Control = $Background/DetailsPopup/Panel/CharacterPreviewCenter
-@onready var details_preview_sprite: Sprite2D = $Background/DetailsPopup/Panel/CharacterPreviewCenter/CharacterPreviewSprite
-
 @onready var details_name: Label = $Background/DetailsPopup/Panel/Name
 @onready var details_story: Label = $Background/DetailsPopup/Panel/StoryBox/StoryPad/Story
 @onready var story_scroll: ScrollContainer = $Background/DetailsPopup/Panel/StoryBox
@@ -37,6 +34,8 @@ extends Control
 @onready var UICloseSound: AudioStreamPlayer = $UICloseSound
 @onready var UIConfirmationSound: AudioStreamPlayer = $UIConfirmationSound
 
+@onready var details_character_preview: CharacterPreview = $Background/DetailsPopup/Panel/CharacterPreviewCenter/CharacterPreview
+
 var current_id: int = 0
 var pending_buy_id: int = -1
 
@@ -48,9 +47,6 @@ const POP_DUR := 0.6
 const DIM_ALPHA := 0.65
 const POP_FROM_SCALE := 0.1
 
-const DETAILS_PREVIEW_TARGET_H := 180.0
-const DETAILS_PREVIEW_Y_BIAS := -20.0
-
 var _details_anim := false
 var _confirm_anim := false
 
@@ -60,15 +56,14 @@ func _ready() -> void:
 	if db == null or card_scene == null:
 		return
 
-	if prices.size() < db.textures.size():
+	if prices.size() < db.idle_frames.size():
 		var old := prices.duplicate()
-		prices.resize(db.textures.size())
+		prices.resize(db.idle_frames.size())
 		for i in range(prices.size()):
 			prices[i] = int(old[i]) if i < old.size() else 0
 
 	_build_grid()
 	_refresh_top()
-
 
 	if GameState.has_signal("unlocks_changed"):
 		GameState.connect("unlocks_changed", Callable(self, "_refresh_all"))
@@ -79,6 +74,7 @@ func _ready() -> void:
 	_prepare_popup(confirm_popup, confirm_dim, confirm_panel)
 
 	_style_story_scrollbar()
+
 
 func _center_pivot(c: Control) -> void:
 	await get_tree().process_frame
@@ -116,11 +112,11 @@ func _build_grid() -> void:
 
 	var star_tex: Texture2D = top_star_icon.texture
 
-	for id in range(db.textures.size()):
+	for id in range(db.idle_frames.size()):
 		var card := card_scene.instantiate() as ShopCard
 		grid.add_child(card)
 
-		card.setup(id, db.textures[id], _card_text(id), star_tex)
+		card.setup(id, _card_text(id), star_tex)
 		card.card_pressed.connect(_open_details)
 
 
@@ -145,8 +141,7 @@ func _open_details(id: int) -> void:
 
 
 func _show_details(id: int) -> void:
-	details_preview_sprite.texture = db.textures[id]
-	_apply_details_preview()
+	details_character_preview.set_character(id)
 
 	details_name.text = db.names[id] if id < db.names.size() else ""
 	details_story.text = db.stories[id] if id < db.stories.size() else ""
@@ -161,26 +156,6 @@ func _show_details(id: int) -> void:
 		_set_buy_button_state(BUY_TEXT + " (" + str(price) + " ★)", false)
 	else:
 		_set_buy_button_state(NOT_ENOUGH_TEXT, true)
-
-
-func _apply_details_preview() -> void:
-	call_deferred("_apply_details_preview_deferred")
-
-
-func _apply_details_preview_deferred() -> void:
-	if details_preview_center.size == Vector2.ZERO:
-		call_deferred("_apply_details_preview_deferred")
-		return
-
-	details_preview_sprite.centered = true
-	details_preview_sprite.position = details_preview_center.size * 0.5 + Vector2(0.0, DETAILS_PREVIEW_Y_BIAS)
-
-	var tex := details_preview_sprite.texture
-	if tex != null:
-		var k := (details_preview_center.size.y * 0.85) / 64.0
-		details_preview_sprite.scale = Vector2(k, k)
-	else:
-		details_preview_sprite.scale = Vector2.ONE
 
 
 func _set_buy_button_state(text_value: String, disabled_value: bool) -> void:
@@ -315,6 +290,7 @@ func _hide_popup(popup: Control, dim: ColorRect, panel: Control) -> void:
 	if popup == confirm_popup:
 		_confirm_anim = false
 
+
 func _style_story_scrollbar() -> void:
 	story_scroll.add_theme_constant_override("scrollbar_v_separation", 6)
 
@@ -384,6 +360,7 @@ func _on_story_scrollbar_gui_input(event: InputEvent) -> void:
 		var mb := event as InputEventMouseButton
 		if mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
 			UIButtonSound.play()
+
 
 func _input(event: InputEvent) -> void:
 	if not event.is_action_pressed("ui_cancel") or event.is_echo():

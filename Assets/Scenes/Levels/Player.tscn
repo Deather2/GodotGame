@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b5towj76s0dll" path="res://Assets/Scripts/Levels/player.gd" id="1_1iq5p"]
 [ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_mqbe8"]
-[ext_resource type="SpriteFrames" uid="uid://doyekqs7quhfp" path="res://Assets/Animations/Char1.tres" id="3_mqbe8"]
+[ext_resource type="SpriteFrames" uid="uid://bjhfkwpvg5ogv" path="res://Assets/Animations/Char2.tres" id="3_kiw01"]
 [ext_resource type="AudioStream" uid="uid://cogwcs8din3sm" path="res://Assets/Sounds/SFX/Player/jump.mp3" id="4_kiw01"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gv6bx"]
@@ -34,8 +34,10 @@ shape = SubResource("CapsuleShape2D_gv6bx")
 [node name="SpritePivot" type="Node2D" parent="."]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="SpritePivot"]
-sprite_frames = ExtResource("3_mqbe8")
+sprite_frames = ExtResource("3_kiw01")
 animation = &"idle"
+frame = 3
+frame_progress = 0.7972444
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -200)
@@ -47,6 +49,7 @@ limit_bottom = 1050
 [node name="Feet" type="Marker2D" parent="."]
 
 [node name="StandCheck" type="ShapeCast2D" parent="."]
+visible = false
 shape = SubResource("CapsuleShape2D_mqbe8")
 target_position = Vector2(0, 0)
 

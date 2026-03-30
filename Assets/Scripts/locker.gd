@@ -1,10 +1,6 @@
 extends Control
 
 @export var db: CharacterDB
-var characters: Array[Texture2D] = []
-
-@onready var preview_center: Control = $Background/BigSign/CharacterBox/PreviewCenter
-@onready var preview_sprite: Sprite2D = $Background/BigSign/CharacterBox/PreviewCenter/PreviewSprite
 
 @onready var left_button: Button = $Background/LeftButton
 @onready var right_button: Button = $Background/RightButton
@@ -22,23 +18,18 @@ var characters: Array[Texture2D] = []
 @onready var UIButtonSound: AudioStreamPlayer = $UIButtonSound
 @onready var UIConfirmationSound: AudioStreamPlayer = $UIConfirmationSound
 
+@onready var character_preview: CharacterPreview = $Background/BigSign/CharacterBox/PreviewCenter/CharacterPreview
+
 var unlocked_ids: Array[int] = []
 var current_pos: int = 0
 var info_pinned: bool = false
-
-const PREVIEW_BASE := 64.0
-const PREVIEW_FILL := 1.6
-const PREVIEW_Y_BIAS := -40.0
 
 
 func _ready() -> void:
 	GameState.show_cursor()
 	Cursor.set_normal()
 
-	if db != null:
-		characters = db.textures
-
-	if characters.is_empty():
+	if db == null or db.idle_frames.is_empty():
 		return
 
 	_rebuild_unlocked_list()
@@ -78,7 +69,7 @@ func _rebuild_unlocked_list() -> void:
 
 	for id in GameState.unlocked_characters:
 		var i := int(id)
-		if i >= 0 and i < characters.size():
+		if i >= 0 and i < db.idle_frames.size():
 			if not unlocked_ids.has(i):
 				unlocked_ids.append(i)
 
@@ -97,34 +88,13 @@ func _get_current_id() -> int:
 func _update_character() -> void:
 	var id := _get_current_id()
 
-	preview_sprite.texture = characters[id]
-	_apply_preview()
+	character_preview.set_character(id)
 
 	_update_select_button()
 
 	if db != null:
 		name_label.text = db.names[id] if id < db.names.size() else ""
 		story_label.text = db.stories[id] if id < db.stories.size() else ""
-
-
-func _apply_preview() -> void:
-	call_deferred("_apply_preview_deferred")
-
-
-func _apply_preview_deferred() -> void:
-	if preview_center.size == Vector2.ZERO:
-		call_deferred("_apply_preview_deferred")
-		return
-
-	preview_sprite.centered = true
-	preview_sprite.position = preview_center.size * 0.5 + Vector2(0.0, PREVIEW_Y_BIAS)
-
-	var tex := preview_sprite.texture
-	if tex != null:
-		var k := (preview_center.size.y * PREVIEW_FILL) / PREVIEW_BASE
-		preview_sprite.scale = Vector2(k, k)
-	else:
-		preview_sprite.scale = Vector2.ONE
 
 
 func _update_select_button() -> void:

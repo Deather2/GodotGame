@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://b8uddhxmbitsr"]
+[gd_scene load_steps=28 format=3 uid="uid://b8uddhxmbitsr"]
 
 [ext_resource type="Script" uid="uid://t5unp2dvwmyd" path="res://Assets/Scripts/Shop.gd" id="1_88w0c"]
 [ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_17tq6"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://drrwoo1060smv" path="res://Assets/Scenes/UI/shopCard.tscn" id="3_7ortk"]
 [ext_resource type="Texture2D" uid="uid://c3blpwxp2fsws" path="res://Assets/ui/header.tres" id="3_17tq6"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="4_7ortk"]
+[ext_resource type="PackedScene" uid="uid://ukyvchk7ccjw" path="res://Assets/Scenes/UI/CharacterPreview.tscn" id="6_ydhgn"]
 [ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="7_7ortk"]
 [ext_resource type="Texture2D" uid="uid://dyaj26n6q7ovb" path="res://Assets/Icons/Sprites/RPG_Stat_MP_Mana_Full_Star.png" id="8_dciiy"]
 [ext_resource type="AudioStream" uid="uid://bw5bd3pck1ibt" path="res://Assets/Sounds/UI/buttonClick.mp3" id="9_v0t5h"]
@@ -103,7 +104,7 @@ grow_vertical = 2
 script = ExtResource("1_88w0c")
 db = ExtResource("2_17tq6")
 card_scene = ExtResource("3_7ortk")
-prices = Array[int]([0, 3])
+prices = Array[int]([0, 3, 9])
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -193,19 +194,17 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_v0t5h")
 
 [node name="CharacterPreviewCenter" type="CenterContainer" parent="Background/DetailsPopup/Panel"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -181.25
-offset_top = -290.5
-offset_right = 181.25
-offset_bottom = 134.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
-[node name="CharacterPreviewSprite" type="Sprite2D" parent="Background/DetailsPopup/Panel/CharacterPreviewCenter"]
+[node name="CharacterPreview" parent="Background/DetailsPopup/Panel/CharacterPreviewCenter" instance=ExtResource("6_ydhgn")]
+layout_mode = 2
+target_height = 200.0
+baseline_y = 200.0
 
 [node name="NameLabel" type="Label" parent="Background/DetailsPopup/Panel"]
 layout_mode = 1

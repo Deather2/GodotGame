@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://drrwoo1060smv"]
+[gd_scene load_steps=6 format=3 uid="uid://drrwoo1060smv"]
 
 [ext_resource type="Script" uid="uid://kojinywpwe1t" path="res://Assets/Scripts/ShopCard.gd" id="1_7mcja"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_aa7hu"]
+[ext_resource type="PackedScene" uid="uid://ukyvchk7ccjw" path="res://Assets/Scenes/UI/CharacterPreview.tscn" id="2_n53le"]
 [ext_resource type="Texture2D" uid="uid://dyaj26n6q7ovb" path="res://Assets/Icons/Sprites/RPG_Stat_MP_Mana_Full_Star.png" id="3_7fhbm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7mcja"]
@@ -55,7 +56,12 @@ theme_override_constants/separation = 12
 custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
 
-[node name="PreviewSprite" type="Sprite2D" parent="BgPanel/VBox/PreviewCenter"]
+[node name="CharacterPreview" parent="BgPanel/VBox/PreviewCenter" instance=ExtResource("2_n53le")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+mouse_filter = 2
+target_height = 100.0
+baseline_y = 105.0
 
 [node name="PriceUI" type="HBoxContainer" parent="BgPanel/VBox"]
 layout_mode = 2
