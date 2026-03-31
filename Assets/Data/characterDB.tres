@@ -1,25 +1,17 @@
-[gd_resource type="Resource" script_class="CharacterDB" load_steps=9 format=3 uid="uid://cvwqdppkj64vm"]
+[gd_resource type="Resource" script_class="CharacterDB" load_steps=6 format=3 uid="uid://cvwqdppkj64vm"]
 
 [ext_resource type="SpriteFrames" uid="uid://dxu0k46qid04c" path="res://Assets/Animations/Char0.tres" id="1_7d18p"]
 [ext_resource type="Script" uid="uid://b7mc5qhmvucnx" path="res://Assets/Scripts/CharacterDB.gd" id="1_i6avy"]
 [ext_resource type="SpriteFrames" uid="uid://doyekqs7quhfp" path="res://Assets/Animations/Char1.tres" id="2_bu7xg"]
 [ext_resource type="SpriteFrames" uid="uid://bjhfkwpvg5ogv" path="res://Assets/Animations/Char2.tres" id="3_0trxb"]
-[ext_resource type="Texture2D" uid="uid://dei0f7g27ws8r" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r05_c03.png" id="4_bu7xg"]
-[ext_resource type="Texture2D" uid="uid://cxrn68bov8ait" path="res://Assets/characters/char_blue/frames_padded_64x64/char_blue_r00_c00.png" id="5_efky2"]
-[ext_resource type="Texture2D" uid="uid://btiha1s7xetg8" path="res://Assets/characters/Knight_player/Idle_KG_2.png" id="7_fv37x"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_c7343"]
-atlas = ExtResource("7_fv37x")
-region = Rect2(14, 0, 64, 64)
+[ext_resource type="SpriteFrames" uid="uid://bsv1smlcunq57" path="res://Assets/Animations/Char3.tres" id="4_bu7xg"]
 
 [resource]
 script = ExtResource("1_i6avy")
-textures = Array[Texture2D]([ExtResource("4_bu7xg"), ExtResource("5_efky2"), SubResource("AtlasTexture_c7343")])
-names = Array[String](["Princis Artorius Valenhardt Aurelius", "Sers Cedric Vaneholt Ravenshield", "Dāma Elīra Silverthorn Vaeloria"])
-stories = Array[String](["Princis Artorius Valenhardt Aurelius nāk no senas karaļu dzimtas, kas gadsimtiem ilgi valdīja pār aukstu ziemeļu karalisti. Pēc nodevības karaliskajā galmā viņš zaudēja tiesības uz troni un zvērēja pats noskaidrot, kurš iznīcināja viņa ģimenes godu. Tagad Artorijs ceļo pa pasauli, palīdzot ciemiem un pilsētām, lai atgūtu uzticību vienkāršajiem ļaudīm un atrastu patiesību par savu dzimtu.", "Reiz viņš bija karaļa pavadoņu vienības karotājs, bet pēc Ziemeļu vārtu krišanas pazuda bez pēdām. Tagad viņš klīst kā kluss zobens algotņu rindās, saistīts ar senu zvērestu un parādu, ko viņš atsakās aizmirst.", "Elīra ir jauna bruņiniece, kura jau kopš bērnības sargāja savu zemi no tumsas radībām. Kad pasaule sāka grimt tumsā un gaisma pazuda, viņa devās ceļā, lai atrastu tās avotu un atjaunotu mieru. Elīra ir drosmīga, neatlaidīga un nekad neatkāpjas, pat tad, kad cerība gandrīz ir zudusi."])
-idle_frames = Array[SpriteFrames]([ExtResource("1_7d18p"), ExtResource("2_bu7xg"), ExtResource("3_0trxb")])
-sprite_offsets = Array[Vector2]([Vector2(0, -16), Vector2(1, -14), Vector2(0, 0)])
-hitbox_offsets = Array[Vector2]([Vector2(0, -13), Vector2(0, -13), Vector2(0, 0)])
-sprite_scales = Array[float]([1.0, 0.8, 0.4])
-preview_offsets = Array[Vector2]([Vector2(5, -40), Vector2(2, -25), Vector2(-5, 15)])
+names = Array[String](["Princis Artorius Valenhardt Aurelius", "Sers Cedric Vaneholt Ravenshield", "Dāma Elīra Silverthorn Vaeloria", "Kaelens Dravemors"])
+stories = Array[String](["Princis Artorius Valenhardt Aurelius nāk no senas karaļu dzimtas, kas gadsimtiem ilgi valdīja pār aukstu ziemeļu karalisti. Pēc nodevības karaliskajā galmā viņš zaudēja tiesības uz troni un zvērēja pats noskaidrot, kurš iznīcināja viņa ģimenes godu. Tagad Artorijs ceļo pa pasauli, palīdzot ciemiem un pilsētām, lai atgūtu uzticību vienkāršajiem ļaudīm un atrastu patiesību par savu dzimtu.", "Reiz viņš bija karaļa pavadoņu vienības karotājs, bet pēc Ziemeļu vārtu krišanas pazuda bez pēdām. Tagad viņš klīst kā kluss zobens algotņu rindās, saistīts ar senu zvērestu un parādu, ko viņš atsakās aizmirst.", "Elīra ir jauna bruņiniece, kura jau kopš bērnības sargāja savu zemi no tumsas radībām. Kad pasaule sāka grimt tumsā un gaisma pazuda, viņa devās ceļā, lai atrastu tās avotu un atjaunotu mieru. Elīra ir drosmīga, neatlaidīga un nekad neatkāpjas, pat tad, kad cerība gandrīz ir zudusi.", "Kaelens Dravemors ir pieredzējis karotājs, kurš jau daudzus gadus cīnās pret tumsas radībām. Viņš ir mierīgs, izturīgs un vienmēr gatavs aizsargāt tos, kuri paši to nespēj. Kopš bērnības viņš ceļoja kopā ar savu jaunāko māsu, un abi viens otram bija vienīgā īstā ģimene. Kad pasauli sāka pārņemt tumsa, Kaelens nolēma doties uz priekšu pirmais, lai atrastu veidu, kā atjaunot gaismu un pasargāt savu māsu no likteņa, kas reiz iznīcināja viņu mājas."])
+idle_frames = Array[SpriteFrames]([ExtResource("1_7d18p"), ExtResource("2_bu7xg"), ExtResource("3_0trxb"), ExtResource("4_bu7xg")])
+sprite_offsets = Array[Vector2]([Vector2(0, -16), Vector2(1, -14), Vector2(0, 4), Vector2(0, -17)])
+hitbox_offsets = Array[Vector2]([Vector2(0, -13), Vector2(0, -13), Vector2(0, 0), Vector2(0, 0)])
+sprite_scales = Array[float]([1.0, 0.8, 0.4, 1.0])
 metadata/_custom_type_script = "uid://b7mc5qhmvucnx"
