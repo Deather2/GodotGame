@@ -104,7 +104,7 @@ grow_vertical = 2
 script = ExtResource("1_88w0c")
 db = ExtResource("2_17tq6")
 card_scene = ExtResource("3_7ortk")
-prices = Array[int]([0, 3, 9, 12])
+prices = Array[int]([0, 3, 9, 12, 12])
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
