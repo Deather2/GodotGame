@@ -27,6 +27,8 @@ func _ready() -> void:
 
 	GameState.hide_cursor()
 	level_music_base_volume = level_music.volume_linear
+	if SceneManager.is_transitioning():
+		await SceneManager.transition_finished
 	_start_level_music_cycle()
 
 

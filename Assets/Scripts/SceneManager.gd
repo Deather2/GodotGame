@@ -1,20 +1,31 @@
 extends Node
 
-const MAIN_MENU  := "res://Assets/Scenes/main_menu.tscn"
+const MAIN_MENU := "res://Assets/Scenes/main_menu.tscn"
 const LEVELS_MENU := "res://Assets/Scenes/levels_menu.tscn"
-const SHOP       := "res://Assets/Scenes/shop.tscn"
-const LOCKER     := "res://Assets/Scenes/locker.tscn"
-const SETTINGS   := "res://Assets/Scenes/settings.tscn"
+const SHOP := "res://Assets/Scenes/shop.tscn"
+const LOCKER := "res://Assets/Scenes/locker.tscn"
+const SETTINGS := "res://Assets/Scenes/settings.tscn"
 const LEVELS_DIR := "res://Assets/Scenes/Levels/"
-const FPS_COUNTER_SCENE := preload("res://Assets/Scenes/UI/FpsCounter.tscn")
 
-var _fps_counter: CanvasLayer = null
+const FPS_COUNTER_SCENE := preload("res://Assets/Scenes/UI/FpsCounter.tscn")
+const LOADING_SPINNER_SCENE := preload("res://Assets/Scenes/UI/LoadingSpinner.tscn")
+
+const MAIN_MENU_SCENE := preload("res://Assets/Scenes/main_menu.tscn")
+const LEVELS_MENU_SCENE := preload("res://Assets/Scenes/levels_menu.tscn")
+const SHOP_SCENE := preload("res://Assets/Scenes/shop.tscn")
+const LOCKER_SCENE := preload("res://Assets/Scenes/locker.tscn")
+const SETTINGS_SCENE := preload("res://Assets/Scenes/settings.tscn")
 
 const SLIDE_DUR := 0.35
 const FADE_OUT_DUR := 0.45
 const FADE_IN_DUR := 0.45
+const LOADING_MIN_TIME := 0.5
 
 enum Transition { FADE, SLIDE_LEFT, SLIDE_RIGHT, DROP_DOWN, DROP_UP }
+
+signal transition_finished
+
+var _fps_counter: CanvasLayer = null
 
 var _busy := false
 var _current: Node = null
@@ -25,6 +36,7 @@ var _stage: Control
 
 var _fade_layer: CanvasLayer
 var _fade: ColorRect
+var _loading_spinner: Control
 
 
 func _ready() -> void:
@@ -58,6 +70,10 @@ func _build_ui() -> void:
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_fade_layer.add_child(_fade)
 
+	_loading_spinner = LOADING_SPINNER_SCENE.instantiate()
+	_loading_spinner.visible = false
+	_fade_layer.add_child(_loading_spinner)
+
 
 func _adopt_initial_scene() -> void:
 	var cs := get_tree().current_scene
@@ -67,7 +83,7 @@ func _adopt_initial_scene() -> void:
 	if cs.get_parent() != null:
 		cs.get_parent().remove_child(cs)
 
-	if cs.scene_file_path.contains("/Levels/"):
+	if _is_level_path(cs.scene_file_path):
 		get_tree().root.add_child(cs)
 	else:
 		_stage.add_child(cs)
@@ -77,74 +93,49 @@ func _adopt_initial_scene() -> void:
 	_stack.clear()
 	_stack.append(_current)
 
+
 func goto_main_menu(tr: int = Transition.FADE) -> void:
-	_go(MAIN_MENU, tr)
+	await _go(MAIN_MENU, tr, _is_current_level_scene())
 	MusicManager.play_menu_music_delayed(0.5)
 
+
 func goto_levels_menu(tr: int = Transition.FADE) -> void:
-	_go(LEVELS_MENU, tr)
+	await _go(LEVELS_MENU, tr, _is_current_level_scene())
 	MusicManager.play_menu_music_delayed(0.5)
+
 
 func goto_levels_menu_from_pause() -> void:
 	if _busy:
 		return
 
 	_busy = true
-	await _go_fade_load_from_pause(LEVELS_MENU)
+	await _go_fade_load_from_pause(LEVELS_MENU, true)
 	_busy = false
 
 	MusicManager.play_menu_music_delayed(0.5)
 
-func _go_fade_load_from_pause(path: String) -> void:
-	var old := _current
-
-	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
-	_fade.modulate.a = 0.0
-
-	var t := create_tween()
-	t.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	t.tween_property(_fade, "modulate:a", 1.0, FADE_OUT_DUR)
-	await t.finished
-
-	get_tree().paused = false
-
-	var packed: PackedScene = load(path) as PackedScene
-	var next: Node = packed.instantiate()
-
-	if path.contains("/Levels/"):
-		get_tree().root.add_child(next)
-	else:
-		_stage.add_child(next)
-		_set_pos(next, Vector2.ZERO)
-
-	if old != null and is_instance_valid(old):
-		old.queue_free()
-
-	_current = next
-	_stack.clear()
-	_stack.append(_current)
-
-	var t2 := create_tween()
-	t2.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	t2.tween_property(_fade, "modulate:a", 0.0, FADE_IN_DUR)
-	await t2.finished
-
-	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func goto_shop(tr: int = Transition.FADE) -> void:
 	_go(SHOP, tr)
 
+
 func goto_locker(tr: int = Transition.FADE) -> void:
 	_go(LOCKER, tr)
 
+
 func goto_settings(tr: int = Transition.FADE) -> void:
 	_go(SETTINGS, tr)
-	
+
 func goto_level(i: int, tr: int = Transition.FADE) -> void:
 	MusicManager.stop_menu_music()
 	clear_stack_keep_top()
 	var path := "%sLevel_%d.tscn" % [LEVELS_DIR, i + 1]
-	_go(path, tr)
+	_go(path, tr, true)
+
+
+func goto_next_level(current_level_index: int, tr: int = Transition.FADE) -> void:
+	goto_level(current_level_index + 1, tr)
+
 
 func reload_current_level() -> void:
 	if _busy:
@@ -159,6 +150,9 @@ func reload_current_level() -> void:
 	var path := _current.scene_file_path
 	var old := _current
 
+	if old != null and is_instance_valid(old) and old.has_method("force_stop_level_music"):
+		old.force_stop_level_music()
+
 	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
 	_fade.modulate.a = 0.0
 
@@ -167,11 +161,21 @@ func reload_current_level() -> void:
 	t.tween_property(_fade, "modulate:a", 1.0, FADE_OUT_DUR)
 	await t.finished
 
+	var loading_started := Time.get_ticks_msec()
+	_show_loading_spinner()
+
 	get_tree().paused = false
 
-	var packed: PackedScene = load(path) as PackedScene
+	var packed: PackedScene = _get_packed_scene(path)
 	var next: Node = packed.instantiate()
 	get_tree().root.add_child(next)
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	var elapsed := (Time.get_ticks_msec() - loading_started) / 1000.0
+	if elapsed < LOADING_MIN_TIME:
+		await get_tree().create_timer(LOADING_MIN_TIME - elapsed).timeout
 
 	if old != null and is_instance_valid(old):
 		old.queue_free()
@@ -179,6 +183,8 @@ func reload_current_level() -> void:
 	_current = next
 	_stack.clear()
 	_stack.append(_current)
+
+	_hide_loading_spinner()
 
 	var t2 := create_tween()
 	t2.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
@@ -188,8 +194,8 @@ func reload_current_level() -> void:
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_busy = false
 
-func goto_next_level(current_level_index: int, tr: int = Transition.FADE) -> void:
-	goto_level(current_level_index + 1, tr)
+	transition_finished.emit()
+
 
 func back() -> void:
 	if _busy:
@@ -198,12 +204,13 @@ func back() -> void:
 	await _pop_overlay_up()
 	_busy = false
 
+
 func quit_game() -> void:
 	await get_tree().create_timer(0.15).timeout
 	get_tree().quit()
 
 
-func _go(path: String, tr: int) -> void:
+func _go(path: String, tr: int, show_loading: bool = false) -> void:
 	if _busy:
 		return
 	_busy = true
@@ -219,14 +226,14 @@ func _go(path: String, tr: int) -> void:
 		return
 
 	if tr == Transition.FADE:
-		await _go_fade_load(path)
+		await _go_fade_load(path, show_loading)
 		_busy = false
 		return
 
-	var packed: PackedScene = load(path) as PackedScene
+	var packed: PackedScene = _get_packed_scene(path)
 	var next: Node = packed.instantiate()
 
-	if path.contains("/Levels/"):
+	if _is_level_path(path):
 		get_tree().root.add_child(next)
 	else:
 		_stage.add_child(next)
@@ -247,15 +254,13 @@ func _go(path: String, tr: int) -> void:
 
 	_current = next
 
-	if not path.contains("/Levels/"):
+	if not _is_level_path(path):
 		_set_pos(_current, Vector2.ZERO)
 
 	_stack.clear()
 	_stack.append(_current)
-
-	_busy = false
-
-func _go_fade_load(path: String) -> void:
+	
+func _go_fade_load(path: String, show_loading: bool = false) -> void:
 	var old := _current
 
 	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -265,14 +270,27 @@ func _go_fade_load(path: String) -> void:
 	t.tween_property(_fade, "modulate:a", 1.0, FADE_OUT_DUR)
 	await t.finished
 
-	var packed: PackedScene = load(path) as PackedScene
+	var loading_started := 0
+	if show_loading:
+		_show_loading_spinner()
+		loading_started = Time.get_ticks_msec()
+
+	var packed: PackedScene = _get_packed_scene(path)
 	var next: Node = packed.instantiate()
 
-	if path.contains("/Levels/"):
+	if _is_level_path(path):
 		get_tree().root.add_child(next)
 	else:
 		_stage.add_child(next)
 		_set_pos(next, Vector2.ZERO)
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	if show_loading:
+		var elapsed := (Time.get_ticks_msec() - loading_started) / 1000.0
+		if elapsed < LOADING_MIN_TIME:
+			await get_tree().create_timer(LOADING_MIN_TIME - elapsed).timeout
 
 	if old != null and is_instance_valid(old):
 		old.queue_free()
@@ -281,11 +299,70 @@ func _go_fade_load(path: String) -> void:
 	_stack.clear()
 	_stack.append(_current)
 
+	if show_loading:
+		_hide_loading_spinner()
+
 	var t2 := create_tween()
 	t2.tween_property(_fade, "modulate:a", 0.0, FADE_IN_DUR)
 	await t2.finished
 
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	transition_finished.emit()
+
+
+func _go_fade_load_from_pause(path: String, show_loading: bool = false) -> void:
+	var old := _current
+
+	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
+	_fade.modulate.a = 0.0
+
+	var t := create_tween()
+	t.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	t.tween_property(_fade, "modulate:a", 1.0, FADE_OUT_DUR)
+	await t.finished
+
+	var loading_started := 0
+	if show_loading:
+		_show_loading_spinner()
+		loading_started = Time.get_ticks_msec()
+
+	get_tree().paused = false
+
+	var packed: PackedScene = _get_packed_scene(path)
+	var next: Node = packed.instantiate()
+
+	if _is_level_path(path):
+		get_tree().root.add_child(next)
+	else:
+		_stage.add_child(next)
+		_set_pos(next, Vector2.ZERO)
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	if show_loading:
+		var elapsed := (Time.get_ticks_msec() - loading_started) / 1000.0
+		if elapsed < LOADING_MIN_TIME:
+			await get_tree().create_timer(LOADING_MIN_TIME - elapsed).timeout
+
+	if old != null and is_instance_valid(old):
+		old.queue_free()
+
+	_current = next
+	_stack.clear()
+	_stack.append(_current)
+
+	if show_loading:
+		_hide_loading_spinner()
+
+	var t2 := create_tween()
+	t2.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	t2.tween_property(_fade, "modulate:a", 0.0, FADE_IN_DUR)
+	await t2.finished
+
+	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	transition_finished.emit()
+
 
 func _push_overlay_from_top(path: String) -> void:
 	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -294,7 +371,7 @@ func _push_overlay_from_top(path: String) -> void:
 	if _stack.is_empty() and _current != null and is_instance_valid(_current):
 		_stack.append(_current)
 
-	var packed: PackedScene = load(path) as PackedScene
+	var packed: PackedScene = _get_packed_scene(path)
 	var next: Node = packed.instantiate()
 	_stage.add_child(next)
 
@@ -327,7 +404,7 @@ func _back_load_under_and_slide_up(path: String) -> void:
 		_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		return
 
-	var packed: PackedScene = load(path) as PackedScene
+	var packed: PackedScene = _get_packed_scene(path)
 	var under: Node = packed.instantiate()
 	_stage.add_child(under)
 
@@ -348,7 +425,6 @@ func _back_load_under_and_slide_up(path: String) -> void:
 	_stack.append(_current)
 
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
-
 
 func _pop_overlay_up() -> void:
 	if _stack.size() < 2:
@@ -377,7 +453,7 @@ func _pop_overlay_up() -> void:
 
 func _tr_fade(old: Node, next: Node) -> void:
 	next.visible = false
-	if not next.scene_file_path.contains("/Levels/"):
+	if not _is_level_path(next.scene_file_path):
 		_set_pos(next, Vector2.ZERO)
 
 	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -420,6 +496,7 @@ func _set_pos(n: Node, p: Vector2) -> void:
 	elif "position" in n:
 		n.position = p
 
+
 func clear_stack_keep_top() -> void:
 	if _stack.size() <= 1:
 		return
@@ -450,8 +527,49 @@ func _hide_fps_counter() -> void:
 	_fps_counter.queue_free()
 	_fps_counter = null
 
+
 func update_fps_counter() -> void:
 	if GameState.show_fps:
 		_show_fps_counter()
 	else:
 		_hide_fps_counter()
+
+
+func _show_loading_spinner() -> void:
+	if _loading_spinner == null or not is_instance_valid(_loading_spinner):
+		return
+	_loading_spinner.visible = true
+
+
+func _hide_loading_spinner() -> void:
+	if _loading_spinner == null or not is_instance_valid(_loading_spinner):
+		return
+	_loading_spinner.visible = false
+
+
+func is_transitioning() -> bool:
+	return _busy
+
+
+func _get_packed_scene(path: String) -> PackedScene:
+	match path:
+		MAIN_MENU:
+			return MAIN_MENU_SCENE
+		LEVELS_MENU:
+			return LEVELS_MENU_SCENE
+		SHOP:
+			return SHOP_SCENE
+		LOCKER:
+			return LOCKER_SCENE
+		SETTINGS:
+			return SETTINGS_SCENE
+		_:
+			return load(path) as PackedScene
+
+
+func _is_level_path(path: String) -> bool:
+	return path.contains("/Levels/")
+
+
+func _is_current_level_scene() -> bool:
+	return _current != null and is_instance_valid(_current) and _is_level_path(_current.scene_file_path)

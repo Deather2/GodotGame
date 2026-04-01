@@ -1,0 +1,72 @@
+[gd_scene load_steps=10 format=3 uid="uid://dyjf5tphba3lu"]
+
+[ext_resource type="Script" uid="uid://b4eyn0domy15c" path="res://Assets/Scripts/loading_spinner.gd" id="1_4ch2o"]
+[ext_resource type="Texture2D" uid="uid://b2661owlc5r4h" path="res://Assets/Loading/Loading Screen.png" id="2_41ud7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_46k20"]
+atlas = ExtResource("2_41ud7")
+region = Rect2(0, 0, 40, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_afw54"]
+atlas = ExtResource("2_41ud7")
+region = Rect2(40, 0, 40, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rpt1g"]
+atlas = ExtResource("2_41ud7")
+region = Rect2(80, 0, 40, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bka0u"]
+atlas = ExtResource("2_41ud7")
+region = Rect2(120, 0, 40, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bgatg"]
+atlas = ExtResource("2_41ud7")
+region = Rect2(160, 0, 40, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_niusl"]
+atlas = ExtResource("2_41ud7")
+region = Rect2(200, 0, 40, 18)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6rdli"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_46k20")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_afw54")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rpt1g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bka0u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bgatg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_niusl")
+}],
+"loop": true,
+"name": &"spin",
+"speed": 10.0
+}]
+
+[node name="LoadingSpinner" type="Control"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("1_4ch2o")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(75, 75)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_6rdli")
+animation = &"spin"
