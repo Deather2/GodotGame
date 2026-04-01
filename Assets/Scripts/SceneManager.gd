@@ -38,6 +38,7 @@ var _fade_layer: CanvasLayer
 var _fade: ColorRect
 var _loading_spinner: Control
 
+var _opened_once: Dictionary = {}
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -92,6 +93,7 @@ func _adopt_initial_scene() -> void:
 	_current = cs
 	_stack.clear()
 	_stack.append(_current)
+	_mark_path_opened(cs.scene_file_path)
 
 
 func goto_main_menu(tr: int = Transition.FADE) -> void:
@@ -214,29 +216,36 @@ func _go(path: String, tr: int, show_loading: bool = false) -> void:
 	if _busy:
 		return
 	_busy = true
+	var prepared_next: Node = null
+	if _should_prepare_first_menu_scene(path, show_loading):
+		prepared_next = await _prepare_scene_with_dots(path)
 
 	if tr == Transition.DROP_DOWN:
-		await _push_overlay_from_top(path)
+		await _push_overlay_from_top(path, prepared_next)
 		_busy = false
 		return
 
 	if tr == Transition.DROP_UP:
-		await _back_load_under_and_slide_up(path)
+		await _back_load_under_and_slide_up(path, prepared_next)
 		_busy = false
 		return
 
 	if tr == Transition.FADE:
-		await _go_fade_load(path, show_loading)
+		await _go_fade_load(path, show_loading, prepared_next)
 		_busy = false
 		return
 
-	var packed: PackedScene = _get_packed_scene(path)
-	var next: Node = packed.instantiate()
+	var next: Node = prepared_next
+	if next == null:
+		var packed: PackedScene = _get_packed_scene(path)
+		next = packed.instantiate()
 
-	if _is_level_path(path):
-		get_tree().root.add_child(next)
+		if _is_level_path(path):
+			get_tree().root.add_child(next)
+		else:
+			_stage.add_child(next)
 	else:
-		_stage.add_child(next)
+		_set_canvas_item_alpha(next, 1.0)
 
 	var size := get_viewport().get_visible_rect().size
 	var old := _current
@@ -259,8 +268,9 @@ func _go(path: String, tr: int, show_loading: bool = false) -> void:
 
 	_stack.clear()
 	_stack.append(_current)
+	_mark_path_opened(path)
 	
-func _go_fade_load(path: String, show_loading: bool = false) -> void:
+func _go_fade_load(path: String, show_loading: bool = false, prepared_next: Node = null) -> void:
 	var old := _current
 
 	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -275,14 +285,20 @@ func _go_fade_load(path: String, show_loading: bool = false) -> void:
 		_show_loading_spinner()
 		loading_started = Time.get_ticks_msec()
 
-	var packed: PackedScene = _get_packed_scene(path)
-	var next: Node = packed.instantiate()
+	var next: Node = prepared_next
+	if next == null:
+		var packed: PackedScene = _get_packed_scene(path)
+		next = packed.instantiate()
 
-	if _is_level_path(path):
-		get_tree().root.add_child(next)
+		if _is_level_path(path):
+			get_tree().root.add_child(next)
+		else:
+			_stage.add_child(next)
+			_set_pos(next, Vector2.ZERO)
 	else:
-		_stage.add_child(next)
-		_set_pos(next, Vector2.ZERO)
+		_set_canvas_item_alpha(next, 1.0)
+		if not _is_level_path(path):
+			_set_pos(next, Vector2.ZERO)
 
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -298,6 +314,7 @@ func _go_fade_load(path: String, show_loading: bool = false) -> void:
 	_current = next
 	_stack.clear()
 	_stack.append(_current)
+	_mark_path_opened(path)
 
 	if show_loading:
 		_hide_loading_spinner()
@@ -364,16 +381,20 @@ func _go_fade_load_from_pause(path: String, show_loading: bool = false) -> void:
 	transition_finished.emit()
 
 
-func _push_overlay_from_top(path: String) -> void:
+func _push_overlay_from_top(path: String, prepared_next: Node = null) -> void:
 	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
 	_fade.modulate.a = 0.0
 
 	if _stack.is_empty() and _current != null and is_instance_valid(_current):
 		_stack.append(_current)
 
-	var packed: PackedScene = _get_packed_scene(path)
-	var next: Node = packed.instantiate()
-	_stage.add_child(next)
+	var next: Node = prepared_next
+	if next == null:
+		var packed: PackedScene = _get_packed_scene(path)
+		next = packed.instantiate()
+		_stage.add_child(next)
+	else:
+		_set_canvas_item_alpha(next, 1.0)
 
 	var size := get_viewport().get_visible_rect().size
 	var from := Vector2(0, -size.y)
@@ -386,12 +407,12 @@ func _push_overlay_from_top(path: String) -> void:
 	await t.finished
 
 	_stack.append(next)
+	_mark_path_opened(path)
 	_current = next
 
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-
-func _back_load_under_and_slide_up(path: String) -> void:
+func _back_load_under_and_slide_up(path: String, prepared_next: Node = null) -> void:
 	if _stack.size() >= 2:
 		await _pop_overlay_up()
 		return
@@ -404,9 +425,13 @@ func _back_load_under_and_slide_up(path: String) -> void:
 		_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		return
 
-	var packed: PackedScene = _get_packed_scene(path)
-	var under: Node = packed.instantiate()
-	_stage.add_child(under)
+	var under: Node = prepared_next
+	if under == null:
+		var packed: PackedScene = _get_packed_scene(path)
+		under = packed.instantiate()
+		_stage.add_child(under)
+	else:
+		_set_canvas_item_alpha(under, 1.0)
 
 	_stage.move_child(under, top.get_index())
 
@@ -423,6 +448,7 @@ func _back_load_under_and_slide_up(path: String) -> void:
 
 	_stack.clear()
 	_stack.append(_current)
+	_mark_path_opened(path)
 
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -573,3 +599,47 @@ func _is_level_path(path: String) -> bool:
 
 func _is_current_level_scene() -> bool:
 	return _current != null and is_instance_valid(_current) and _is_level_path(_current.scene_file_path)
+
+func _mark_path_opened(path: String) -> void:
+	if path == "":
+		return
+
+	_opened_once[path] = true
+
+func _should_prepare_first_menu_scene(path: String, show_loading: bool) -> bool:
+	if show_loading:
+		return false
+
+	if _is_level_path(path):
+		return false
+
+	match path:
+		LEVELS_MENU, SHOP, LOCKER, SETTINGS:
+			return not _opened_once.get(path, false)
+		_:
+			return false
+
+func _set_canvas_item_alpha(node: Node, alpha: float) -> void:
+	if node is CanvasItem:
+		(node as CanvasItem).modulate.a = alpha
+
+func _prepare_scene_with_dots(path: String) -> Node:
+	var loading_started := Time.get_ticks_msec()
+	_show_loading_spinner()
+
+	var packed: PackedScene = _get_packed_scene(path)
+	var next: Node = packed.instantiate()
+
+	_stage.add_child(next)
+	_set_pos(next, Vector2.ZERO)
+	_set_canvas_item_alpha(next, 0.0)
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	var elapsed := (Time.get_ticks_msec() - loading_started) / 1000.0
+	if elapsed < LOADING_MIN_TIME:
+		await get_tree().create_timer(LOADING_MIN_TIME - elapsed).timeout
+
+	_hide_loading_spinner()
+	return next
