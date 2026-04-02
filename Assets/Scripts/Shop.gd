@@ -74,6 +74,7 @@ func _ready() -> void:
 	_prepare_popup(confirm_popup, confirm_dim, confirm_panel)
 
 	_style_story_scrollbar()
+	call_deferred("_warmup_shop_popups")
 
 
 func _center_pivot(c: Control) -> void:
@@ -382,3 +383,51 @@ func _input(event: InputEvent) -> void:
 		return
 
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
+
+func _warmup_shop_popups() -> void:
+	await _warmup_details_popup()
+	await _warmup_confirm_popup()
+
+
+func _warmup_details_popup() -> void:
+	if db != null and db.idle_frames.size() > 0:
+		details_character_preview.set_character(0)
+		details_name.text = db.names[0] if 0 < db.names.size() else ""
+		details_story.text = db.stories[0] if 0 < db.stories.size() else ""
+		_set_buy_button_state(BUY_TEXT, false)
+
+	await _warmup_popup(details_popup, details_dim, details_panel)
+
+
+func _warmup_confirm_popup() -> void:
+	confirm_label.text = "Vai tiešām vēlaties nopirkt?"
+	await _warmup_popup(confirm_popup, confirm_dim, confirm_panel)
+
+
+func _warmup_popup(popup: Control, dim: ColorRect, panel: Control) -> void:
+	var old_popup_filter := popup.mouse_filter
+	var old_dim_filter := dim.mouse_filter
+	var old_dim_alpha := dim.modulate.a
+	var old_panel_alpha := panel.modulate.a
+	var old_panel_scale := panel.scale
+
+	popup.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	popup.visible = true
+	dim.modulate.a = 0.0
+	panel.modulate.a = 0.0
+	panel.scale = Vector2.ONE
+
+	await _center_pivot(panel)
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	popup.visible = false
+
+	dim.modulate.a = old_dim_alpha
+	panel.modulate.a = old_panel_alpha
+	panel.scale = old_panel_scale
+
+	popup.mouse_filter = old_popup_filter
+	dim.mouse_filter = old_dim_filter

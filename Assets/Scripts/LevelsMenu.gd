@@ -49,9 +49,9 @@ func _ready() -> void:
 	confirm_reset.scale = Vector2(0.9, 0.9)
 
 	_build_grid()
-	#call_deferred("_generate_auto_previews")
 	target_page = page
 	reset_btn.visible = GameState.has_any_progress()
+	call_deferred("_warmup_confirm_popup")
 
 
 func _page_count() -> int:
@@ -288,3 +288,33 @@ func _get_preview_for_level(i: int) -> Texture2D:
 		return level_previews[i]
 
 	return null
+
+func _warmup_confirm_popup() -> void:
+	var old_dim_filter := dim.mouse_filter
+	var old_confirm_filter := confirm_reset.mouse_filter
+	var old_dim_alpha := dim.modulate.a
+	var old_confirm_alpha := confirm_reset.modulate.a
+	var old_confirm_scale := confirm_reset.scale
+
+	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	confirm_reset.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	dim.visible = true
+	confirm_reset.visible = true
+
+	dim.modulate.a = 0.0
+	confirm_reset.modulate.a = 0.0
+	confirm_reset.scale = Vector2(1.0, 1.0)
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	confirm_reset.visible = false
+	dim.visible = false
+
+	dim.modulate.a = old_dim_alpha
+	confirm_reset.modulate.a = old_confirm_alpha
+	confirm_reset.scale = old_confirm_scale
+
+	dim.mouse_filter = old_dim_filter
+	confirm_reset.mouse_filter = old_confirm_filter
