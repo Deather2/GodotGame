@@ -177,7 +177,7 @@ func _on_reset_confirmed() -> void:
 	UIConfirmationSound.play()
 	await _hide_confirm()
 	GameState.reset_all_progress_keep_settings()
-	page = 0
+	target_page = page
 	update_chapter_label(page)
 	_build_grid()
 	reset_btn.visible = GameState.has_any_progress()
@@ -271,7 +271,6 @@ func _animate_to_page(new_page: int, dir: int) -> void:
 
 	t.finished.connect(func():
 		page = new_page
-		update_chapter_label(page)
 		old_container.queue_free()
 		current_container = new_container
 		animating = false
@@ -279,6 +278,8 @@ func _animate_to_page(new_page: int, dir: int) -> void:
 		if target_page != page:
 			var dir1 := 1 if target_page > page else -1
 			_animate_to_page(target_page, dir1)
+		else:
+			update_chapter_label(page)
 	)
 
 func _input(event: InputEvent) -> void:
