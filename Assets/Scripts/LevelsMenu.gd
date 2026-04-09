@@ -1,6 +1,6 @@
 extends Control
 
-const PER_PAGE := 6
+const PER_PAGE := 3
 
 var page: int = 0
 var target_page: int = 0
@@ -29,9 +29,19 @@ var confirm_animating: bool = false
 @onready var UICloseSound: AudioStreamPlayer = $UICloseSound
 @onready var UILevelSelect: AudioStreamPlayer = $UILevelSelect
 
+@onready var chapter_label: Label = $ChapterLabel
+
+const CHAPTER_TITLES := [
+	"1. nodaļa: Sākums",
+	"2. nodaļa: Tumsas ceļš",
+	"3. nodaļa: Pirmie draudi",
+]
+
 func _ready() -> void:
 	GameState.show_cursor()
 	current_container = $PagesHolder/LevelsContainer
+
+	update_chapter_label(page)
 
 	back_btn.pressed.connect(_on_back_pressed)
 	reset_btn.pressed.connect(_on_reset_pressed)
@@ -168,6 +178,7 @@ func _on_reset_confirmed() -> void:
 	await _hide_confirm()
 	GameState.reset_all_progress_keep_settings()
 	page = 0
+	update_chapter_label(page)
 	_build_grid()
 	reset_btn.visible = GameState.has_any_progress()
 
@@ -188,6 +199,7 @@ func _on_prev_page() -> void:
 		return
 
 	target_page -= 1
+	update_chapter_label(target_page)
 	UIButtonSound.play()
 
 	if not animating:
@@ -200,6 +212,7 @@ func _on_next_page() -> void:
 		return
 
 	target_page += 1
+	update_chapter_label(target_page)
 	UIButtonSound.play()
 
 	if not animating:
@@ -258,6 +271,7 @@ func _animate_to_page(new_page: int, dir: int) -> void:
 
 	t.finished.connect(func():
 		page = new_page
+		update_chapter_label(page)
 		old_container.queue_free()
 		current_container = new_container
 		animating = false
@@ -318,3 +332,9 @@ func _warmup_confirm_popup() -> void:
 
 	dim.mouse_filter = old_dim_filter
 	confirm_reset.mouse_filter = old_confirm_filter
+
+func update_chapter_label(p: int) -> void:
+	if p >= 0 and p < CHAPTER_TITLES.size():
+		chapter_label.text = CHAPTER_TITLES[p]
+	else:
+		chapter_label.text = "Nodaļa"
