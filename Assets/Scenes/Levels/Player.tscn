@@ -1,9 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://cblv52lkscke7"]
+[gd_scene load_steps=11 format=3 uid="uid://cblv52lkscke7"]
 
 [ext_resource type="Script" uid="uid://b5towj76s0dll" path="res://Assets/Scripts/Levels/player.gd" id="1_1iq5p"]
 [ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_mqbe8"]
 [ext_resource type="SpriteFrames" uid="uid://bsv1smlcunq57" path="res://Assets/Animations/Char3.tres" id="3_kiw01"]
 [ext_resource type="AudioStream" uid="uid://cogwcs8din3sm" path="res://Assets/Sounds/SFX/Player/jump.mp3" id="4_kiw01"]
+[ext_resource type="AudioStream" uid="uid://b0svmpsjffyc6" path="res://Assets/Sounds/SFX/Player/hurt.mp3" id="5_02ikm"]
+[ext_resource type="AudioStream" uid="uid://dk8v5ajpkhlxq" path="res://Assets/Sounds/SFX/Player/death.mp3" id="6_bau5h"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gv6bx"]
 radius = 7.0
@@ -56,4 +58,20 @@ texture = SubResource("GradientTexture2D_kiw01")
 
 [node name="JumpSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_kiw01")
+bus = &"SFX"
+
+[node name="LeftFloorRay" type="RayCast2D" parent="."]
+position = Vector2(-6, 0)
+target_position = Vector2(0, 13)
+
+[node name="RightFloorRay" type="RayCast2D" parent="."]
+position = Vector2(6, 0)
+target_position = Vector2(0, 13)
+
+[node name="HurtPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_02ikm")
+bus = &"SFX"
+
+[node name="DeathPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_bau5h")
 bus = &"SFX"

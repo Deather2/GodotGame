@@ -42,8 +42,8 @@ func _physics_process(_delta: float) -> void:
 
 
 func _on_kill_zone_body_entered(body: Node) -> void:
-	if body.is_in_group("player"):
-		body.die()
+	if body.is_in_group("player") and body.has_method("fall_death"):
+		body.call_deferred("fall_death")
 
 
 func _on_finish_area_body_entered(body: Node2D) -> void:

@@ -328,7 +328,7 @@ range_layer_min = -100
 stream = null
 
 [node name="KillZone" type="Area2D" parent="."]
-position = Vector2(1050, 832)
+position = Vector2(1050, 780)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
 position = Vector2(972, -22)

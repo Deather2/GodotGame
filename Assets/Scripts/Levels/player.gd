@@ -7,10 +7,16 @@ extends CharacterBody2D
 @onready var collision: CollisionShape2D = $CollisionShape2D
 @onready var cam: Camera2D = $Camera2D
 @onready var stand_check: ShapeCast2D = $StandCheck
+@onready var feet: Node2D = $Feet
 
 @onready var capsule: CapsuleShape2D = collision.shape as CapsuleShape2D
-
 @onready var JumpSound: AudioStreamPlayer2D = $JumpSound
+
+@onready var left_floor_ray: RayCast2D = $LeftFloorRay
+@onready var right_floor_ray: RayCast2D = $RightFloorRay
+
+@onready var HurtSound: AudioStreamPlayer = $HurtPlayer
+@onready var DeathSound: AudioStreamPlayer = $DeathPlayer
 
 var finish_auto_run := false
 const FINISH_AUTO_RUN_SPEED := 220.0
@@ -27,6 +33,15 @@ const SLOPE_TILT_MULT := 1.15
 @export var crouch_height := 20.0
 @export var crouch_radius := 7.0
 
+const DEATH_JUMP_Y := -330.0
+const DEATH_PUSH_X := 110.0
+const DEATH_GRAVITY_MULT := 1.15
+const DEATH_WINDUP_DELAY := 0.5
+const DEATH_RESPAWN_DELAY := 1.6
+const DEATH_BLINK_INTERVAL := 0.08
+
+const FALL_CAMERA_TRAVEL_TIME := 0.35
+
 var gravity: float = float(ProjectSettings.get_setting("physics/2d/default_gravity"))
 var face_dir: int = 1
 var jump_anim_playing := false
@@ -38,16 +53,34 @@ var stand_r: float
 var stand_y: float
 
 var cutscene_lock := false
+var is_dying := false
+var death_windup_active := false
+var _death_blink_accum := 0.0
+
+var camera_respawn_travel := false
+var cam_follow_offset := Vector2.ZERO
+
+var fall_respawn_active := false
+var death_respawn_active := false
+
+const RESPAWN_GROUND_GAP := 2.0
 
 func _ready() -> void:
 	_apply_selected()
+
+	var initial_cam_global := cam.global_position
+	cam.top_level = true
+	cam.global_position = initial_cam_global
 	cam.make_current()
+	cam_follow_offset = cam.global_position - global_position
 
 	if capsule != null:
 		stand_h = capsule.height
 		stand_r = capsule.radius
 	stand_y = collision.position.y
-	
+
+	_setup_floor_rays()
+
 	var sc_shape := stand_check.shape as CapsuleShape2D
 	if sc_shape != null:
 		sc_shape.height = stand_h
@@ -55,6 +88,7 @@ func _ready() -> void:
 
 	if GameState.has_signal("selected_character_changed"):
 		GameState.selected_character_changed.connect(func(_i): _apply_selected())
+
 
 func _apply_selected() -> void:
 	if db == null:
@@ -83,13 +117,43 @@ func _apply_selected() -> void:
 	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
 		sprite.play("idle")
 
+
 func _physics_process(delta: float) -> void:
-	if cutscene_lock:
+	if fall_respawn_active:
 		velocity = Vector2.ZERO
-		sprite.play("idle")
 		move_and_slide()
 		return
-	
+
+	if death_respawn_active:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+
+	if death_windup_active:
+		velocity = Vector2.ZERO
+
+		if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
+			if sprite.animation != "idle":
+				sprite.play("idle")
+			sprite.stop()
+			sprite.frame = 0
+
+		move_and_slide()
+		return
+
+	if is_dying:
+		velocity.y += gravity * DEATH_GRAVITY_MULT * delta
+		move_and_slide()
+		_update_death_blink(delta)
+		return
+
+	if cutscene_lock:
+		velocity = Vector2.ZERO
+		if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
+			sprite.play("idle")
+		move_and_slide()
+		return
+
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
@@ -142,6 +206,9 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
+	if _check_spike_collision():
+		return
+
 	if jump_requested and not is_on_floor():
 		jump_anim_playing = true
 		if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("jump"):
@@ -152,38 +219,56 @@ func _physics_process(delta: float) -> void:
 	_update_slope_tilt()
 	_update_anim()
 
+
 func _apply_crouch_collision(on: bool) -> void:
 	if capsule == null:
 		return
 
 	var new_h := crouch_height if on else stand_h
 	var new_r := crouch_radius if on else stand_r
-
 	var dh := stand_h - new_h
 
 	capsule.height = new_h
 	capsule.radius = new_r
-
-	
 	collision.position.y = stand_y + dh * 0.5
 
+	_setup_floor_rays()
+
+
 func _update_slope_tilt() -> void:
-	if is_on_floor():
-		var a: float = get_floor_angle()
-		var nx: float = get_floor_normal().x
-		var sign_x: float = sign(nx)
-
-		var target: float = a * -sign_x
-
-		if absf(target) < SLOPE_TILT_DEAD:
-			target = 0.0
-
-		target *= SLOPE_TILT_MULT
-		target = clampf(target, -SLOPE_TILT_MAX, SLOPE_TILT_MAX)
-
-		sprite_pivot.rotation = lerp_angle(sprite_pivot.rotation, -target, SLOPE_TILT_LERP)
-	else:
+	if is_dying or death_windup_active:
 		sprite_pivot.rotation = lerp_angle(sprite_pivot.rotation, 0.0, SLOPE_TILT_LERP)
+		return
+
+	if not is_on_floor():
+		sprite_pivot.rotation = lerp_angle(sprite_pivot.rotation, 0.0, SLOPE_TILT_LERP)
+		return
+
+	left_floor_ray.force_raycast_update()
+	right_floor_ray.force_raycast_update()
+
+	if not left_floor_ray.is_colliding() or not right_floor_ray.is_colliding():
+		return
+
+	var lp := left_floor_ray.get_collision_point()
+	var rp := right_floor_ray.get_collision_point()
+
+	var dx := rp.x - lp.x
+	if absf(dx) < 0.001:
+		sprite_pivot.rotation = lerp_angle(sprite_pivot.rotation, 0.0, SLOPE_TILT_LERP)
+		return
+
+	var dy := rp.y - lp.y
+	if absf(dy) < 0.1:
+		sprite_pivot.rotation = lerp_angle(sprite_pivot.rotation, 0.0, SLOPE_TILT_LERP)
+		return
+
+	var target := atan2(dy, dx)
+	target *= SLOPE_TILT_MULT
+	target = clampf(target, -SLOPE_TILT_MAX, SLOPE_TILT_MAX)
+
+	sprite_pivot.rotation = lerp_angle(sprite_pivot.rotation, target, SLOPE_TILT_LERP)
+
 
 func _update_anim() -> void:
 	if sprite.sprite_frames == null:
@@ -193,11 +278,18 @@ func _update_anim() -> void:
 	var moving := absf(velocity.x) > 5.0
 
 	if not on_floor:
-		if jump_anim_playing and sprite.animation == "jump":
+		if jump_anim_playing and sprite.sprite_frames.has_animation("jump"):
+			if sprite.animation != "jump":
+				sprite.play("jump")
+
 			if not sprite.is_playing():
 				var last := sprite.sprite_frames.get_frame_count("jump") - 1
 				if last >= 0:
 					sprite.frame = last
+		else:
+			var air_target := "run" if moving else "idle"
+			if sprite.sprite_frames.has_animation(air_target) and sprite.animation != air_target:
+				sprite.play(air_target)
 		return
 
 	jump_anim_playing = false
@@ -220,22 +312,309 @@ func _update_anim() -> void:
 	if sprite.sprite_frames.has_animation(target2) and sprite.animation != target2:
 		sprite.play(target2)
 
+
 func die() -> void:
-	var sp := get_parent().get_node("SpawnPoint") as Node2D
-	var feet := $Feet as Node2D
-	global_position += sp.global_position - feet.global_position
+	if is_dying or death_windup_active:
+		return
+
+	death_windup_active = true
+	cutscene_lock = false
+	finish_auto_run = false
+	crouching = false
+	_was_crouching = false
+	jump_anim_playing = false
+	_death_blink_accum = 0.0
+
 	velocity = Vector2.ZERO
 
+	_apply_crouch_collision(false)
+	sprite_pivot.rotation = 0.0
+
+	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
+		sprite.play("idle")
+		sprite.stop()
+		sprite.frame = 0
+
+	sprite.visible = true
+
+	HurtSound.play()
+	_start_real_death()
+
+
+func _start_real_death() -> void:
+	await get_tree().create_timer(DEATH_WINDUP_DELAY).timeout
+
+	if not death_windup_active or is_dying:
+		return
+
+	death_windup_active = false
+	is_dying = true
+
+	sprite.visible = true
+
+	collision.set_deferred("disabled", true)
+	stand_check.set_deferred("enabled", false)
+
+	var push_dir := -face_dir
+	if push_dir == 0:
+		push_dir = -1
+
+	velocity.x = DEATH_PUSH_X * push_dir
+	velocity.y = DEATH_JUMP_Y
+
+	DeathSound.play()
+	_respawn_after_delay()
+
+
+func _respawn_after_delay() -> void:
+	await get_tree().create_timer(DEATH_RESPAWN_DELAY).timeout
+	_die_respawn_with_camera_travel()
+
+
+func fall_death() -> void:
+	if is_dying or fall_respawn_active or death_windup_active:
+		return
+
+	fall_respawn_active = true
+	cutscene_lock = false
+	finish_auto_run = false
+	crouching = false
+	_was_crouching = false
+	jump_anim_playing = false
+	velocity = Vector2.ZERO
+
+	_apply_crouch_collision(false)
+	sprite_pivot.rotation = 0.0
+	sprite.visible = false
+
+	collision.set_deferred("disabled", true)
+	stand_check.set_deferred("enabled", false)
+
+	_fall_respawn_with_camera_travel()
+
+
+func _fall_respawn_with_camera_travel() -> void:
+	var sp := get_parent().get_node_or_null("SpawnPoint") as Node2D
+	if sp == null:
+		fall_respawn_active = false
+		respawn()
+		return
+
+	var target_pos := _get_respawn_position(sp)
+	var target_cam_pos := (target_pos + cam_follow_offset).round()
+
+	camera_respawn_travel = true
+
+	global_position = target_pos
+	face_dir = 1
+	sprite.flip_h = false
+	velocity = Vector2.ZERO
+	sprite_pivot.rotation = 0.0
+	sprite.visible = false
+
+	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
+		sprite.play("idle")
+
+	await get_tree().physics_frame
+
+	collision.set_deferred("disabled", false)
+	stand_check.set_deferred("enabled", true)
+
+	await get_tree().physics_frame
+
+	_apply_crouch_collision(false)
+
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+
+	sprite.visible = true
+	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
+		sprite.play("idle")
+
+	var tw := create_tween()
+	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.tween_property(cam, "global_position", target_cam_pos, FALL_CAMERA_TRAVEL_TIME) \
+		.set_trans(Tween.TRANS_SINE) \
+		.set_ease(Tween.EASE_IN_OUT)
+
+	await tw.finished
+
+	fall_respawn_active = false
+	camera_respawn_travel = false
+	cam.global_position = target_cam_pos
+
+
+func _get_respawn_position(sp: Node2D) -> Vector2:
+	var bottom_offset := stand_y + stand_h * 0.5 + stand_r
+
+	return Vector2(
+		round(sp.global_position.x),
+		round(sp.global_position.y - bottom_offset - RESPAWN_GROUND_GAP)
+	)
+
+
+func respawn() -> void:
+	var sp := get_parent().get_node_or_null("SpawnPoint") as Node2D
+	if sp == null:
+		return
+
+	global_position = _get_respawn_position(sp)
+
+	velocity = Vector2.ZERO
+	face_dir = 1
+	sprite.flip_h = false
+	is_dying = false
+	death_windup_active = false
+	death_respawn_active = false
+	crouching = false
+	_was_crouching = false
+	jump_anim_playing = false
+	sprite.visible = true
+	sprite_pivot.rotation = 0.0
+
+	collision.set_deferred("disabled", false)
+	stand_check.set_deferred("enabled", true)
+
+	_apply_crouch_collision(false)
+
+	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
+		sprite.play("idle")
+
+	camera_respawn_travel = false
+	cam.global_position = (global_position + cam_follow_offset).round()
+
+
+func _update_death_blink(delta: float) -> void:
+	_death_blink_accum += delta
+	var phase := int(_death_blink_accum / DEATH_BLINK_INTERVAL) % 2
+	sprite.visible = (phase == 0)
+
+
 func _process(_delta: float) -> void:
-	cam.global_position = cam.global_position.round()
+	if not camera_respawn_travel:
+		cam.global_position = (global_position + cam_follow_offset).round()
+
 
 func _can_stand() -> bool:
 	stand_check.force_shapecast_update()
 	return not stand_check.is_colliding()
 
+
 func start_finish_auto_run() -> void:
+	if is_dying or death_windup_active:
+		return
 	finish_auto_run = true
 	crouching = false
 
+
 func stop_finish_auto_run() -> void:
 	finish_auto_run = false
+
+
+func _setup_floor_rays() -> void:
+	if capsule == null:
+		return
+
+	var x_off := maxf(capsule.radius * 0.55, 4.0)
+	var y_pos := feet.position.y - 10.0
+
+	left_floor_ray.position = Vector2(-x_off, y_pos)
+	right_floor_ray.position = Vector2(x_off, y_pos)
+
+	left_floor_ray.target_position = Vector2(0, 34)
+	right_floor_ray.target_position = Vector2(0, 34)
+
+	left_floor_ray.exclude_parent = true
+	right_floor_ray.exclude_parent = true
+
+	left_floor_ray.hit_from_inside = true
+	right_floor_ray.hit_from_inside = true
+
+	left_floor_ray.collision_mask = stand_check.collision_mask
+	right_floor_ray.collision_mask = stand_check.collision_mask
+
+	left_floor_ray.enabled = true
+	right_floor_ray.enabled = true
+
+
+func _check_spike_collision() -> bool:
+	for i in range(get_slide_collision_count()):
+		var col := get_slide_collision(i)
+		var collider := col.get_collider()
+
+		if collider is TileMap:
+			var tilemap := collider as TileMap
+			var hit_pos := col.get_position() - col.get_normal() * 2.0
+			var local_pos := tilemap.to_local(hit_pos)
+			var cell := tilemap.local_to_map(local_pos)
+			var data := tilemap.get_cell_tile_data(0, cell)
+
+			if data and data.get_custom_data("is_spike") == true:
+				die()
+				return true
+
+	return false
+
+func _die_respawn_with_camera_travel() -> void:
+	var sp := get_parent().get_node_or_null("SpawnPoint") as Node2D
+	if sp == null:
+		death_respawn_active = false
+		respawn()
+		return
+
+	death_respawn_active = true
+	camera_respawn_travel = true
+
+	is_dying = false
+	death_windup_active = false
+	crouching = false
+	_was_crouching = false
+	jump_anim_playing = false
+
+	_apply_crouch_collision(false)
+
+	global_position = _get_respawn_position(sp)
+	velocity = Vector2.ZERO
+	face_dir = 1
+	sprite.flip_h = false
+	sprite_pivot.rotation = 0.0
+	_set_player_visuals_visible(false)
+
+	collision.disabled = false
+	stand_check.enabled = true
+
+	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
+		sprite.play("idle")
+
+	await get_tree().physics_frame
+
+	var target_cam_pos := (global_position + cam_follow_offset).round()
+	var need_cam_travel := cam.global_position.distance_to(target_cam_pos) > 1.0
+
+	_set_player_visuals_visible(true)
+
+	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
+		sprite.play("idle")
+
+	if need_cam_travel:
+		var tw := create_tween()
+		tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		tw.tween_property(cam, "global_position", target_cam_pos, FALL_CAMERA_TRAVEL_TIME) \
+			.set_trans(Tween.TRANS_SINE) \
+			.set_ease(Tween.EASE_IN_OUT)
+
+		await tw.finished
+	else:
+		cam.global_position = target_cam_pos
+
+	death_respawn_active = false
+	camera_respawn_travel = false
+	cam.global_position = target_cam_pos
+
+func _set_player_visuals_visible(on: bool) -> void:
+	sprite.visible = on
+
+	var light := get_node_or_null("PlayerLight")
+	if light is CanvasItem:
+		(light as CanvasItem).visible = on
