@@ -39,6 +39,7 @@ func _ready() -> void:
 		await SceneManager.transition_finished
 
 	if level_music != null:
+		await _wait_while_paused()
 		_start_level_music_cycle()
 
 
@@ -96,6 +97,11 @@ func _exit_tree() -> void:
 
 func _start_level_music_cycle() -> void:
 	while music_cycle_active:
+		await _wait_while_paused()
+
+		if not music_cycle_active or level_music == null:
+			return
+
 		level_music.volume_linear = level_music_base_volume
 		level_music.play()
 		await level_music.finished
@@ -103,7 +109,7 @@ func _start_level_music_cycle() -> void:
 		if not music_cycle_active:
 			return
 
-		await get_tree().create_timer(LEVEL_MUSIC_GAP).timeout
+		await get_tree().create_timer(LEVEL_MUSIC_GAP, false).timeout
 
 		if not music_cycle_active:
 			return
@@ -236,3 +242,7 @@ func _prepare_preview_mode() -> void:
 	var music := get_node_or_null("LevelMusicPlayer") as AudioStreamPlayer
 	if music != null:
 		music.stop()
+
+func _wait_while_paused() -> void:
+	while get_tree().paused:
+		await get_tree().create_timer(0.05, true).timeout
