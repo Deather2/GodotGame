@@ -206,6 +206,11 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
+	if is_on_floor():
+		var pv := get_platform_velocity()
+		if pv != Vector2.ZERO:
+			print("platform vel: ", pv)
+
 	if _check_spike_collision():
 		return
 
@@ -218,6 +223,7 @@ func _physics_process(delta: float) -> void:
 
 	_update_slope_tilt()
 	_update_anim()
+	_update_camera_follow()
 
 
 func _apply_crouch_collision(on: bool) -> void:
@@ -492,9 +498,11 @@ func _update_death_blink(delta: float) -> void:
 
 
 func _process(_delta: float) -> void:
+	pass
+
+func _update_camera_follow() -> void:
 	if not camera_respawn_travel:
 		cam.global_position = (global_position + cam_follow_offset).round()
-
 
 func _can_stand() -> bool:
 	stand_check.force_shapecast_update()

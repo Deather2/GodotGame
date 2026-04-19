@@ -26,6 +26,7 @@ fill_from = Vector2(0.5, 0.5)
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_index = 10
+collision_mask = 3
 floor_snap_length = 12.0
 script = ExtResource("1_1iq5p")
 db = ExtResource("2_mqbe8")
