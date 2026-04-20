@@ -206,11 +206,6 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	if is_on_floor():
-		var pv := get_platform_velocity()
-		if pv != Vector2.ZERO:
-			print("platform vel: ", pv)
-
 	if _check_spike_collision():
 		return
 
