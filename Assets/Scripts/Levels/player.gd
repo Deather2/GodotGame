@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal died
+
 @export var db: CharacterDB
 
 @onready var sprite_pivot: Node2D = $SpritePivot
@@ -64,6 +66,8 @@ var fall_respawn_active := false
 var death_respawn_active := false
 
 const RESPAWN_GROUND_GAP := 2.0
+
+var intro_drop_lock := false
 
 func _ready() -> void:
 	_apply_selected()
@@ -161,10 +165,12 @@ func _physics_process(delta: float) -> void:
 
 	if finish_auto_run:
 		direction = 1.0
+	elif intro_drop_lock:
+		direction = 0.0
 	else:
 		direction = Input.get_axis("move_left", "move_right")
 
-	var want_crouch := false if finish_auto_run else Input.is_action_pressed("crouch")
+	var want_crouch := false if (finish_auto_run or intro_drop_lock) else Input.is_action_pressed("crouch")
 
 	if not is_on_floor():
 		crouching = false
@@ -174,7 +180,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			crouching = not _can_stand()
 
-	var jump_pressed := false if finish_auto_run else Input.is_action_just_pressed("jump")
+	var jump_pressed := false if (finish_auto_run or intro_drop_lock) else Input.is_action_just_pressed("jump")
 	var jump_requested := false
 
 	if jump_pressed and is_on_floor():
@@ -318,6 +324,8 @@ func die() -> void:
 	if is_dying or death_windup_active:
 		return
 
+	died.emit()
+
 	death_windup_active = true
 	cutscene_lock = false
 	finish_auto_run = false
@@ -375,6 +383,8 @@ func _respawn_after_delay() -> void:
 func fall_death() -> void:
 	if is_dying or fall_respawn_active or death_windup_active:
 		return
+
+	died.emit()
 
 	fall_respawn_active = true
 	cutscene_lock = false

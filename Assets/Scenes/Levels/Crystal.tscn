@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://d1hufwe84g7pp"]
+[gd_scene load_steps=5 format=3 uid="uid://d1hufwe84g7pp"]
 
 [ext_resource type="Script" uid="uid://co5jhdg6dhl3h" path="res://Assets/Scripts/Levels/crystal.gd" id="1_11rht"]
 [ext_resource type="SpriteFrames" uid="uid://dwc6am33j0brk" path="res://Assets/Animations/Crystal.tres" id="2_i2sod"]
+[ext_resource type="AudioStream" uid="uid://bxu84e2wu1kno" path="res://Assets/Sounds/SFX/Level/crystall.mp3" id="3_i2sod"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_11rht"]
 radius = 28.01785
@@ -15,3 +16,7 @@ animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_11rht")
+
+[node name="CrystalDesctructionSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_i2sod")
+bus = &"SFX"

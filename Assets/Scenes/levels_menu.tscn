@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://ru6my31iays2"]
+[gd_scene load_steps=23 format=3 uid="uid://ru6my31iays2"]
 
 [ext_resource type="Script" uid="uid://ds6pa7yu56gah" path="res://Assets/Scripts/LevelsMenu.gd" id="1_bvbgm"]
 [ext_resource type="PackedScene" uid="uid://c3retqugyu8ab" path="res://Assets/Scenes/UI/level_button.tscn" id="2_2018i"]
@@ -6,6 +6,7 @@
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="3_oc7xc"]
 [ext_resource type="Texture2D" uid="uid://d37rs6cwppcrd" path="res://Assets/ui/Ramka.png" id="3_yar8t"]
 [ext_resource type="Texture2D" uid="uid://bkq6hsaawodrw" path="res://Assets/ui/medieval.png" id="4_2oixe"]
+[ext_resource type="Texture2D" uid="uid://b6fs0r2rmmhiu" path="res://Assets/Images/Level2.png" id="4_obegr"]
 [ext_resource type="Texture2D" uid="uid://dfli2ldbdrs7q" path="res://Assets/ui/newbuttons.png" id="5_ovywt"]
 [ext_resource type="Texture2D" uid="uid://b0215xlkibelg" path="res://Assets/ui/newbuttons2.png" id="6_t6v1y"]
 [ext_resource type="AudioStream" uid="uid://bw5bd3pck1ibt" path="res://Assets/Sounds/UI/buttonClick.mp3" id="8_firr7"]
@@ -58,7 +59,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_bvbgm")
 level_button_scene = ExtResource("2_2018i")
-level_previews = Array[Texture2D]([ExtResource("3_imeig")])
+level_previews = Array[Texture2D]([ExtResource("3_imeig"), ExtResource("4_obegr")])
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
