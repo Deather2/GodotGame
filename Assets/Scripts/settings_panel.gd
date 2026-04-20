@@ -30,7 +30,8 @@ extends CenterContainer
 @onready var crouch_bind_2: Button = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind2
 
 @onready var pause_bind_1: Button = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1
-@onready var pause_bind_2: Button = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind2
+
+@onready var interact_bind_1: Button = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/InteractRow/HBoxContainer/Bind1
 
 @onready var reset_controls_button: Button = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton
 
@@ -49,6 +50,7 @@ const BIND_BUTTONS_GAP := 8
 @onready var jump_hbox: HBoxContainer = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/JumpRow/HBoxContainer
 @onready var crouch_hbox: HBoxContainer = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer
 @onready var pause_hbox: HBoxContainer = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer
+@onready var interact_hbox: HBoxContainer = $Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/InteractRow/HBoxContainer
 
 var _rebind_action: StringName = &""
 var _rebind_slot: int = -1
@@ -60,7 +62,8 @@ var _controls_actions: Array[StringName] = [
 	&"move_right",
 	&"jump",
 	&"crouch",
-	&"ui_cancel"
+	&"ui_cancel",
+	&"interact"
 ]
 
 var _ui_sounds_enabled: bool = false
@@ -88,7 +91,8 @@ func _ready() -> void:
 	crouch_bind_2.pressed.connect(func(): _begin_rebind(&"crouch", 1, crouch_bind_2))
 
 	pause_bind_1.pressed.connect(func(): _begin_rebind(&"ui_cancel", 0, pause_bind_1))
-	pause_bind_2.pressed.connect(func(): _begin_rebind(&"ui_cancel", 1, pause_bind_2))
+	
+	interact_bind_1.pressed.connect(func(): _begin_rebind(&"interact", 0, interact_bind_1))
 	
 	reset_controls_button.pressed.connect(_on_reset_controls_pressed)
 
@@ -155,7 +159,8 @@ func _ready() -> void:
 		move_right_bind_1, move_right_bind_2,
 		jump_bind_1, jump_bind_2,
 		crouch_bind_1, crouch_bind_2,
-		pause_bind_1, pause_bind_2
+		pause_bind_1,
+		interact_bind_1
 	]
 
 	for b in bind_buttons:
@@ -654,11 +659,13 @@ func _load_controls_values_into_ui() -> void:
 	_set_action_binds(&"move_right", move_right_bind_1, move_right_bind_2)
 	_set_action_binds(&"jump", jump_bind_1, jump_bind_2)
 	_set_action_binds(&"crouch", crouch_bind_1, crouch_bind_2)
-	_set_action_binds(&"ui_cancel", pause_bind_1, pause_bind_2)
+	_set_action_binds(&"ui_cancel", pause_bind_1, null)
+	_set_action_binds(&"interact", interact_bind_1, null)
 
-func _set_action_binds(action_name: StringName, bind1: Button, bind2: Button) -> void:
+func _set_action_binds(action_name: StringName, bind1: Button, bind2: Button = null) -> void:
 	bind1.text = "—"
-	bind2.text = "—"
+	if bind2 != null:
+		bind2.text = "—"
 
 	var events := InputMap.action_get_events(action_name)
 	var shown := 0
@@ -670,7 +677,7 @@ func _set_action_binds(action_name: StringName, bind1: Button, bind2: Button) ->
 
 		if shown == 0:
 			bind1.text = text
-		elif shown == 1:
+		elif shown == 1 and bind2 != null:
 			bind2.text = text
 		else:
 			break
@@ -1066,6 +1073,7 @@ func _apply_uniform_right_side_widths() -> void:
 	_apply_bind_row_width(jump_hbox)
 	_apply_bind_row_width(crouch_hbox)
 	_apply_bind_row_width(pause_hbox)
+	_apply_bind_row_width(interact_hbox)
 
 
 func _apply_bind_row_width(row: HBoxContainer) -> void:

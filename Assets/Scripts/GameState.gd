@@ -56,7 +56,8 @@ var _controls_actions: Array[StringName] = [
 	&"move_right",
 	&"jump",
 	&"crouch",
-	&"ui_cancel"
+	&"ui_cancel",
+	&"interact"
 ]
 
 var _default_controls: Dictionary = {}

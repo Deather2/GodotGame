@@ -23,6 +23,7 @@ var finish_transition := false
 @onready var parallax_dark: CanvasModulate = get_node_or_null("ParallaxBackground/ParallaxDark")
 @onready var player: CharacterBody2D = get_node_or_null("Player")
 
+@onready var crystal = get_node_or_null("Crystal")
 
 func _ready() -> void:
 	if GameState.preview_mode:
@@ -42,6 +43,8 @@ func _ready() -> void:
 		await _wait_while_paused()
 		_start_level_music_cycle()
 
+	if crystal != null:
+		crystal.collected.connect(_on_crystal_collected)
 
 func _setup_dark_level() -> void:
 	if world_dark != null:
@@ -246,3 +249,8 @@ func _prepare_preview_mode() -> void:
 func _wait_while_paused() -> void:
 	while get_tree().paused:
 		await get_tree().create_timer(0.05, true).timeout
+
+func _on_crystal_collected() -> void:
+	var light := get_node_or_null("Player/PointLight2D") as PointLight2D
+	if light != null:
+		light.texture_scale = 1.1
