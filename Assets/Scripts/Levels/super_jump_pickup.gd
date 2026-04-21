@@ -65,3 +65,16 @@ func _on_respawn_timer_timeout() -> void:
 	player_in_range = false
 	icon.visible = true
 	monitoring = true
+
+func force_reset() -> void:
+	activated = false
+	player_in_range = false
+
+	if respawn_timer != null:
+		respawn_timer.stop()
+
+	icon.visible = true
+	monitoring = true
+
+	if interaction_hint != null:
+		interaction_hint.visible = false
