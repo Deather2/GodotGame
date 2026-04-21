@@ -306,6 +306,7 @@ bus = &"SFX"
 [node name="InteractionHint" parent="." instance=ExtResource("13_d5qly")]
 
 [node name="WinUi" parent="." instance=ExtResource("8_3v4yn")]
+visible = false
 
 [node name="VBox" parent="WinUi/Panel" index="0"]
 offset_left = -117.0
