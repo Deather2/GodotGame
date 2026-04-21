@@ -267,6 +267,7 @@ bus = &"UI"
 
 [node name="ShowSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_3u4sp")
+volume_db = 10.0
 bus = &"SFX"
 
 [connection signal="mouse_entered" from="Panel/VBox/NextButton" to="." method="_on_button_mouse_entered"]

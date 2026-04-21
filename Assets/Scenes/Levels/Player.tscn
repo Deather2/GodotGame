@@ -71,8 +71,10 @@ target_position = Vector2(0, 13)
 
 [node name="HurtPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_02ikm")
+volume_db = 7.0
 bus = &"SFX"
 
 [node name="DeathPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_bau5h")
+volume_db = 7.0
 bus = &"SFX"

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b52lfp4us2rem"
-path="res://.godot/imported/RPG_Item_Armor_Equipment_Slot_Feet_Boots_Legplates.png-69750c220fa9fe08d138e129fa69fff1.ctex"
+uid="uid://d3odeq4lr0lr7"
+path="res://.godot/imported/boots.png-1671dc87344ed89b0566bfc038868564.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Icons/Sprites/RPG_Item_Armor_Equipment_Slot_Feet_Boots_Legplates.png"
-dest_files=["res://.godot/imported/RPG_Item_Armor_Equipment_Slot_Feet_Boots_Legplates.png-69750c220fa9fe08d138e129fa69fff1.ctex"]
+source_file="res://Assets/Icons/Sprites/boots.png"
+dest_files=["res://.godot/imported/boots.png-1671dc87344ed89b0566bfc038868564.ctex"]
 
 [params]
 

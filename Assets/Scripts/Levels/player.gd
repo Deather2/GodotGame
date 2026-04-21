@@ -24,7 +24,14 @@ var finish_auto_run := false
 const FINISH_AUTO_RUN_SPEED := 220.0
 
 const SPEED := 300.0
-const JUMP_VELOCITY := -400.0
+
+const BASE_JUMP_VELOCITY := -400.0
+const SUPER_JUMP_VELOCITY := -520.0
+
+var jump_velocity := BASE_JUMP_VELOCITY
+var super_jump_active := false
+var super_jump_request_id := 0
+
 const CROUCH_SPEED_MULT := 0.45
 
 const SLOPE_TILT_MAX := deg_to_rad(21.0)
@@ -191,7 +198,7 @@ func _physics_process(delta: float) -> void:
 			if crouching and _can_stand():
 				crouching = false
 
-			velocity.y = JUMP_VELOCITY
+			velocity.y = jump_velocity
 			jump_requested = true
 
 	if crouching != _was_crouching:
@@ -631,3 +638,18 @@ func _set_player_visuals_visible(on: bool) -> void:
 	var light := get_node_or_null("PlayerLight")
 	if light is CanvasItem:
 		(light as CanvasItem).visible = on
+
+func apply_super_jump(duration: float = 5.0) -> void:
+	super_jump_request_id += 1
+	var request_id := super_jump_request_id
+
+	super_jump_active = true
+	jump_velocity = SUPER_JUMP_VELOCITY
+
+	await get_tree().create_timer(duration).timeout
+
+	if request_id != super_jump_request_id:
+		return
+
+	super_jump_active = false
+	jump_velocity = BASE_JUMP_VELOCITY
