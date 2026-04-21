@@ -63,6 +63,8 @@ func _ready() -> void:
 	if crystal_intro_trigger != null and not crystal_intro_trigger.body_entered.is_connected(_on_crystal_intro_trigger_body_entered):
 		crystal_intro_trigger.body_entered.connect(_on_crystal_intro_trigger_body_entered)
 
+	if player != null and not player.is_connected("died", Callable(self, "_on_player_died")):
+		player.connect("died", Callable(self, "_on_player_died"))
 
 func _setup_dark_level() -> void:
 	if world_dark != null:
@@ -257,6 +259,11 @@ func show_win_ui() -> void:
 
 	GameState.show_cursor()
 	win_ui.setup_result(get_earned_stars(), get_level_time_text(), 1)
+
+	var death_label := win_ui.get_node_or_null("Panel/VBox/DeathLabel") as Label
+	if death_label != null:
+		death_label.text = "Nāves: %d" % death_count
+
 	win_ui.show_with_anim()
 
 
