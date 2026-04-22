@@ -22,6 +22,8 @@ signal died
 
 @onready var super_jump_vfx: GPUParticles2D = $SuperJumpVFX
 
+@onready var player_light: PointLight2D = $PointLight2D
+
 var finish_auto_run := false
 const FINISH_AUTO_RUN_SPEED := 220.0
 
@@ -435,7 +437,7 @@ func _fall_respawn_with_camera_travel() -> void:
 	sprite.flip_h = false
 	velocity = Vector2.ZERO
 	sprite_pivot.rotation = 0.0
-	sprite.visible = false
+	_set_player_visuals_visible(false)
 
 	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
 		sprite.play("idle")
@@ -453,7 +455,7 @@ func _fall_respawn_with_camera_travel() -> void:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 
-	sprite.visible = true
+	_set_player_visuals_visible(true)
 	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
 		sprite.play("idle")
 
@@ -642,9 +644,8 @@ func _die_respawn_with_camera_travel() -> void:
 func _set_player_visuals_visible(on: bool) -> void:
 	sprite.visible = on
 
-	var light := get_node_or_null("PlayerLight")
-	if light is CanvasItem:
-		(light as CanvasItem).visible = on
+	if player_light != null:
+		player_light.visible = on
 
 func apply_super_jump(duration: float = 5.0) -> void:
 	super_jump_request_id += 1
