@@ -20,6 +20,13 @@ func _on_body_entered(body: Node) -> void:
 	if not body.is_in_group("player"):
 		return
 
+	if is_active:
+		return
+
+	if checkpoint_index <= _get_highest_active_checkpoint_index():
+		return
+
+	activate()
 	reached.emit(self)
 
 
@@ -45,3 +52,29 @@ func _set_inactive_visual() -> void:
 		sprite.stop()
 		sprite.animation = "idle"
 		sprite.frame = 0
+
+func is_checkpoint_active() -> bool:
+	return is_active
+
+
+func get_checkpoint_index() -> int:
+	return checkpoint_index
+
+
+func get_respawn_point() -> Node2D:
+	return respawn_point
+
+
+func _get_highest_active_checkpoint_index() -> int:
+	var highest: int = -1
+
+	for cp in get_tree().get_nodes_in_group("checkpoints"):
+		if cp == self:
+			continue
+
+		if cp.has_method("is_checkpoint_active") and cp.is_checkpoint_active():
+			var idx: int = int(cp.get_checkpoint_index())
+			if idx > highest:
+				highest = idx
+
+	return highest

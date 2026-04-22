@@ -711,6 +711,10 @@ func clear_super_jump() -> void:
 		super_jump_vfx.emitting = false
 
 func _get_respawn_anchor() -> Node2D:
+	var latest_checkpoint_point := _get_latest_active_checkpoint_respawn()
+	if latest_checkpoint_point != null:
+		return latest_checkpoint_point
+
 	var parent_node := get_parent()
 
 	if parent_node != null and parent_node.has_method("get_current_respawn_point"):
@@ -719,3 +723,26 @@ func _get_respawn_anchor() -> Node2D:
 			return point
 
 	return parent_node.get_node_or_null("SpawnPoint") as Node2D
+
+func _get_latest_active_checkpoint_respawn() -> Node2D:
+	var parent_node := get_parent()
+	if parent_node == null:
+		return null
+
+	var latest_point: Node2D = null
+	var highest_index: int = -1
+
+	for cp in get_tree().get_nodes_in_group("checkpoints"):
+		if cp == null:
+			continue
+
+		if not parent_node.is_ancestor_of(cp):
+			continue
+
+		if cp.has_method("is_checkpoint_active") and cp.is_checkpoint_active():
+			var idx: int = int(cp.get_checkpoint_index())
+			if idx > highest_index:
+				highest_index = idx
+				latest_point = cp.get_respawn_point()
+
+	return latest_point
