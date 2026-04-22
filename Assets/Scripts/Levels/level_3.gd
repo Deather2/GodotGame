@@ -38,7 +38,7 @@ var current_checkpoint_index := -1
 
 @onready var spawn_point: Node2D = $SpawnPoint
 
-@onready var checkpoint_0 = get_node_or_null("Checkpoint_0")
+var checkpoints: Array = []
 
 func _ready() -> void:
 	current_respawn_point = spawn_point
@@ -72,8 +72,11 @@ func _ready() -> void:
 		if not super_jump_pickup.picked_up.is_connected(_on_super_jump_picked_up):
 			super_jump_pickup.picked_up.connect(_on_super_jump_picked_up)
 
-	if checkpoint_0 != null and not checkpoint_0.reached.is_connected(_on_checkpoint_reached):
-		checkpoint_0.reached.connect(_on_checkpoint_reached)
+	checkpoints = get_tree().get_nodes_in_group("checkpoints")
+
+	for checkpoint in checkpoints:
+		if checkpoint != null and not checkpoint.reached.is_connected(_on_checkpoint_reached):
+			checkpoint.reached.connect(_on_checkpoint_reached)
 
 func _setup_dark_level() -> void:
 	if world_dark != null:

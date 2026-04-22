@@ -103,7 +103,7 @@ color = Color(0.1254902, 0.1254902, 0.15686275, 1)
 [node name="SuperJumpPickup" parent="." instance=ExtResource("7_ddcr0")]
 position = Vector2(384, 408)
 
-[node name="Checkpoint_0" parent="." instance=ExtResource("8_cxbkx")]
+[node name="Checkpoint_0" parent="." groups=["checkpoints"] instance=ExtResource("8_cxbkx")]
 position = Vector2(1652, 578)
 
 [node name="Crystal" parent="." instance=ExtResource("6_cxbkx")]
