@@ -11,11 +11,15 @@ signal picked_up
 var player_in_range := false
 var activated := false
 
+@export var super_jump_duration: float = 5.0
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	respawn_timer.timeout.connect(_on_respawn_timer_timeout)
+
+	if player != null and not player.died.is_connected(_on_player_died):
+		player.died.connect(_on_player_died)
 
 	if interaction_hint != null:
 		interaction_hint.visible = false
@@ -27,6 +31,9 @@ func _process(_delta: float) -> void:
 
 	if player_in_range and Input.is_action_just_pressed("interact"):
 		activated = true
+
+		if player != null and player.has_method("apply_super_jump"):
+			player.apply_super_jump(super_jump_duration)
 
 		if player != null:
 			player.velocity = Vector2.ZERO
@@ -78,3 +85,6 @@ func force_reset() -> void:
 
 	if interaction_hint != null:
 		interaction_hint.visible = false
+
+func _on_player_died() -> void:
+	force_reset()

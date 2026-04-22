@@ -336,6 +336,7 @@ func die() -> void:
 	if is_dying or death_windup_active:
 		return
 
+	clear_super_jump()
 	died.emit()
 
 	death_windup_active = true
@@ -396,6 +397,7 @@ func fall_death() -> void:
 	if is_dying or fall_respawn_active or death_windup_active:
 		return
 
+	clear_super_jump()
 	died.emit()
 
 	fall_respawn_active = true

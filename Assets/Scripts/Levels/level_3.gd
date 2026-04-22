@@ -63,10 +63,6 @@ func _ready() -> void:
 	if player != null and not player.is_connected("died", Callable(self, "_on_player_died")):
 		player.connect("died", Callable(self, "_on_player_died"))
 
-	if super_jump_pickup != null:
-		if not super_jump_pickup.picked_up.is_connected(_on_super_jump_picked_up):
-			super_jump_pickup.picked_up.connect(_on_super_jump_picked_up)
-
 
 func _setup_dark_level() -> void:
 	if world_dark != null:
@@ -308,13 +304,3 @@ func _wait_while_paused() -> void:
 
 func _on_player_died() -> void:
 	death_count += 1
-
-	if player != null and player.has_method("clear_super_jump"):
-		player.clear_super_jump()
-
-	if super_jump_pickup != null and super_jump_pickup.has_method("force_reset"):
-		super_jump_pickup.force_reset()
-
-func _on_super_jump_picked_up() -> void:
-	if player != null and player.has_method("apply_super_jump"):
-		player.apply_super_jump(5.0)
