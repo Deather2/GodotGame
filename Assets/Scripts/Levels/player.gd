@@ -417,7 +417,7 @@ func fall_death() -> void:
 
 
 func _fall_respawn_with_camera_travel() -> void:
-	var sp := get_parent().get_node_or_null("SpawnPoint") as Node2D
+	var sp := _get_respawn_anchor()
 	if sp == null:
 		fall_respawn_active = false
 		respawn()
@@ -478,7 +478,7 @@ func _get_respawn_position(sp: Node2D) -> Vector2:
 
 
 func respawn() -> void:
-	var sp := get_parent().get_node_or_null("SpawnPoint") as Node2D
+	var sp := _get_respawn_anchor()
 	if sp == null:
 		return
 
@@ -582,7 +582,7 @@ func _check_spike_collision() -> bool:
 	return false
 
 func _die_respawn_with_camera_travel() -> void:
-	var sp := get_parent().get_node_or_null("SpawnPoint") as Node2D
+	var sp := _get_respawn_anchor()
 	if sp == null:
 		death_respawn_active = false
 		respawn()
@@ -709,3 +709,13 @@ func clear_super_jump() -> void:
 
 	if super_jump_vfx != null:
 		super_jump_vfx.emitting = false
+
+func _get_respawn_anchor() -> Node2D:
+	var parent_node := get_parent()
+
+	if parent_node != null and parent_node.has_method("get_current_respawn_point"):
+		var point = parent_node.get_current_respawn_point()
+		if point != null:
+			return point
+
+	return parent_node.get_node_or_null("SpawnPoint") as Node2D

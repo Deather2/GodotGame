@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://iwjx6gelrbfv"]
+[gd_scene load_steps=19 format=3 uid="uid://iwjx6gelrbfv"]
 
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_21mir"]
 [ext_resource type="Script" uid="uid://bbs8k23qlfj0d" path="res://Assets/Scripts/Levels/level_3.gd" id="1_ga7jm"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://d1hufwe84g7pp" path="res://Assets/Scenes/Levels/Crystal.tscn" id="6_cxbkx"]
 [ext_resource type="PackedScene" uid="uid://ytp5tluquc64" path="res://Assets/Scenes/UI/InteractionHint.tscn" id="7_0mf6r"]
 [ext_resource type="PackedScene" uid="uid://bhdqo2vjp761r" path="res://Assets/Scenes/Levels/SuperJumpPickup.tscn" id="7_ddcr0"]
+[ext_resource type="PackedScene" uid="uid://dtlcwuipqktik" path="res://Assets/Scenes/Levels/Checkpoint.tscn" id="8_cxbkx"]
 [ext_resource type="PackedScene" uid="uid://kcb2g4k1jg4x" path="res://Assets/Scenes/UI/WinUI.tscn" id="8_eoqe0"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="9_xydl0"]
 [ext_resource type="PackedScene" uid="uid://7p3tfx1b6c73" path="res://Assets/Scenes/UI/LevelTimer.tscn" id="10_m5oou"]
@@ -76,16 +77,16 @@ position = Vector2(90, 530)
 position = Vector2(90, 530)
 scale = Vector2(2, 2)
 
-[node name="Camera2D" parent="Player" index="2"]
+[node name="Camera2D" parent="Player" index="3"]
 limit_right = 3600
 limit_bottom = 648
 
-[node name="PointLight2D" parent="Player" index="5"]
+[node name="PointLight2D" parent="Player" index="6"]
 enabled = false
 range_layer_min = -100
 texture_scale = 1.1
 
-[node name="JumpSound" parent="Player" index="6"]
+[node name="JumpSound" parent="Player" index="7"]
 stream = null
 
 [node name="KillZone" type="Area2D" parent="."]
@@ -101,6 +102,9 @@ color = Color(0.1254902, 0.1254902, 0.15686275, 1)
 
 [node name="SuperJumpPickup" parent="." instance=ExtResource("7_ddcr0")]
 position = Vector2(384, 408)
+
+[node name="Checkpoint_0" parent="." instance=ExtResource("8_cxbkx")]
+position = Vector2(1652, 578)
 
 [node name="Crystal" parent="." instance=ExtResource("6_cxbkx")]
 position = Vector2(3499.0002, 278)
@@ -149,4 +153,5 @@ stream = ExtResource("15_cxbkx")
 bus = &"SFX"
 
 [editable path="Player"]
+[editable path="Checkpoint_0"]
 [editable path="WinUi"]

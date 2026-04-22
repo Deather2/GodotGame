@@ -16,6 +16,10 @@ var finish_transition := false
 var death_count := 0
 var crystal_collected := false
 
+var current_respawn_point: Node2D
+
+var current_checkpoint_index := -1
+
 @onready var level_timer_ui = get_node_or_null("LevelTimer")
 @onready var pause_menu: CanvasLayer = get_node_or_null("PauseMenu")
 @onready var level_music: AudioStreamPlayer = get_node_or_null("LevelMusicPlayer")
@@ -32,7 +36,12 @@ var crystal_collected := false
 
 @onready var super_jump_pickup = get_node_or_null("SuperJumpPickup")
 
+@onready var spawn_point: Node2D = $SpawnPoint
+
+@onready var checkpoint_0 = get_node_or_null("Checkpoint_0")
+
 func _ready() -> void:
+	current_respawn_point = spawn_point
 	if GameState.preview_mode:
 		_prepare_preview_mode()
 		return
@@ -62,6 +71,9 @@ func _ready() -> void:
 	if super_jump_pickup != null:
 		if not super_jump_pickup.picked_up.is_connected(_on_super_jump_picked_up):
 			super_jump_pickup.picked_up.connect(_on_super_jump_picked_up)
+
+	if checkpoint_0 != null and not checkpoint_0.reached.is_connected(_on_checkpoint_reached):
+		checkpoint_0.reached.connect(_on_checkpoint_reached)
 
 func _setup_dark_level() -> void:
 	if world_dark != null:
@@ -313,3 +325,17 @@ func _on_player_died() -> void:
 func _on_super_jump_picked_up() -> void:
 	if player != null and player.has_method("apply_super_jump"):
 		player.apply_super_jump(5.0)
+
+func get_current_respawn_point() -> Node2D:
+	return current_respawn_point
+
+func _on_checkpoint_reached(checkpoint) -> void:
+	if checkpoint == null:
+		return
+
+	if checkpoint.checkpoint_index <= current_checkpoint_index:
+		return
+
+	current_checkpoint_index = checkpoint.checkpoint_index
+	current_respawn_point = checkpoint.respawn_point
+	checkpoint.activate()
