@@ -1,57 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://bpdhwtxe3x2eo"]
+[gd_scene load_steps=5 format=3 uid="uid://bpdhwtxe3x2eo"]
 
 [ext_resource type="Script" uid="uid://dryvxjc528d8t" path="res://Assets/Scripts/Levels/slime_enemy.gd" id="1_f03xa"]
-[ext_resource type="Texture2D" uid="uid://1dtuqynqtt8s" path="res://Assets/Monsters/Forest_Monsters_PREMIUM/Slime/Green Slime/Green Slime with VFX/Green_Slime-Run.png" id="2_qwssu"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ta4oj"]
-atlas = ExtResource("2_qwssu")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_e7qul"]
-atlas = ExtResource("2_qwssu")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_b320w"]
-atlas = ExtResource("2_qwssu")
-region = Rect2(128, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hkmf3"]
-atlas = ExtResource("2_qwssu")
-region = Rect2(192, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0270u"]
-atlas = ExtResource("2_qwssu")
-region = Rect2(256, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7pvoq"]
-atlas = ExtResource("2_qwssu")
-region = Rect2(320, 0, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_l85b0"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ta4oj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_e7qul")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_b320w")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hkmf3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0270u")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7pvoq")
-}],
-"loop": true,
-"name": &"walk",
-"speed": 7.0
-}]
+[ext_resource type="SpriteFrames" uid="uid://ncqs8f8st3f8" path="res://Assets/Animations/SlimeEnemy.tres" id="2_f03xa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0qody"]
 radius = 8.0
@@ -65,7 +15,7 @@ script = ExtResource("1_f03xa")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -32)
-sprite_frames = SubResource("SpriteFrames_l85b0")
+sprite_frames = ExtResource("2_f03xa")
 animation = &"walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
