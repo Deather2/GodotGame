@@ -710,11 +710,6 @@ custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 focus_mode = 0
 
-[node name="Bind2" type="Button" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer"]
-custom_minimum_size = Vector2(90, 0)
-layout_mode = 2
-focus_mode = 0
-
 [node name="InteractRow" type="HBoxContainer" parent="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList"]
 layout_mode = 2
 theme_override_constants/separation = 250
@@ -935,9 +930,6 @@ bus = &"UI"
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="SettingsPanel" method="_on_button_mouse_exited"]
 [connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="SettingsPanel" method="on_button_pressed"]
-[connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_entered"]
-[connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind2" to="SettingsPanel" method="_on_button_mouse_exited"]
-[connection signal="pressed" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind2" to="SettingsPanel" method="on_button_pressed"]
 [connection signal="mouse_entered" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="SettingsPanel" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="SettingsPanel" method="_on_button_mouse_exited"]
 [connection signal="drag_started" from="SettingsPanel/Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/MenuMusicRow/MenuMusicSlider" to="SettingsPanel" method="on_button_pressed"]

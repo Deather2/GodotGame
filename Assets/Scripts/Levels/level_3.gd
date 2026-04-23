@@ -252,9 +252,9 @@ func get_earned_stars() -> int:
 		max_by_deaths = 1
 
 	var stars_by_time := 1
-	if level_time <= 40.0:
+	if level_time <= 30.0:
 		stars_by_time = 3
-	elif level_time <= 60.0:
+	elif level_time <= 50.0:
 		stars_by_time = 2
 
 	return min(max_by_deaths, stars_by_time)
