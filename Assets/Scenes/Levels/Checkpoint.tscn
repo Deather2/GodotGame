@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://dtlcwuipqktik"]
+
+[ext_resource type="Script" uid="uid://qboms0l7aadi" path="res://Assets/Scripts/Levels/checkpoint.gd" id="1_7t8it"]
+[ext_resource type="SpriteFrames" uid="uid://cdadwsg52gso6" path="res://Assets/Animations/Checkpoint.tres" id="2_qfowv"]
+[ext_resource type="AudioStream" uid="uid://bqkxv8ja6clam" path="res://Assets/Sounds/SFX/Level/checkpoint.mp3" id="3_qfowv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m202q"]
+size = Vector2(16, 71.333336)
+
+[node name="Checkpoint" type="Area2D"]
+script = ExtResource("1_7t8it")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, -107)
+scale = Vector2(3, 3)
+shape = SubResource("RectangleShape2D_m202q")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -36)
+scale = Vector2(3, 3)
+sprite_frames = ExtResource("2_qfowv")
+animation = &"idle"
+
+[node name="RespawnPoint" type="Marker2D" parent="."]
+
+[node name="CheckpointSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_qfowv")
+bus = &"SFX"

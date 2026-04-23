@@ -238,6 +238,7 @@ theme_override_font_sizes/font_size = 18
 
 [node name="TypeSound" type="AudioStreamPlayer" parent="Cutscene/UI/MonologueIntro"]
 stream = ExtResource("11_3v4yn")
+volume_db = 7.0
 
 [node name="MonologueOutro" type="Control" parent="Cutscene/UI"]
 visible = false
@@ -294,6 +295,7 @@ theme_override_font_sizes/font_size = 18
 
 [node name="TypeSound" type="AudioStreamPlayer" parent="Cutscene/UI/MonologueOutro"]
 stream = ExtResource("11_3v4yn")
+volume_db = 7.0
 
 [node name="BlinkOffSound" type="AudioStreamPlayer" parent="Cutscene"]
 stream = ExtResource("13_y3x6l")
@@ -301,6 +303,7 @@ bus = &"SFX"
 
 [node name="LightOnSound" type="AudioStreamPlayer" parent="Cutscene"]
 stream = ExtResource("14_xbeyj")
+volume_db = 7.0
 bus = &"SFX"
 
 [node name="InteractionHint" parent="." instance=ExtResource("13_d5qly")]

@@ -14,7 +14,7 @@ func _refresh() -> void:
 	label.text = _format_hint(template)
 
 func _format_hint(t: String) -> String:
-	var actions := [&"move_left", &"move_right", &"jump", &"crouch"]
+	var actions := [&"move_left", &"move_right", &"jump", &"crouch", &"ui_cancel"]
 
 	for a in actions:
 		t = t.replace("{%s}" % String(a), _action_hint_all(a))

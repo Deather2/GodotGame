@@ -20,11 +20,22 @@ signal died
 @onready var HurtSound: AudioStreamPlayer = $HurtPlayer
 @onready var DeathSound: AudioStreamPlayer = $DeathPlayer
 
+@onready var super_jump_vfx: GPUParticles2D = $SuperJumpVFX
+
+@onready var player_light: PointLight2D = $PointLight2D
+
 var finish_auto_run := false
 const FINISH_AUTO_RUN_SPEED := 220.0
 
 const SPEED := 300.0
-const JUMP_VELOCITY := -400.0
+
+const BASE_JUMP_VELOCITY := -400.0
+const SUPER_JUMP_VELOCITY := -520.0
+
+var jump_velocity := BASE_JUMP_VELOCITY
+var super_jump_active := false
+var super_jump_request_id := 0
+
 const CROUCH_SPEED_MULT := 0.45
 
 const SLOPE_TILT_MAX := deg_to_rad(21.0)
@@ -93,6 +104,9 @@ func _ready() -> void:
 	if GameState.has_signal("selected_character_changed"):
 		GameState.selected_character_changed.connect(func(_i): _apply_selected())
 
+	_setup_super_jump_vfx()
+	if super_jump_vfx != null:
+		super_jump_vfx.emitting = false
 
 func _apply_selected() -> void:
 	if db == null:
@@ -191,7 +205,7 @@ func _physics_process(delta: float) -> void:
 			if crouching and _can_stand():
 				crouching = false
 
-			velocity.y = JUMP_VELOCITY
+			velocity.y = jump_velocity
 			jump_requested = true
 
 	if crouching != _was_crouching:
@@ -324,6 +338,7 @@ func die() -> void:
 	if is_dying or death_windup_active:
 		return
 
+	clear_super_jump()
 	died.emit()
 
 	death_windup_active = true
@@ -384,6 +399,7 @@ func fall_death() -> void:
 	if is_dying or fall_respawn_active or death_windup_active:
 		return
 
+	clear_super_jump()
 	died.emit()
 
 	fall_respawn_active = true
@@ -405,7 +421,7 @@ func fall_death() -> void:
 
 
 func _fall_respawn_with_camera_travel() -> void:
-	var sp := get_parent().get_node_or_null("SpawnPoint") as Node2D
+	var sp := _get_respawn_anchor()
 	if sp == null:
 		fall_respawn_active = false
 		respawn()
@@ -421,7 +437,7 @@ func _fall_respawn_with_camera_travel() -> void:
 	sprite.flip_h = false
 	velocity = Vector2.ZERO
 	sprite_pivot.rotation = 0.0
-	sprite.visible = false
+	_set_player_visuals_visible(false)
 
 	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
 		sprite.play("idle")
@@ -439,7 +455,7 @@ func _fall_respawn_with_camera_travel() -> void:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 
-	sprite.visible = true
+	_set_player_visuals_visible(true)
 	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
 		sprite.play("idle")
 
@@ -466,7 +482,7 @@ func _get_respawn_position(sp: Node2D) -> Vector2:
 
 
 func respawn() -> void:
-	var sp := get_parent().get_node_or_null("SpawnPoint") as Node2D
+	var sp := _get_respawn_anchor()
 	if sp == null:
 		return
 
@@ -570,7 +586,7 @@ func _check_spike_collision() -> bool:
 	return false
 
 func _die_respawn_with_camera_travel() -> void:
-	var sp := get_parent().get_node_or_null("SpawnPoint") as Node2D
+	var sp := _get_respawn_anchor()
 	if sp == null:
 		death_respawn_active = false
 		respawn()
@@ -628,6 +644,108 @@ func _die_respawn_with_camera_travel() -> void:
 func _set_player_visuals_visible(on: bool) -> void:
 	sprite.visible = on
 
-	var light := get_node_or_null("PlayerLight")
-	if light is CanvasItem:
-		(light as CanvasItem).visible = on
+	if player_light != null:
+		player_light.visible = on
+
+func apply_super_jump(duration: float = 5.0) -> void:
+	super_jump_request_id += 1
+	var request_id := super_jump_request_id
+
+	super_jump_active = true
+	jump_velocity = SUPER_JUMP_VELOCITY
+
+	if super_jump_vfx != null:
+		super_jump_vfx.emitting = true
+
+	await get_tree().create_timer(duration).timeout
+
+	if request_id != super_jump_request_id:
+		return
+
+	super_jump_active = false
+	jump_velocity = BASE_JUMP_VELOCITY
+
+	if super_jump_vfx != null:
+		super_jump_vfx.emitting = false
+
+func _setup_super_jump_vfx() -> void:
+	if super_jump_vfx == null:
+		return
+
+	var img := Image.create(2, 2, false, Image.FORMAT_RGBA8)
+	img.fill(Color(1, 1, 1, 1))
+
+	var tex := ImageTexture.create_from_image(img)
+
+	var mat := ParticleProcessMaterial.new()
+	mat.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
+	mat.emission_box_extents = Vector3(10.0, 18.0, 1.0)
+
+	mat.direction = Vector3(0.0, -1.0, 0.0)
+	mat.spread = 20.0
+
+	mat.initial_velocity_min = 18.0
+	mat.initial_velocity_max = 32.0
+
+	mat.gravity = Vector3.ZERO
+
+	mat.scale_min = 1.0
+	mat.scale_max = 1.0
+
+	mat.color = Color(0.2, 1.0, 0.2, 0.9)
+
+	super_jump_vfx.texture = tex
+	super_jump_vfx.process_material = mat
+	super_jump_vfx.amount = 18
+	super_jump_vfx.lifetime = 0.6
+	super_jump_vfx.one_shot = false
+	super_jump_vfx.explosiveness = 0.0
+	super_jump_vfx.randomness = 0.7
+	super_jump_vfx.local_coords = false
+	super_jump_vfx.position = Vector2(0, 6)
+	super_jump_vfx.emitting = false
+
+func clear_super_jump() -> void:
+	super_jump_request_id += 1
+	super_jump_active = false
+	jump_velocity = BASE_JUMP_VELOCITY
+
+	if super_jump_vfx != null:
+		super_jump_vfx.emitting = false
+
+func _get_respawn_anchor() -> Node2D:
+	var latest_checkpoint_point := _get_latest_active_checkpoint_respawn()
+	if latest_checkpoint_point != null:
+		return latest_checkpoint_point
+
+	var parent_node := get_parent()
+
+	if parent_node != null and parent_node.has_method("get_current_respawn_point"):
+		var point = parent_node.get_current_respawn_point()
+		if point != null:
+			return point
+
+	return parent_node.get_node_or_null("SpawnPoint") as Node2D
+
+func _get_latest_active_checkpoint_respawn() -> Node2D:
+	var parent_node := get_parent()
+	if parent_node == null:
+		return null
+
+	var latest_point: Node2D = null
+	var highest_index: int = -1
+
+	for cp in get_tree().get_nodes_in_group("checkpoints"):
+		if cp == null:
+			continue
+
+		if not parent_node.is_ancestor_of(cp):
+			continue
+
+		if cp.has_method("is_checkpoint_active") and cp.is_checkpoint_active():
+			var idx: int = int(cp.get_checkpoint_index())
+			if idx > highest_index:
+				highest_index = idx
+				latest_point = cp.get_respawn_point()
+
+	return latest_point

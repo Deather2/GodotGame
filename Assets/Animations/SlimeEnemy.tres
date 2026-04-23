@@ -1,0 +1,53 @@
+[gd_resource type="SpriteFrames" load_steps=8 format=3 uid="uid://ncqs8f8st3f8"]
+
+[ext_resource type="Texture2D" uid="uid://1dtuqynqtt8s" path="res://Assets/Monsters/Forest_Monsters_PREMIUM/Slime/Green Slime/Green Slime with VFX/Green_Slime-Run.png" id="1_xjgc3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ta4oj"]
+atlas = ExtResource("1_xjgc3")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e7qul"]
+atlas = ExtResource("1_xjgc3")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b320w"]
+atlas = ExtResource("1_xjgc3")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hkmf3"]
+atlas = ExtResource("1_xjgc3")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0270u"]
+atlas = ExtResource("1_xjgc3")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7pvoq"]
+atlas = ExtResource("1_xjgc3")
+region = Rect2(320, 0, 64, 64)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ta4oj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e7qul")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b320w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hkmf3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0270u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7pvoq")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 7.0
+}]

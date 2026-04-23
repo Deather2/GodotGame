@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b52lfp4us2rem"
-path="res://.godot/imported/RPG_Item_Armor_Equipment_Slot_Feet_Boots_Legplates.png-69750c220fa9fe08d138e129fa69fff1.ctex"
+uid="uid://c2p4uxvbt3t8j"
+path="res://.godot/imported/Mushroom-Die.png-c50084daeba100a2185d6fa8e686e2fa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Icons/Sprites/RPG_Item_Armor_Equipment_Slot_Feet_Boots_Legplates.png"
-dest_files=["res://.godot/imported/RPG_Item_Armor_Equipment_Slot_Feet_Boots_Legplates.png-69750c220fa9fe08d138e129fa69fff1.ctex"]
+source_file="res://Assets/Monsters/Forest_Monsters_PREMIUM/Mushroom/Mushroom without VFX/Mushroom-Die.png"
+dest_files=["res://.godot/imported/Mushroom-Die.png-c50084daeba100a2185d6fa8e686e2fa.ctex"]
 
 [params]
 

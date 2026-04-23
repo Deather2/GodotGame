@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://bpdhwtxe3x2eo"]
+
+[ext_resource type="Script" uid="uid://dryvxjc528d8t" path="res://Assets/Scripts/Levels/slime_enemy.gd" id="1_f03xa"]
+[ext_resource type="SpriteFrames" uid="uid://ncqs8f8st3f8" path="res://Assets/Animations/SlimeEnemy.tres" id="2_f03xa"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0qody"]
+radius = 8.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_u08go"]
+radius = 12.337838
+
+[node name="SlimeEnemy" type="CharacterBody2D"]
+scale = Vector2(3, 3)
+script = ExtResource("1_f03xa")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -32)
+sprite_frames = ExtResource("2_f03xa")
+animation = &"walk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, -9)
+shape = SubResource("CircleShape2D_0qody")
+
+[node name="WallCheck" type="RayCast2D" parent="."]
+position = Vector2(0, -8)
+target_position = Vector2(-15, 0)
+
+[node name="HurtBox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(0, -9)
+shape = SubResource("CircleShape2D_u08go")

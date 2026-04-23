@@ -416,6 +416,7 @@ theme_override_font_sizes/font_size = 18
 
 [node name="TypeSound" type="AudioStreamPlayer" parent="Cutscene/UI/Monologue"]
 stream = ExtResource("11_0f1i4")
+volume_db = 7.0
 
 [node name="EarthquakeSound" type="AudioStreamPlayer" parent="Cutscene"]
 stream = ExtResource("12_yffv5")
@@ -427,6 +428,7 @@ bus = &"SFX"
 
 [node name="LightOnSound" type="AudioStreamPlayer" parent="Cutscene"]
 stream = ExtResource("14_yffv5")
+volume_db = 7.0
 bus = &"SFX"
 
 [node name="FinishArea" type="Area2D" parent="."]
