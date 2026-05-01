@@ -10,6 +10,7 @@ signal collected
 var player_in_range := false
 var activated := false
 
+
 func _ready() -> void:
 	sprite.play("idle")
 	body_entered.connect(_on_body_entered)
@@ -19,36 +20,72 @@ func _ready() -> void:
 	if interaction_hint != null:
 		interaction_hint.visible = false
 
+
 func _process(_delta: float) -> void:
 	if activated:
-		return
-
-	if player_in_range and Input.is_action_just_pressed("interact"):
-		activated = true
-
-		if player != null:
-			player.cutscene_lock = true
-			player.velocity = Vector2.ZERO
-
 		if interaction_hint != null:
 			interaction_hint.visible = false
+		return
 
-		if destruction_sound != null:
-			destruction_sound.play()
+	_update_interaction_hint()
 
-		sprite.play("destruction")
+	if _can_interact() and Input.is_action_just_pressed("interact"):
+		_activate_crystal()
+
+
+func _can_interact() -> bool:
+	if not player_in_range:
+		return false
+
+	if player == null:
+		return false
+
+	if not player.is_on_floor():
+		return false
+
+	return true
+
+
+func _update_interaction_hint() -> void:
+	if interaction_hint == null:
+		return
+
+	interaction_hint.visible = _can_interact()
+
+
+func _activate_crystal() -> void:
+	activated = true
+
+	if player != null:
+		player.cutscene_lock = true
+		player.velocity = Vector2.ZERO
+
+	if interaction_hint != null:
+		interaction_hint.visible = false
+
+	if destruction_sound != null:
+		destruction_sound.play()
+
+	sprite.play("destruction")
+
 
 func _on_body_entered(body: Node) -> void:
 	if body.name == "Player":
 		player_in_range = true
-		if interaction_hint != null:
-			interaction_hint.visible = true
+
+		if player == null:
+			player = body as CharacterBody2D
+
+		_update_interaction_hint()
+
 
 func _on_body_exited(body: Node) -> void:
 	if body.name == "Player":
 		player_in_range = false
+
 		if interaction_hint != null:
 			interaction_hint.visible = false
+
 
 func _on_animation_finished() -> void:
 	if sprite.animation == "destruction":
