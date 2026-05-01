@@ -442,8 +442,8 @@ position = Vector2(944, 464)
 move_offset = Vector2(550, 0)
 
 [node name="MovingPlatform3" parent="." instance=ExtResource("7_rkjwt")]
-position = Vector2(2032, 136)
-move_offset = Vector2(0, 400)
+position = Vector2(2032, 287)
+move_offset = Vector2(0, 233)
 
 [node name="MovingPlatform4" parent="." instance=ExtResource("7_rkjwt")]
 position = Vector2(3950, 136)
