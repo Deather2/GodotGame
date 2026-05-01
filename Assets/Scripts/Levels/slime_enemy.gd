@@ -4,23 +4,26 @@ extends CharacterBody2D
 @export var direction: int = -1
 @export var turn_cooldown: float = 0.12
 
+@export var hurt_box_offset_x: float = 2.0
+
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var wall_check: RayCast2D = $WallCheck
+@onready var floor_check: RayCast2D = $FloorCheck
 @onready var hurt_box: Area2D = $HurtBox
 @onready var player: Node = get_parent().get_node_or_null("Player")
 
 var gravity: float = float(ProjectSettings.get_setting("physics/2d/default_gravity"))
 var turn_cooldown_left: float = 0.0
 
-@export var hurt_box_offset_x: float = 2.0
-
 var hurt_box_base_pos: Vector2
+
 
 func _ready() -> void:
 	hurt_box.body_entered.connect(_on_hurt_box_body_entered)
 
 	if player != null:
 		wall_check.add_exception(player)
+		floor_check.add_exception(player)
 
 	hurt_box_base_pos = hurt_box.position
 
@@ -36,21 +39,25 @@ func _physics_process(delta: float) -> void:
 		velocity.y += gravity * delta
 
 	wall_check.force_raycast_update()
+	floor_check.force_raycast_update()
 
-	if turn_cooldown_left <= 0.0 and wall_check.is_colliding():
-		var collider := wall_check.get_collider()
+	if turn_cooldown_left <= 0.0:
+		if wall_check.is_colliding():
+			var collider := wall_check.get_collider()
 
-		if collider != null and collider.is_in_group("enemies"):
-			_reverse_direction()
+			if collider != null and collider.is_in_group("enemies"):
+				_reverse_direction()
 
-			if collider.has_method("turn_from_enemy_contact"):
-				collider.turn_from_enemy_contact()
+				if collider.has_method("turn_from_enemy_contact"):
+					collider.turn_from_enemy_contact()
 
-			velocity.x = direction * speed
-			move_and_slide()
-			return
+				velocity.x = direction * speed
+				move_and_slide()
+				return
+			else:
+				_reverse_direction()
 
-		else:
+		elif is_on_floor() and not floor_check.is_colliding():
 			_reverse_direction()
 
 	velocity.x = direction * speed
@@ -71,11 +78,14 @@ func _reverse_direction() -> void:
 
 
 func _apply_direction_setup() -> void:
-	var px := absf(wall_check.position.x)
-	var tx := absf(wall_check.target_position.x)
+	var wall_px := absf(wall_check.position.x)
+	var wall_tx := absf(wall_check.target_position.x)
 
-	wall_check.position.x = px * direction
-	wall_check.target_position.x = tx * direction
+	wall_check.position.x = wall_px * direction
+	wall_check.target_position.x = wall_tx * direction
+
+	var floor_px := absf(floor_check.position.x)
+	floor_check.position.x = floor_px * direction
 
 	hurt_box.position.x = hurt_box_base_pos.x + hurt_box_offset_x * direction
 

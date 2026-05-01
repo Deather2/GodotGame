@@ -179,6 +179,7 @@ bus = &"SFX"
 
 [editable path="Player"]
 [editable path="Checkpoint_0"]
+[editable path="Crystal"]
 [editable path="HintText"]
 [editable path="HintText4"]
 [editable path="HintText2"]

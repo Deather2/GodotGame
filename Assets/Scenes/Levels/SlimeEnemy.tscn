@@ -26,6 +26,10 @@ shape = SubResource("CircleShape2D_0qody")
 position = Vector2(0, -8)
 target_position = Vector2(-15, 0)
 
+[node name="FloorCheck" type="RayCast2D" parent="."]
+position = Vector2(-13, -12.667)
+target_position = Vector2(0, 13.333334)
+
 [node name="HurtBox" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
