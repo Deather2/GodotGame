@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://ru6my31iays2"]
+[gd_scene load_steps=25 format=3 uid="uid://ru6my31iays2"]
 
 [ext_resource type="Script" uid="uid://ds6pa7yu56gah" path="res://Assets/Scripts/LevelsMenu.gd" id="1_bvbgm"]
 [ext_resource type="PackedScene" uid="uid://c3retqugyu8ab" path="res://Assets/Scenes/UI/level_button.tscn" id="2_2018i"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://b6fs0r2rmmhiu" path="res://Assets/Images/Level2.png" id="4_obegr"]
 [ext_resource type="Texture2D" uid="uid://bkbyy1ja1e7ut" path="res://Assets/Images/level3.png" id="5_l1v83"]
 [ext_resource type="Texture2D" uid="uid://dfli2ldbdrs7q" path="res://Assets/ui/newbuttons.png" id="5_ovywt"]
+[ext_resource type="Texture2D" uid="uid://xtvs072docj0" path="res://Assets/Images/Level4.png" id="6_jn4s0"]
 [ext_resource type="Texture2D" uid="uid://b0215xlkibelg" path="res://Assets/ui/newbuttons2.png" id="6_t6v1y"]
 [ext_resource type="AudioStream" uid="uid://bw5bd3pck1ibt" path="res://Assets/Sounds/UI/buttonClick.mp3" id="8_firr7"]
 [ext_resource type="AudioStream" uid="uid://0kgtucvyp2jy" path="res://Assets/Sounds/UI/success.mp3" id="9_imeig"]
@@ -60,7 +61,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_bvbgm")
 level_button_scene = ExtResource("2_2018i")
-level_previews = Array[Texture2D]([ExtResource("3_imeig"), ExtResource("4_obegr"), ExtResource("5_l1v83")])
+level_previews = Array[Texture2D]([ExtResource("3_imeig"), ExtResource("4_obegr"), ExtResource("5_l1v83"), ExtResource("6_jn4s0")])
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
