@@ -3,8 +3,9 @@ extends CharacterBody2D
 @export var speed: float = 40.0
 @export var direction: int = -1
 @export var turn_cooldown: float = 0.12
-
 @export var hurt_box_offset_x: float = 2.0
+
+@export_enum("green", "blue", "orange") var slime_color: String = "green"
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var wall_check: RayCast2D = $WallCheck
@@ -24,6 +25,9 @@ func _ready() -> void:
 	if player != null:
 		wall_check.add_exception(player)
 		floor_check.add_exception(player)
+
+	wall_check.add_exception(self)
+	floor_check.add_exception(self)
 
 	hurt_box_base_pos = hurt_box.position
 
@@ -96,10 +100,21 @@ func _play_default_anim() -> void:
 	if sprite.sprite_frames == null:
 		return
 
-	if sprite.sprite_frames.has_animation("walk"):
+	var walk_anim := _get_walk_anim_name()
+
+	if sprite.sprite_frames.has_animation(walk_anim):
+		sprite.play(walk_anim)
+	elif sprite.sprite_frames.has_animation("walk"):
 		sprite.play("walk")
 	elif sprite.sprite_frames.has_animation("idle"):
 		sprite.play("idle")
+
+
+func _get_walk_anim_name() -> String:
+	if slime_color == "green":
+		return "walk"
+
+	return "walk_%s" % slime_color
 
 
 func _on_hurt_box_body_entered(body: Node) -> void:
