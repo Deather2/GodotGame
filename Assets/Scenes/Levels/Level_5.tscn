@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bg7eykmlkkoty"]
+[gd_scene load_steps=24 format=3 uid="uid://bg7eykmlkkoty"]
 
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_m8bea"]
 [ext_resource type="Texture2D" uid="uid://dqotditve6qxc" path="res://Assets/backgrounds/background_layer_2.png" id="2_5bepj"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bpdhwtxe3x2eo" path="res://Assets/Scenes/Levels/SlimeEnemy.tscn" id="8_6crnw"]
 [ext_resource type="PackedScene" uid="uid://ytp5tluquc64" path="res://Assets/Scenes/UI/InteractionHint.tscn" id="9_03ovd"]
 [ext_resource type="PackedScene" uid="uid://dtlcwuipqktik" path="res://Assets/Scenes/Levels/Checkpoint.tscn" id="9_5bepj"]
+[ext_resource type="PackedScene" uid="uid://7aav2caa6uif" path="res://Assets/Scenes/Levels/FallingSpikeTrap.tscn" id="9_cec54"]
 [ext_resource type="PackedScene" uid="uid://bu3ajukqx3vit" path="res://Assets/Scenes/Levels/RotatingSpikeTrap.tscn" id="10_b0rdy"]
 [ext_resource type="PackedScene" uid="uid://bhdqo2vjp761r" path="res://Assets/Scenes/Levels/SuperJumpPickup.tscn" id="10_j0kch"]
 [ext_resource type="PackedScene" uid="uid://kcb2g4k1jg4x" path="res://Assets/Scenes/UI/WinUI.tscn" id="10_k1sd8"]
@@ -443,8 +444,23 @@ move_offset = Vector2(520, 0)
 position = Vector2(1072, 387)
 slime_color = "orange"
 
+[node name="FallingSpikeTrap" parent="." instance=ExtResource("9_cec54")]
+position = Vector2(2496, 48)
+scale = Vector2(2, 2)
+fall_distance = 72.0
+
+[node name="FallingSpikeTrap2" parent="." instance=ExtResource("9_cec54")]
+position = Vector2(2640, 48)
+scale = Vector2(2, 2)
+fall_distance = 72.0
+
+[node name="FallingSpikeTrap3" parent="." instance=ExtResource("9_cec54")]
+position = Vector2(2784, 48)
+scale = Vector2(2, 2)
+fall_distance = 72.0
+
 [node name="Checkpoint_0" parent="." groups=["checkpoints"] instance=ExtResource("9_5bepj")]
-position = Vector2(3938, 292)
+position = Vector2(3070, 339)
 
 [node name="SuperJumpPickup" parent="." instance=ExtResource("10_j0kch")]
 position = Vector2(4387, 215)
