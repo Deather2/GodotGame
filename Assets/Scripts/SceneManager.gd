@@ -168,9 +168,19 @@ func reload_current_level() -> void:
 
 	get_tree().paused = false
 
+	if old != null and is_instance_valid(old):
+		old.queue_free()
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+
 	var packed: PackedScene = _get_packed_scene(path)
 	var next: Node = packed.instantiate()
 	get_tree().root.add_child(next)
+
+	_current = next
+	_stack.clear()
+	_stack.append(_current)
 
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -178,13 +188,6 @@ func reload_current_level() -> void:
 	var elapsed := (Time.get_ticks_msec() - loading_started) / 1000.0
 	if elapsed < LOADING_MIN_TIME:
 		await get_tree().create_timer(LOADING_MIN_TIME - elapsed).timeout
-
-	if old != null and is_instance_valid(old):
-		old.queue_free()
-
-	_current = next
-	_stack.clear()
-	_stack.append(_current)
 
 	_hide_loading_spinner()
 
