@@ -21,6 +21,9 @@ const FADE_OUT_DUR := 0.45
 const FADE_IN_DUR := 0.45
 const LOADING_MIN_TIME := 0.5
 
+const LEVELS_PER_PAGE := 3
+var levels_menu_start_page: int = 0
+
 enum Transition { FADE, SLIDE_LEFT, SLIDE_RIGHT, DROP_DOWN, DROP_UP }
 
 signal transition_finished
@@ -111,6 +114,9 @@ func goto_levels_menu_from_pause() -> void:
 		return
 
 	_busy = true
+
+	_set_levels_menu_page_from_current_level()
+
 	await _go_fade_load_from_pause(LEVELS_MENU, true)
 	_busy = false
 
@@ -646,3 +652,31 @@ func _prepare_scene_with_dots(path: String) -> Node:
 
 	_hide_loading_spinner()
 	return next
+
+func _set_levels_menu_page_from_current_level() -> void:
+	levels_menu_start_page = 0
+
+	if _current == null:
+		return
+
+	var path := _current.scene_file_path
+	if path == "":
+		return
+
+	var file_name := path.get_file().get_basename()
+	var parts := file_name.split("_")
+
+	for part in parts:
+		if part.is_valid_int():
+			var level_number := int(part)
+
+			if level_number > 0:
+				levels_menu_start_page = int((level_number - 1) / LEVELS_PER_PAGE)
+
+			return
+
+
+func consume_levels_menu_start_page() -> int:
+	var p := levels_menu_start_page
+	levels_menu_start_page = 0
+	return p

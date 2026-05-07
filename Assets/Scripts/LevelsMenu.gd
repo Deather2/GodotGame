@@ -40,6 +40,9 @@ const CHAPTER_TITLES := [
 func _ready() -> void:
 	GameState.show_cursor()
 	current_container = $PagesHolder/LevelsContainer
+	
+	page = clampi(SceneManager.consume_levels_menu_start_page(), 0, _page_count() - 1)
+	target_page = page
 
 	update_chapter_label(page)
 
@@ -59,7 +62,6 @@ func _ready() -> void:
 	confirm_reset.scale = Vector2(0.9, 0.9)
 
 	_build_grid()
-	target_page = page
 	reset_btn.visible = GameState.has_any_progress()
 	call_deferred("_warmup_confirm_popup")
 
