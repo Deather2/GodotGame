@@ -1,0 +1,61 @@
+[gd_scene load_steps=7 format=3 uid="uid://bu3ajukqx3vit"]
+
+[ext_resource type="Script" uid="uid://dfg6qttrl7gnq" path="res://Assets/Scripts/Levels/RotatingSpikeTrap.gd" id="1_2f70u"]
+[ext_resource type="Texture2D" uid="uid://coh4xlti3qpdf" path="res://Assets/tilesets/oak_woods_tileset.png" id="1_et0jq"]
+[ext_resource type="Texture2D" uid="uid://cs2yy10vyqaja" path="res://Assets/tilesets/spike_24x24_up.png" id="2_2f70u"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wc0mh"]
+texture = ExtResource("1_et0jq")
+texture_region_size = Vector2i(24, 24)
+2:2/0 = 0
+1:1/0 = 0
+0:11/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mier2"]
+texture = ExtResource("2_2f70u")
+texture_region_size = Vector2i(24, 24)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_efuk8"]
+tile_size = Vector2i(24, 24)
+sources/0 = SubResource("TileSetAtlasSource_wc0mh")
+sources/2 = SubResource("TileSetAtlasSource_mier2")
+
+[node name="RotatingSpikeTrap" type="Node2D"]
+script = ExtResource("1_2f70u")
+
+[node name="Pivot" type="Node2D" parent="."]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Pivot"]
+position = Vector2(-12, 12)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 254, 255, 2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 255, 255, 2, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 48, 255, 255, 255, 255, 2, 0, 0, 0, 0, 0, 0, 96)
+tile_set = SubResource("TileSet_efuk8")
+collision_enabled = false
+
+[node name="SpikeUp" type="Area2D" parent="Pivot"]
+position = Vector2(0, -24)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Pivot/SpikeUp"]
+position = Vector2(0, 2)
+polygon = PackedVector2Array(0, -12, 12, 10, -12, 10)
+
+[node name="SpikeRight" type="Area2D" parent="Pivot"]
+position = Vector2(24, 0)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Pivot/SpikeRight"]
+position = Vector2(-2, 0)
+polygon = PackedVector2Array(-10, -12, 12, 0, -10, 12)
+
+[node name="SpikeDown" type="Area2D" parent="Pivot"]
+position = Vector2(0, 24)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Pivot/SpikeDown"]
+position = Vector2(0, -2)
+polygon = PackedVector2Array(0, 12, 12, -10, -12, -10)
+
+[node name="SpikeLeft" type="Area2D" parent="Pivot"]
+position = Vector2(-24, 0)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Pivot/SpikeLeft"]
+position = Vector2(2, 0)
+polygon = PackedVector2Array(10, -12, -12, 0, 10, 12)
