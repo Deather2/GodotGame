@@ -69,7 +69,7 @@ animations = [{
 size = Vector2(46, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0suo4"]
-size = Vector2(46, 6)
+size = Vector2(43, 4)
 
 [node name="BreakablePlatform" type="StaticBody2D"]
 script = ExtResource("1_hkx7u")
@@ -85,7 +85,7 @@ shape = SubResource("RectangleShape2D_wmwe8")
 [node name="TriggerArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TriggerArea"]
-position = Vector2(0, -19)
+position = Vector2(-0.5, -18)
 shape = SubResource("RectangleShape2D_0suo4")
 
 [node name="RespawnTimer" type="Timer" parent="."]

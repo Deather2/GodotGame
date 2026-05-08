@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bg7eykmlkkoty"]
+[gd_scene load_steps=26 format=3 uid="uid://bg7eykmlkkoty"]
 
 [ext_resource type="Script" uid="uid://cdisfqchc11mj" path="res://Assets/Scripts/Levels/level_5.gd" id="1_dh6xv"]
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_m8bea"]
@@ -17,7 +17,6 @@
 [ext_resource type="PackedScene" uid="uid://kcb2g4k1jg4x" path="res://Assets/Scenes/UI/WinUI.tscn" id="10_k1sd8"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="11_uslck"]
 [ext_resource type="PackedScene" uid="uid://7p3tfx1b6c73" path="res://Assets/Scenes/UI/LevelTimer.tscn" id="12_mt8v8"]
-[ext_resource type="PackedScene" uid="uid://cg72wspj0xrt3" path="res://Assets/Scenes/Levels/SuperSpeedPickup.tscn" id="13_6crnw"]
 [ext_resource type="PackedScene" uid="uid://d1hufwe84g7pp" path="res://Assets/Scenes/Levels/Crystal.tscn" id="13_ksuih"]
 [ext_resource type="PackedScene" uid="uid://ck3f2fkk1o4me" path="res://Assets/Scenes/UI/PauseMenu.tscn" id="13_ydtfl"]
 [ext_resource type="AudioStream" uid="uid://byjx0d43tk6yb" path="res://Assets/Sounds/LevelMusic/levelMusic.mp3" id="14_4u1l6"]
@@ -477,9 +476,6 @@ position = Vector2(3070, 339)
 
 [node name="SuperJumpPickup" parent="." instance=ExtResource("10_j0kch")]
 position = Vector2(4387, 215)
-
-[node name="SuperSpeedPickup" parent="." instance=ExtResource("13_6crnw")]
-position = Vector2(4300, 230)
 
 [node name="RotatingSpikeTrap" parent="." instance=ExtResource("10_b0rdy")]
 position = Vector2(4570, 300)
