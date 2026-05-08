@@ -23,14 +23,15 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if activated:
-		if interaction_hint != null:
+		if interaction_hint != null and player_in_range:
 			interaction_hint.visible = false
 		return
 
-	_update_interaction_hint()
+	if player_in_range:
+		_update_interaction_hint()
 
-	if _can_interact() and Input.is_action_just_pressed("interact"):
-		_activate_crystal()
+		if _can_interact() and Input.is_action_just_pressed("interact"):
+			_activate_crystal()
 
 
 func _can_interact() -> bool:
