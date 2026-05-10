@@ -1,5 +1,6 @@
-[gd_scene load_steps=25 format=3 uid="uid://dnmq5l05e4njy"]
+[gd_scene load_steps=27 format=3 uid="uid://dnmq5l05e4njy"]
 
+[ext_resource type="Script" uid="uid://r0lgtpcr0bly" path="res://Assets/Scripts/Levels/level_6.gd" id="1_ydxxh"]
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_yx5i3"]
 [ext_resource type="Texture2D" uid="uid://dqotditve6qxc" path="res://Assets/backgrounds/background_layer_2.png" id="2_0cv0k"]
 [ext_resource type="Texture2D" uid="uid://82e4b4xmqqlk" path="res://Assets/backgrounds/background_layer_3.png" id="3_4184j"]
@@ -21,6 +22,7 @@
 [ext_resource type="AudioStream" uid="uid://jvy4ouj35075" path="res://Assets/Sounds/SFX/Level/lightSwitchOff.mp3" id="13_avx7k"]
 [ext_resource type="PackedScene" uid="uid://bu3ajukqx3vit" path="res://Assets/Scenes/Levels/RotatingSpikeTrap.tscn" id="13_l5axv"]
 [ext_resource type="AudioStream" uid="uid://c44jo8bvbp2p7" path="res://Assets/Sounds/SFX/Level/shine.mp3" id="14_lcav8"]
+[ext_resource type="PackedScene" uid="uid://d1hufwe84g7pp" path="res://Assets/Scenes/Levels/Crystal.tscn" id="15_728ap"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ntbrp"]
 texture = ExtResource("5_ud0b8")
@@ -349,6 +351,7 @@ sources/1 = SubResource("TileSetAtlasSource_ntbrp")
 size = Vector2(6322, 64)
 
 [node name="Level6" type="Node2D"]
+script = ExtResource("1_ydxxh")
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
@@ -602,6 +605,10 @@ scale = Vector2(2, 2)
 position = Vector2(5616, 480)
 scale = Vector2(2, 2)
 
+[node name="Crystal" parent="." instance=ExtResource("15_728ap")]
+position = Vector2(6049.0005, 283)
+scale = Vector2(1.3, 1.3)
+
 [node name="InteractionHint" parent="." instance=ExtResource("7_rg846")]
 
 [node name="WinUi" parent="." instance=ExtResource("8_l5axv")]
@@ -646,4 +653,5 @@ bus = &"SFX"
 
 [editable path="Player"]
 [editable path="Checkpoint_0"]
+[editable path="Crystal"]
 [editable path="WinUi"]
