@@ -670,16 +670,12 @@ func apply_super_jump(duration: float = 5.0) -> void:
 	if super_jump_vfx != null:
 		super_jump_vfx.emitting = true
 
-	await get_tree().create_timer(duration).timeout
+	await get_tree().create_timer(duration, false).timeout
 
 	if request_id != super_jump_request_id:
 		return
 
-	super_jump_active = false
-	jump_velocity = BASE_JUMP_VELOCITY
-
-	if super_jump_vfx != null:
-		super_jump_vfx.emitting = false
+	clear_super_jump()
 
 func _setup_super_jump_vfx() -> void:
 	if super_jump_vfx == null:
@@ -773,7 +769,7 @@ func apply_super_speed(duration: float = 5.0) -> void:
 	if super_speed_vfx != null:
 		super_speed_vfx.emitting = true
 
-	await get_tree().create_timer(duration).timeout
+	await get_tree().create_timer(duration, false).timeout
 
 	if request_id != super_speed_request_id:
 		return
