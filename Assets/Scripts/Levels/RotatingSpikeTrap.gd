@@ -2,6 +2,8 @@ extends Node2D
 
 @export var rotation_speed: float = 120.0
 
+@export_enum("Clockwise", "Counter-clockwise") var rotation_direction: int = 0
+
 @export var move_enabled: bool = false
 @export var move_offset: Vector2 = Vector2.ZERO
 @export var move_duration: float = 2.0
@@ -33,7 +35,12 @@ func _physics_process(delta: float) -> void:
 
 
 func _rotate_trap(delta: float) -> void:
-	pivot.rotation_degrees += rotation_speed * delta
+	var direction := 1.0
+
+	if rotation_direction == 1:
+		direction = -1.0
+
+	pivot.rotation_degrees += absf(rotation_speed) * direction * delta
 
 
 func _move_trap(delta: float) -> void:
