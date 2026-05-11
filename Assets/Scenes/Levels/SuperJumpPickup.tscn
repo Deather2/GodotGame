@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bhdqo2vjp761r"]
 
 [ext_resource type="Script" uid="uid://drx0u57p8w1b3" path="res://Assets/Scripts/Levels/super_jump_pickup.gd" id="1_615pa"]
-[ext_resource type="Texture2D" uid="uid://d3odeq4lr0lr7" path="res://Assets/Icons/Sprites/boots.png" id="1_vyhee"]
+[ext_resource type="Texture2D" uid="uid://c5t6lgadbviiy" path="res://Assets/Icons/Sprites/Arrows_Pointer_Up_North.png" id="2_yrpl4"]
 [ext_resource type="AudioStream" uid="uid://bb1s6fv331p7c" path="res://Assets/Sounds/SFX/Player/pick up.mp3" id="3_yrpl4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_615pa"]
@@ -11,8 +11,9 @@ radius = 20.024984
 script = ExtResource("1_615pa")
 
 [node name="Icon" type="Sprite2D" parent="."]
-scale = Vector2(2, 2)
-texture = ExtResource("1_vyhee")
+position = Vector2(1, 0)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_yrpl4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_615pa")

@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://cg72wspj0xrt3"]
+
+[ext_resource type="Script" uid="uid://v02ix8xhiv7c" path="res://Assets/Scripts/Levels/super_speed_pickup.gd" id="1_4aooo"]
+[ext_resource type="Texture2D" uid="uid://dul63q67kb3wi" path="res://Assets/Icons/Sprites/Arrows_Pointer_Right_East.png" id="1_iunmn"]
+[ext_resource type="AudioStream" uid="uid://bb1s6fv331p7c" path="res://Assets/Sounds/SFX/Player/pick up.mp3" id="2_4aooo"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_omby3"]
+radius = 20.024984
+
+[node name="SuperSpeedPickup" type="Area2D"]
+script = ExtResource("1_4aooo")
+
+[node name="Icon" type="Sprite2D" parent="."]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("1_iunmn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_omby3")
+
+[node name="RespawnTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="PickUpSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_4aooo")
+volume_db = 18.0
+bus = &"SFX"

@@ -1,0 +1,93 @@
+[gd_scene load_steps=13 format=3 uid="uid://3k71180pq1f5"]
+
+[ext_resource type="Script" uid="uid://da4moj1q6j6vp" path="res://Assets/Scripts/Levels/breakable_platform.gd" id="1_hkx7u"]
+[ext_resource type="Texture2D" uid="uid://c0r3kw46k1tm8" path="res://Assets/tilesets/breakable_platform_6frames_48x64.png" id="2_xq6ro"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yy6yo"]
+atlas = ExtResource("2_xq6ro")
+region = Rect2(0, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ncymn"]
+atlas = ExtResource("2_xq6ro")
+region = Rect2(48, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1aalo"]
+atlas = ExtResource("2_xq6ro")
+region = Rect2(96, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6o6d6"]
+atlas = ExtResource("2_xq6ro")
+region = Rect2(144, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8r4yt"]
+atlas = ExtResource("2_xq6ro")
+region = Rect2(192, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pddsg"]
+atlas = ExtResource("2_xq6ro")
+region = Rect2(240, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pm4cm"]
+atlas = ExtResource("2_xq6ro")
+region = Rect2(0, 0, 48, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nmnb6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yy6yo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ncymn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1aalo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6o6d6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8r4yt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pddsg")
+}],
+"loop": false,
+"name": &"break",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pm4cm")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wmwe8"]
+size = Vector2(46, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0suo4"]
+size = Vector2(43, 4)
+
+[node name="BreakablePlatform" type="StaticBody2D"]
+script = ExtResource("1_hkx7u")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_nmnb6")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_wmwe8")
+
+[node name="TriggerArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TriggerArea"]
+position = Vector2(-0.5, -18)
+shape = SubResource("RectangleShape2D_0suo4")
+
+[node name="RespawnTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true

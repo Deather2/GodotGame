@@ -34,7 +34,7 @@ var confirm_animating: bool = false
 const CHAPTER_TITLES := [
 	"1. nodaļa: Sākums",
 	"2. nodaļa: Tumsas ceļš",
-	"3. nodaļa: Pirmie draudi",
+	"3. nodaļa: Gaisma",
 ]
 
 func _ready() -> void:

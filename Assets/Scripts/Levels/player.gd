@@ -22,12 +22,19 @@ signal died
 
 @onready var super_jump_vfx: GPUParticles2D = $SuperJumpVFX
 
+@onready var super_speed_vfx: GPUParticles2D = $SuperSpeedVFX
+
 @onready var player_light: PointLight2D = $PointLight2D
 
 var finish_auto_run := false
 const FINISH_AUTO_RUN_SPEED := 220.0
 
-const SPEED := 300.0
+const BASE_SPEED := 300.0
+const SUPER_SPEED := 450.0
+
+var current_move_speed := BASE_SPEED
+var super_speed_active := false
+var super_speed_request_id := 0
 
 const BASE_JUMP_VELOCITY := -400.0
 const SUPER_JUMP_VELOCITY := -520.0
@@ -107,6 +114,10 @@ func _ready() -> void:
 	_setup_super_jump_vfx()
 	if super_jump_vfx != null:
 		super_jump_vfx.emitting = false
+
+	_setup_super_speed_vfx()
+	if super_speed_vfx != null:
+		super_speed_vfx.emitting = false
 
 func _apply_selected() -> void:
 	if db == null:
@@ -212,15 +223,15 @@ func _physics_process(delta: float) -> void:
 		_apply_crouch_collision(crouching)
 		_was_crouching = crouching
 
-	var speed := FINISH_AUTO_RUN_SPEED if finish_auto_run else SPEED
+	var move_speed := FINISH_AUTO_RUN_SPEED if finish_auto_run else current_move_speed
 	if crouching:
-		speed *= CROUCH_SPEED_MULT
+		move_speed *= CROUCH_SPEED_MULT
 
 	if direction != 0.0:
-		velocity.x = direction * speed
+		velocity.x = direction * move_speed
 		face_dir = int(sign(direction))
 	else:
-		velocity.x = move_toward(velocity.x, 0.0, SPEED)
+		velocity.x = move_toward(velocity.x, 0.0, current_move_speed)
 
 	sprite.flip_h = face_dir < 0
 
@@ -339,6 +350,7 @@ func die() -> void:
 		return
 
 	clear_super_jump()
+	clear_super_speed()
 	died.emit()
 
 	death_windup_active = true
@@ -400,6 +412,7 @@ func fall_death() -> void:
 		return
 
 	clear_super_jump()
+	clear_super_speed()
 	died.emit()
 
 	fall_respawn_active = true
@@ -657,16 +670,12 @@ func apply_super_jump(duration: float = 5.0) -> void:
 	if super_jump_vfx != null:
 		super_jump_vfx.emitting = true
 
-	await get_tree().create_timer(duration).timeout
+	await get_tree().create_timer(duration, false).timeout
 
 	if request_id != super_jump_request_id:
 		return
 
-	super_jump_active = false
-	jump_velocity = BASE_JUMP_VELOCITY
-
-	if super_jump_vfx != null:
-		super_jump_vfx.emitting = false
+	clear_super_jump()
 
 func _setup_super_jump_vfx() -> void:
 	if super_jump_vfx == null:
@@ -749,3 +758,66 @@ func _get_latest_active_checkpoint_respawn() -> Node2D:
 				latest_point = cp.get_respawn_point()
 
 	return latest_point
+
+func apply_super_speed(duration: float = 5.0) -> void:
+	super_speed_request_id += 1
+	var request_id := super_speed_request_id
+
+	super_speed_active = true
+	current_move_speed = SUPER_SPEED
+
+	if super_speed_vfx != null:
+		super_speed_vfx.emitting = true
+
+	await get_tree().create_timer(duration, false).timeout
+
+	if request_id != super_speed_request_id:
+		return
+
+	clear_super_speed()
+
+
+func clear_super_speed() -> void:
+	super_speed_request_id += 1
+	super_speed_active = false
+	current_move_speed = BASE_SPEED
+
+	if super_speed_vfx != null:
+		super_speed_vfx.emitting = false
+
+func _setup_super_speed_vfx() -> void:
+	if super_speed_vfx == null:
+		return
+
+	var img := Image.create(2, 2, false, Image.FORMAT_RGBA8)
+	img.fill(Color(1, 1, 1, 1))
+
+	var tex := ImageTexture.create_from_image(img)
+
+	var mat := ParticleProcessMaterial.new()
+	mat.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
+	mat.emission_box_extents = Vector3(12.0, 14.0, 1.0)
+
+	mat.direction = Vector3(-1.0, 0.0, 0.0)
+	mat.spread = 35.0
+
+	mat.initial_velocity_min = 35.0
+	mat.initial_velocity_max = 70.0
+
+	mat.gravity = Vector3.ZERO
+
+	mat.scale_min = 1.0
+	mat.scale_max = 1.0
+
+	mat.color = Color(0.35, 0.85, 1.0, 0.9)
+
+	super_speed_vfx.texture = tex
+	super_speed_vfx.process_material = mat
+	super_speed_vfx.amount = 24
+	super_speed_vfx.lifetime = 0.35
+	super_speed_vfx.one_shot = false
+	super_speed_vfx.explosiveness = 0.0
+	super_speed_vfx.randomness = 0.8
+	super_speed_vfx.local_coords = false
+	super_speed_vfx.position = Vector2(0, 4)
+	super_speed_vfx.emitting = false

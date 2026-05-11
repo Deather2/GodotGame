@@ -15,7 +15,7 @@ const VIDEO_SECTION := "video"
 const AUDIO_SECTION := "audio"
 const MIN_BUS_DB := -80.0
 
-const LEVEL_COUNT := 9
+const LEVEL_COUNT := 7
 
 const WINDOW_MODE_WINDOWED := 0
 const WINDOW_MODE_FULLSCREEN := 1

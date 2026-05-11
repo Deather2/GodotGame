@@ -23,7 +23,7 @@
 [ext_resource type="AudioStream" uid="uid://jvy4ouj35075" path="res://Assets/Sounds/SFX/Level/lightSwitchOff.mp3" id="15_eltcl"]
 [ext_resource type="AudioStream" uid="uid://c44jo8bvbp2p7" path="res://Assets/Sounds/SFX/Level/shine.mp3" id="16_6et12"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r3e6j"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_03ovd"]
 texture = ExtResource("5_cec54")
 texture_region_size = Vector2i(24, 24)
 0:0/0 = 0
@@ -344,7 +344,7 @@ texture_region_size = Vector2i(24, 24)
 
 [sub_resource type="TileSet" id="TileSet_rrsak"]
 tile_size = Vector2i(24, 24)
-sources/1 = SubResource("TileSetAtlasSource_r3e6j")
+sources/1 = SubResource("TileSetAtlasSource_03ovd")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m1erp"]
 size = Vector2(6322, 64)
@@ -412,17 +412,17 @@ position = Vector2(60, 338)
 position = Vector2(60, 309)
 scale = Vector2(2, 2)
 
-[node name="Camera2D" parent="Player" index="3"]
+[node name="Camera2D" parent="Player" index="4"]
 position = Vector2(9, -200)
 limit_right = 5808
 limit_bottom = 648
 
-[node name="PointLight2D" parent="Player" index="6"]
+[node name="PointLight2D" parent="Player" index="7"]
 enabled = false
 range_layer_min = -100
 texture_scale = 1.3
 
-[node name="JumpSound" parent="Player" index="7"]
+[node name="JumpSound" parent="Player" index="8"]
 stream = null
 
 [node name="KillZone" type="Area2D" parent="."]
