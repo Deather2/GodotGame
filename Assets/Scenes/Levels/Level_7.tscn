@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://cvi6ds45uokvr"]
+[gd_scene load_steps=28 format=3 uid="uid://cvi6ds45uokvr"]
 
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_aae5b"]
 [ext_resource type="Script" uid="uid://mul6ebt32fc6" path="res://Assets/Scripts/Levels/level_7.gd" id="1_hgy4a"]
@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://cg72wspj0xrt3" path="res://Assets/Scenes/Levels/SuperSpeedPickup.tscn" id="13_18727"]
 [ext_resource type="PackedScene" uid="uid://3k71180pq1f5" path="res://Assets/Scenes/Levels/BreakablePlatform.tscn" id="14_cagm5"]
 [ext_resource type="AudioStream" uid="uid://c44jo8bvbp2p7" path="res://Assets/Sounds/SFX/Level/shine.mp3" id="14_cmrno"]
+[ext_resource type="PackedScene" uid="uid://b0h36cfohtngm" path="res://Assets/Scenes/Levels/BringerBoss.tscn" id="16_2tego"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7ikdf"]
 texture = ExtResource("5_lrteq")
@@ -410,7 +411,7 @@ layer_0/tile_data = PackedInt32Array(917564, 65537, 1, 917563, 65537, 1, 852027,
 position = Vector2(60, 434)
 
 [node name="Player" parent="." instance=ExtResource("6_5f77l")]
-position = Vector2(60, 405)
+position = Vector2(8000, 405)
 scale = Vector2(2, 2)
 
 [node name="Camera2D" parent="Player" index="4"]
@@ -547,6 +548,14 @@ scale = Vector2(2, 2)
 [node name="BreakablePlatform4" parent="." instance=ExtResource("14_cagm5")]
 position = Vector2(7488, 377)
 scale = Vector2(2, 2)
+
+[node name="BringerBoss" parent="." instance=ExtResource("16_2tego")]
+position = Vector2(8308, 532)
+scale = Vector2(1.5, 1.5)
+melee_range = 120.0
+stop_distance = 70.0
+melee_cooldown = 2.0
+cast_cooldown = 4.0
 
 [node name="InteractionHint" parent="." instance=ExtResource("7_dtdno")]
 

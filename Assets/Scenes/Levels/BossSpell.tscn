@@ -1,0 +1,112 @@
+[gd_scene load_steps=22 format=3 uid="uid://d2ac8s1q00l8d"]
+
+[ext_resource type="Script" uid="uid://bj264nj22q63u" path="res://Assets/Scripts/Levels/boss_spell.gd" id="1_lo2vi"]
+[ext_resource type="Texture2D" uid="uid://byolho4884dws" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_1.png" id="1_mgewk"]
+[ext_resource type="Texture2D" uid="uid://bhj45jyqk2h7f" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_2.png" id="2_lo2vi"]
+[ext_resource type="Texture2D" uid="uid://cq0icqs3bil11" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_3.png" id="3_vtxsd"]
+[ext_resource type="Texture2D" uid="uid://dffhbkxpw8vsc" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_4.png" id="4_3yn05"]
+[ext_resource type="Texture2D" uid="uid://cjijlr4o2u6ma" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_5.png" id="5_s42so"]
+[ext_resource type="Texture2D" uid="uid://c3dcymbs2n10v" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_6.png" id="6_ddnes"]
+[ext_resource type="Texture2D" uid="uid://bi815jee6sm7t" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_7.png" id="7_c3jgl"]
+[ext_resource type="Texture2D" uid="uid://bv20khyq48hm" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_8.png" id="8_adflw"]
+[ext_resource type="Texture2D" uid="uid://caac2o3qobx3q" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_9.png" id="9_ljt0i"]
+[ext_resource type="Texture2D" uid="uid://ck4nfxocarvva" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_10.png" id="10_j5xdb"]
+[ext_resource type="Texture2D" uid="uid://4jykevaxdv27" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_11.png" id="11_pt4r2"]
+[ext_resource type="Texture2D" uid="uid://dycqggbtt2xgf" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_12.png" id="12_eeu17"]
+[ext_resource type="Texture2D" uid="uid://cu0ssm8cis0wq" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_13.png" id="13_0re8x"]
+[ext_resource type="Texture2D" uid="uid://dem6fjfc46slk" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_14.png" id="14_pd6vb"]
+[ext_resource type="Texture2D" uid="uid://dicbjxe41on4b" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_15.png" id="15_obq56"]
+[ext_resource type="Texture2D" uid="uid://du7i6qv0rvrt4" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_16.png" id="16_kqiio"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ph1ac"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_mgewk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_lo2vi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_vtxsd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_3yn05")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_s42so")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ddnes")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_c3jgl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_adflw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_ljt0i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_j5xdb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_pt4r2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_eeu17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_0re8x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_pd6vb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_obq56")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_kqiio")
+}],
+"loop": false,
+"name": &"spell",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mgewk"]
+size = Vector2(20, 48)
+
+[sub_resource type="Gradient" id="Gradient_mqbe8"]
+offsets = PackedFloat32Array(0, 0.7235577)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lo2vi"]
+gradient = SubResource("Gradient_mqbe8")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="BossSpell" type="Area2D"]
+z_index = 12
+scale = Vector2(2, 2)
+monitoring = false
+script = ExtResource("1_lo2vi")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2.5, -47.25)
+scale = Vector2(1, 1.016129)
+sprite_frames = SubResource("SpriteFrames_ph1ac")
+animation = &"spell"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, -24)
+shape = SubResource("RectangleShape2D_mgewk")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(1.9073486e-06, -29.5)
+scale = Vector2(0.75000006, 1)
+color = Color(0.72156864, 0.42352942, 1, 1)
+energy = 0.5
+texture = SubResource("GradientTexture2D_lo2vi")
+
+[node name="LifeTimer" type="Timer" parent="."]

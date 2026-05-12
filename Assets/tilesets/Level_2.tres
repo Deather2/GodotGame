@@ -221,7 +221,7 @@ texture_region_size = Vector2i(24, 24)
 
 [resource]
 tile_size = Vector2i(24, 24)
-physics_layer_0/collision_layer = 1
+physics_layer_0/collision_layer = 9
 custom_data_layer_0/name = "is_spike"
 custom_data_layer_0/type = 1
 sources/0 = SubResource("TileSetAtlasSource_aei17")
