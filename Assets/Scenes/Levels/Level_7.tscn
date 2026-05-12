@@ -1,6 +1,7 @@
-[gd_scene load_steps=26 format=3 uid="uid://cvi6ds45uokvr"]
+[gd_scene load_steps=27 format=3 uid="uid://cvi6ds45uokvr"]
 
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_aae5b"]
+[ext_resource type="Script" uid="uid://mul6ebt32fc6" path="res://Assets/Scripts/Levels/level_7.gd" id="1_hgy4a"]
 [ext_resource type="Texture2D" uid="uid://dqotditve6qxc" path="res://Assets/backgrounds/background_layer_2.png" id="2_imhva"]
 [ext_resource type="Texture2D" uid="uid://82e4b4xmqqlk" path="res://Assets/backgrounds/background_layer_3.png" id="3_awn5j"]
 [ext_resource type="TileSet" uid="uid://bdkqljvd7f35m" path="res://Assets/tilesets/Level_2.tres" id="4_pmsox"]
@@ -350,6 +351,7 @@ sources/1 = SubResource("TileSetAtlasSource_7ikdf")
 size = Vector2(10257, 64)
 
 [node name="Level7" type="Node2D"]
+script = ExtResource("1_hgy4a")
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
