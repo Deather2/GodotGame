@@ -548,13 +548,6 @@ scale = Vector2(2, 2)
 position = Vector2(7488, 377)
 scale = Vector2(2, 2)
 
-[node name="Checkpoint_2" parent="." groups=["checkpoints"] instance=ExtResource("8_awn5j")]
-position = Vector2(7800, 388)
-checkpoint_index = 2
-
-[node name="CollisionShape2D" parent="Checkpoint_2" index="0"]
-position = Vector2(1, -194)
-
 [node name="InteractionHint" parent="." instance=ExtResource("7_dtdno")]
 
 [node name="WinUi" parent="." instance=ExtResource("8_18727")]
@@ -600,5 +593,4 @@ bus = &"SFX"
 [editable path="Player"]
 [editable path="Checkpoint_0"]
 [editable path="Checkpoint_1"]
-[editable path="Checkpoint_2"]
 [editable path="WinUi"]
