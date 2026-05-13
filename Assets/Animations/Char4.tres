@@ -1,6 +1,34 @@
-[gd_resource type="SpriteFrames" load_steps=31 format=3 uid="uid://csbpbd8b0hxom"]
+[gd_resource type="SpriteFrames" load_steps=38 format=3 uid="uid://csbpbd8b0hxom"]
 
 [ext_resource type="Texture2D" uid="uid://bg64yxac715vd" path="res://Assets/characters/Characters Pack/Without Outline/WarriorWoman-Sheet_grounded_headcenter_v3_transparent.png" id="1_t22ct"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t22ct"]
+atlas = ExtResource("1_t22ct")
+region = Rect2(0, 704, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wlwxc"]
+atlas = ExtResource("1_t22ct")
+region = Rect2(80, 704, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uqg42"]
+atlas = ExtResource("1_t22ct")
+region = Rect2(160, 704, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_omk1t"]
+atlas = ExtResource("1_t22ct")
+region = Rect2(240, 704, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_roixx"]
+atlas = ExtResource("1_t22ct")
+region = Rect2(320, 704, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56h4r"]
+atlas = ExtResource("1_t22ct")
+region = Rect2(400, 704, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fpy7i"]
+atlas = ExtResource("1_t22ct")
+region = Rect2(560, 704, 80, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rmsk4"]
 atlas = ExtResource("1_t22ct")
@@ -120,6 +148,32 @@ region = Rect2(560, 192, 80, 64)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t22ct")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wlwxc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uqg42")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_omk1t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_roixx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_56h4r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fpy7i")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 10.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_rmsk4")
