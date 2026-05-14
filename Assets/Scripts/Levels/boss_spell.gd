@@ -10,6 +10,7 @@ var damage_active := false
 
 
 func _ready() -> void:
+	add_to_group("boss_spell")
 	monitoring = false
 
 	if collision != null:

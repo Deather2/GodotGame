@@ -37,6 +37,9 @@ var attack_damage_active := false
 @export var attack_damage_end_frame: int = 5
 @export var attack_damage: int = 1
 
+@export var attack_cooldown: float = 0.45
+var attack_timer := 0.0
+
 var attack_hit_shape_start_pos := Vector2.ZERO
 var attack_hit_box_start_pos := Vector2.ZERO
 
@@ -93,6 +96,7 @@ var _death_blink_accum := 0.0
 
 var camera_respawn_travel := false
 var cam_follow_offset := Vector2.ZERO
+var camera_follow_enabled := true
 
 var fall_respawn_active := false
 var death_respawn_active := false
@@ -213,7 +217,9 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
-	if can_attack and not is_attacking and Input.is_action_just_pressed("attack") and is_on_floor() and not crouching:
+	attack_timer = maxf(attack_timer - delta, 0.0)
+
+	if can_attack and not is_attacking and attack_timer <= 0.0 and Input.is_action_just_pressed("attack") and is_on_floor() and not crouching:
 		_start_attack()
 
 	if is_attacking:
@@ -594,7 +600,7 @@ func _process(_delta: float) -> void:
 	pass
 
 func _update_camera_follow() -> void:
-	if not camera_respawn_travel:
+	if camera_follow_enabled and not camera_respawn_travel:
 		cam.global_position = (global_position + cam_follow_offset).round()
 
 func _can_stand() -> bool:
@@ -691,8 +697,12 @@ func _die_respawn_with_camera_travel() -> void:
 
 	await get_tree().physics_frame
 
-	var target_cam_pos := (global_position + cam_follow_offset).round()
-	var need_cam_travel := cam.global_position.distance_to(target_cam_pos) > 1.0
+	var target_cam_pos := cam.global_position.round()
+	var need_cam_travel := false
+
+	if camera_follow_enabled:
+		target_cam_pos = (global_position + cam_follow_offset).round()
+		need_cam_travel = cam.global_position.distance_to(target_cam_pos) > 1.0
 
 	_set_player_visuals_visible(true)
 
@@ -783,16 +793,19 @@ func clear_super_jump() -> void:
 		super_jump_vfx.emitting = false
 
 func _get_respawn_anchor() -> Node2D:
-	var latest_checkpoint_point := _get_latest_active_checkpoint_respawn()
-	if latest_checkpoint_point != null:
-		return latest_checkpoint_point
-
 	var parent_node := get_parent()
 
 	if parent_node != null and parent_node.has_method("get_current_respawn_point"):
 		var point = parent_node.get_current_respawn_point()
 		if point != null:
 			return point
+
+	var latest_checkpoint_point := _get_latest_active_checkpoint_respawn()
+	if latest_checkpoint_point != null:
+		return latest_checkpoint_point
+
+	if parent_node == null:
+		return null
 
 	return parent_node.get_node_or_null("SpawnPoint") as Node2D
 
@@ -957,6 +970,7 @@ func _on_sprite_animation_finished() -> void:
 
 	is_attacking = false
 	_set_attack_damage_active(false)
+	attack_timer = attack_cooldown
 
 
 func enable_attack() -> void:
@@ -974,3 +988,6 @@ func _cancel_attack() -> void:
 
 	if attack_hit_box != null:
 		attack_hit_box.monitoring = false
+
+func set_camera_follow_enabled(enabled: bool) -> void:
+	camera_follow_enabled = enabled

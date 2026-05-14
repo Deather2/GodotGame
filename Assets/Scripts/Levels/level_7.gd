@@ -17,6 +17,13 @@ var level_music_base_volume := 1.0
 var finish_transition := false
 var death_count := 0
 
+var boss_intro_started := false
+var boss_fight_started := false
+var boss_fight_resetting := false
+var boss_fight_checkpoint_time := 0.0
+
+@export var boss_camera_move_time: float = 1.2
+
 @onready var level_timer_ui = get_node_or_null("LevelTimer")
 @onready var pause_menu: CanvasLayer = get_node_or_null("PauseMenu")
 @onready var level_music: AudioStreamPlayer = get_node_or_null("LevelMusicPlayer")
@@ -31,6 +38,12 @@ var death_count := 0
 
 @onready var spawn_point: Node2D = get_node_or_null("SpawnPoint")
 
+@onready var boss_intro_trigger: Area2D = get_node_or_null("BossIntroTrigger")
+@onready var boss_run_target: Marker2D = get_node_or_null("BossRunTarget")
+@onready var boss_camera_target: Marker2D = get_node_or_null("BossCameraTarget")
+@onready var boss_arena_left_wall: StaticBody2D = get_node_or_null("BossArenaLeftWall")
+@onready var boss: CharacterBody2D = get_node_or_null("BringerBoss")
+@onready var final_crystal: Area2D = get_node_or_null("Crystal")
 
 func _ready() -> void:
 	if GameState.preview_mode:
@@ -56,6 +69,15 @@ func _ready() -> void:
 	if player != null and not player.is_connected("died", Callable(self, "_on_player_died")):
 		player.connect("died", Callable(self, "_on_player_died"))
 
+	if boss_intro_trigger != null and not boss_intro_trigger.is_connected("body_entered", Callable(self, "_on_boss_intro_trigger_body_entered")):
+		boss_intro_trigger.connect("body_entered", Callable(self, "_on_boss_intro_trigger_body_entered"))
+
+	if boss_arena_left_wall != null:
+		var wall_shape := boss_arena_left_wall.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		if wall_shape != null:
+			wall_shape.disabled = true
+
+	_set_final_crystal_locked(true)
 
 func _setup_dark_level() -> void:
 	if world_dark != null:
@@ -125,7 +147,7 @@ func _start_level_music_cycle() -> void:
 			return
 
 
-func stop_level_music() -> void:
+func stop_level_music(fade_time: float = LEVEL_MUSIC_FADE_OUT) -> void:
 	if level_music == null:
 		return
 
@@ -142,7 +164,7 @@ func stop_level_music() -> void:
 
 	var tw := create_tween()
 	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	tw.tween_property(level_music, "volume_linear", 0.001, LEVEL_MUSIC_FADE_OUT) \
+	tw.tween_property(level_music, "volume_linear", 0.001, fade_time) \
 		.set_trans(Tween.TRANS_SINE) \
 		.set_ease(Tween.EASE_IN)
 
@@ -201,3 +223,186 @@ func _wait_while_paused() -> void:
 
 func _on_player_died() -> void:
 	death_count += 1
+
+	if boss_fight_started and not finished and not boss_fight_resetting:
+		_restart_boss_fight_after_death()
+
+func _on_boss_intro_trigger_body_entered(body: Node) -> void:
+	if boss_intro_started:
+		return
+
+	if not body.is_in_group("player"):
+		return
+
+	boss_intro_started = true
+	_start_boss_intro_sequence()
+
+
+func _start_boss_intro_sequence() -> void:
+	if player == null or boss_run_target == null or boss_camera_target == null:
+		return
+
+	finish_transition = true
+	timer_running = false
+	_set_level_timer_visible(false)
+
+	if boss_intro_trigger != null:
+		boss_intro_trigger.set_deferred("monitoring", false)
+
+	player.disable_attack()
+	player.cutscene_lock = false
+	player.start_finish_auto_run()
+
+	stop_level_music(4.0)
+
+	while player.global_position.x < boss_run_target.global_position.x:
+		await get_tree().physics_frame
+
+	player.stop_finish_auto_run()
+	player.velocity = Vector2.ZERO
+	player.cutscene_lock = true
+
+	await get_tree().physics_frame
+
+	player.set_camera_follow_enabled(false)
+
+	var cam := player.get_node_or_null("Camera2D") as Camera2D
+	if cam != null:
+		var tw := create_tween()
+		tw.tween_property(cam, "global_position", boss_camera_target.global_position.round(), boss_camera_move_time) \
+			.set_trans(Tween.TRANS_SINE) \
+			.set_ease(Tween.EASE_IN_OUT)
+
+		await tw.finished
+
+	_enable_boss_arena_wall()
+
+	await get_tree().create_timer(0.5).timeout
+
+	_start_boss_fight()
+
+
+func _enable_boss_arena_wall() -> void:
+	if boss_arena_left_wall == null:
+		return
+
+	var wall_shape := boss_arena_left_wall.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if wall_shape != null:
+		wall_shape.disabled = false
+
+
+func _start_boss_fight() -> void:
+	if boss_fight_started:
+		return
+
+	boss_fight_started = true
+	boss_fight_checkpoint_time = level_time
+	timer_running = true
+	_set_level_timer_visible(true)
+	finish_transition = false
+
+	if player != null:
+		player.cutscene_lock = false
+		player.enable_attack()
+
+	if boss != null and boss.has_method("start_fight"):
+		boss.start_fight()
+
+func _set_final_crystal_locked(value: bool) -> void:
+	if final_crystal == null:
+		return
+
+	if final_crystal.has_method("set_locked"):
+		final_crystal.set_locked(value)
+
+func get_current_respawn_point() -> Node2D:
+	if boss_intro_started or boss_fight_started:
+		return boss_run_target
+
+	return spawn_point
+
+func _restart_boss_fight_after_death() -> void:
+	boss_fight_resetting = true
+	timer_running = false
+	_set_level_timer_visible(false)
+
+	if player != null:
+		player.disable_attack()
+		player.cutscene_lock = true
+
+	await get_tree().create_timer(0.75, false).timeout
+	await SceneManager.fade_to_black(0.7)
+
+	if boss != null and boss.has_method("stop_fight"):
+		boss.stop_fight()
+
+	await _wait_until_player_respawn_finished()
+
+	_clear_boss_spells()
+
+	level_time = boss_fight_checkpoint_time
+
+	if level_timer_ui != null:
+		level_timer_ui.set_time_text(get_level_time_text())
+
+	if player != null:
+		player.set_camera_follow_enabled(false)
+
+		var cam := player.get_node_or_null("Camera2D") as Camera2D
+		if cam != null and boss_camera_target != null:
+			cam.global_position = boss_camera_target.global_position.round()
+
+	if boss != null and boss.has_method("reset_fight"):
+		boss.reset_fight()
+
+	await get_tree().create_timer(0.25, false).timeout
+	await SceneManager.fade_from_black(0.7)
+
+	await get_tree().create_timer(0.45, false).timeout
+
+	timer_running = true
+	_set_level_timer_visible(true)
+
+	if player != null:
+		player.cutscene_lock = false
+		player.enable_attack()
+
+	if boss != null and boss.has_method("start_fight"):
+		boss.start_fight()
+
+	boss_fight_resetting = false
+
+
+func _wait_until_player_respawn_finished() -> void:
+	if player == null:
+		return
+
+	while true:
+		var busy := false
+
+		if "is_dying" in player and player.is_dying:
+			busy = true
+
+		if "death_windup_active" in player and player.death_windup_active:
+			busy = true
+
+		if "death_respawn_active" in player and player.death_respawn_active:
+			busy = true
+
+		if "fall_respawn_active" in player and player.fall_respawn_active:
+			busy = true
+
+		if not busy:
+			return
+
+		await get_tree().physics_frame
+
+
+func _clear_boss_spells() -> void:
+	for spell in get_tree().get_nodes_in_group("boss_spell"):
+		if spell != null and is_instance_valid(spell) and is_ancestor_of(spell):
+			spell.queue_free()
+
+func _set_level_timer_visible(value: bool) -> void:
+	if level_timer_ui != null:
+		level_timer_ui.visible = value

@@ -12,6 +12,7 @@ enum State {
 }
 
 var waiting_for_death_cutscene := false
+@export var fight_active := false
 
 @export var max_hp: int = 10
 @export var move_speed: float = 65.0
@@ -51,10 +52,12 @@ var invulnerable := false
 
 var action_id := 0
 var melee_hit_shape_start_pos := Vector2.ZERO
+var start_global_position := Vector2.ZERO
 
 
 func _ready() -> void:
 	hp = max_hp
+	start_global_position = global_position
 	add_to_group("boss")
 
 	player = get_tree().get_first_node_in_group("player") as CharacterBody2D
@@ -71,6 +74,16 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if state == State.DEAD:
+		return
+
+	if not fight_active:
+		velocity.x = 0.0
+
+		if not is_on_floor():
+			velocity.y += gravity * delta
+
+		_play_anim("idle")
+		move_and_slide()
 		return
 
 	if waiting_for_death_cutscene:
@@ -336,3 +349,44 @@ func _spawn_spell_over_player() -> void:
 		player.global_position.x,
 		spell_spawn_global_y
 	)
+
+func start_fight() -> void:
+	fight_active = true
+
+func stop_fight() -> void:
+	fight_active = false
+	action_id += 1
+
+	state = State.IDLE
+	waiting_for_death_cutscene = false
+	invulnerable = false
+	melee_timer = 0.0
+	cast_timer = 0.0
+	velocity = Vector2.ZERO
+
+	if melee_hit_box != null:
+		melee_hit_box.set_deferred("monitoring", false)
+
+	_play_anim("idle")
+
+
+func reset_fight() -> void:
+	action_id += 1
+
+	hp = max_hp
+	state = State.IDLE
+	fight_active = false
+	waiting_for_death_cutscene = false
+	invulnerable = false
+	melee_timer = 0.0
+	cast_timer = 0.0
+	velocity = Vector2.ZERO
+	visible = true
+
+	global_position = start_global_position
+
+	if melee_hit_box != null:
+		melee_hit_box.set_deferred("monitoring", false)
+
+	_set_face_dir(-1)
+	_play_anim("idle")

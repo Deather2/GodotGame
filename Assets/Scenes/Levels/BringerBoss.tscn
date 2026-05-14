@@ -237,7 +237,7 @@ radius = 20.0
 height = 56.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3lawb"]
-size = Vector2(94, 61)
+size = Vector2(91, 61)
 
 [sub_resource type="Gradient" id="Gradient_mqbe8"]
 offsets = PackedFloat32Array(0, 0.7235577)
@@ -276,7 +276,7 @@ shape = SubResource("CapsuleShape2D_4yjyk")
 monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeHitBox"]
-position = Vector2(-53, -32.5)
+position = Vector2(-54.5, -32.5)
 shape = SubResource("RectangleShape2D_3lawb")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]

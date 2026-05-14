@@ -680,3 +680,22 @@ func consume_levels_menu_start_page() -> int:
 	var p := levels_menu_start_page
 	levels_menu_start_page = 0
 	return p
+
+func fade_to_black(duration: float = FADE_OUT_DUR) -> void:
+	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
+
+	var tw := create_tween()
+	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.tween_property(_fade, "modulate:a", 1.0, duration)
+
+	await tw.finished
+
+
+func fade_from_black(duration: float = FADE_IN_DUR) -> void:
+	var tw := create_tween()
+	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.tween_property(_fade, "modulate:a", 0.0, duration)
+
+	await tw.finished
+
+	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
