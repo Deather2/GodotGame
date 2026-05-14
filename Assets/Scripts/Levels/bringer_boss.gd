@@ -11,10 +11,13 @@ enum State {
 	DEAD
 }
 
+var waiting_for_death_cutscene := false
+
 @export var max_hp: int = 10
 @export var move_speed: float = 65.0
 
 @export var melee_range: float = 55.0
+@export var melee_vertical_tolerance: float = 40.0
 @export var cast_range: float = 210.0
 @export var stop_distance: float = 42.0
 
@@ -27,11 +30,12 @@ enum State {
 
 @export var boss_spell_scene: PackedScene
 @export var spell_spawn_delay: float = 0.55
-@export var spell_spawn_y_offset: float = -80.0
+@export var spell_spawn_global_y: float = 0.0
 
 @onready var sprite_pivot: Node2D = $SpritePivot
 @onready var sprite: AnimatedSprite2D = $SpritePivot/AnimatedSprite2D
 @onready var melee_hit_box: Area2D = $MeleeHitBox
+@onready var melee_hit_shape: CollisionShape2D = $MeleeHitBox/CollisionShape2D
 @onready var hurt_box: Area2D = $HurtBox
 
 var gravity: float = float(ProjectSettings.get_setting("physics/2d/default_gravity"))
@@ -46,7 +50,7 @@ var cast_timer := 0.0
 var invulnerable := false
 
 var action_id := 0
-var melee_hitbox_start_pos := Vector2.ZERO
+var melee_hit_shape_start_pos := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -55,7 +59,7 @@ func _ready() -> void:
 
 	player = get_tree().get_first_node_in_group("player") as CharacterBody2D
 
-	melee_hitbox_start_pos = melee_hit_box.position
+	melee_hit_shape_start_pos = melee_hit_shape.position
 	melee_hit_box.monitoring = false
 
 	if not melee_hit_box.is_connected("body_entered", Callable(self, "_on_melee_hit_box_body_entered")):
@@ -67,6 +71,15 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if state == State.DEAD:
+		return
+
+	if waiting_for_death_cutscene:
+		velocity.x = 0.0
+
+		if not is_on_floor():
+			velocity.y += gravity * delta
+
+		move_and_slide()
 		return
 
 	if not is_on_floor():
@@ -87,13 +100,14 @@ func _physics_process(delta: float) -> void:
 
 	var dx := player.global_position.x - global_position.x
 	var distance := absf(dx)
+	var vertical_distance := absf(player.global_position.y - global_position.y)
 
 	if dx < 0.0:
 		_set_face_dir(-1)
 	elif dx > 0.0:
 		_set_face_dir(1)
 
-	if distance <= melee_range and melee_timer <= 0.0:
+	if distance <= melee_range and vertical_distance <= melee_vertical_tolerance and melee_timer <= 0.0:
 		_start_melee_attack()
 	elif distance >= cast_range and cast_timer <= 0.0:
 		_start_cast_attack()
@@ -189,16 +203,40 @@ func take_damage(amount: int = 1) -> void:
 	if state == State.DEAD:
 		return
 
+	if waiting_for_death_cutscene:
+		return
+
 	if invulnerable:
 		return
 
 	hp -= amount
 
 	if hp <= 0:
-		_die()
+		hp = 0
+		_start_final_hurt()
 	else:
 		_start_hurt()
 
+func _start_final_hurt() -> void:
+	state = State.HURT
+	action_id += 1
+
+	waiting_for_death_cutscene = true
+	invulnerable = true
+	melee_hit_box.monitoring = false
+	velocity.x = 0.0
+
+	_play_anim("hurt")
+
+	await sprite.animation_finished
+
+	if state != State.HURT:
+		return
+
+	state = State.IDLE
+	_play_anim("idle")
+
+	defeated.emit()
 
 func _start_hurt() -> void:
 	state = State.HURT
@@ -230,6 +268,7 @@ func _die() -> void:
 	state = State.DEAD
 	action_id += 1
 
+	waiting_for_death_cutscene = false
 	melee_hit_box.monitoring = false
 	velocity = Vector2.ZERO
 
@@ -237,8 +276,13 @@ func _die() -> void:
 
 	await sprite.animation_finished
 
-	defeated.emit()
+	visible = false
 
+func play_death() -> void:
+	if state == State.DEAD:
+		return
+
+	_die()
 
 func _set_face_dir(dir: int) -> void:
 	face_dir = dir
@@ -248,8 +292,8 @@ func _set_face_dir(dir: int) -> void:
 	else:
 		sprite_pivot.scale.x = -1.0
 
-	melee_hit_box.position.x = absf(melee_hitbox_start_pos.x) * face_dir
-	melee_hit_box.position.y = melee_hitbox_start_pos.y
+	melee_hit_shape.position.x = absf(melee_hit_shape_start_pos.x) * face_dir
+	melee_hit_shape.position.y = melee_hit_shape_start_pos.y
 
 
 func _play_anim(anim_name: String) -> void:
@@ -290,5 +334,5 @@ func _spawn_spell_over_player() -> void:
 
 	spell.global_position = Vector2(
 		player.global_position.x,
-		player.global_position.y + spell_spawn_y_offset
+		spell_spawn_global_y
 	)

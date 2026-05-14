@@ -554,8 +554,9 @@ position = Vector2(8308, 532)
 scale = Vector2(1.5, 1.5)
 melee_range = 120.0
 stop_distance = 70.0
-melee_cooldown = 2.0
+melee_cooldown = 3.0
 cast_cooldown = 4.0
+spell_spawn_global_y = 530.0
 
 [node name="InteractionHint" parent="." instance=ExtResource("7_dtdno")]
 

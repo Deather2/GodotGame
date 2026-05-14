@@ -26,6 +26,20 @@ signal died
 
 @onready var player_light: PointLight2D = $PointLight2D
 
+@onready var attack_hit_box: Area2D = $AttackHitBox
+@onready var attack_hit_shape: CollisionShape2D = $AttackHitBox/CollisionShape2D
+
+var can_attack := false
+var is_attacking := false
+var attack_damage_active := false
+
+@export var attack_damage_start_frame: int = 3
+@export var attack_damage_end_frame: int = 5
+@export var attack_damage: int = 1
+
+var attack_hit_shape_start_pos := Vector2.ZERO
+var attack_hit_box_start_pos := Vector2.ZERO
+
 var finish_auto_run := false
 const FINISH_AUTO_RUN_SPEED := 220.0
 
@@ -119,6 +133,22 @@ func _ready() -> void:
 	if super_speed_vfx != null:
 		super_speed_vfx.emitting = false
 
+	if attack_hit_box != null:
+		attack_hit_box_start_pos = attack_hit_box.position
+		attack_hit_shape_start_pos = attack_hit_shape.position
+		attack_hit_box.monitoring = false
+
+		if not attack_hit_box.body_entered.is_connected(_on_attack_hit_box_body_entered):
+			attack_hit_box.body_entered.connect(_on_attack_hit_box_body_entered)
+
+	if sprite != null:
+		if not sprite.frame_changed.is_connected(_on_sprite_frame_changed):
+			sprite.frame_changed.connect(_on_sprite_frame_changed)
+
+		if not sprite.animation_finished.is_connected(_on_sprite_animation_finished):
+			sprite.animation_finished.connect(_on_sprite_animation_finished)
+
+
 func _apply_selected() -> void:
 	if db == null:
 		return
@@ -183,6 +213,27 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
+	if can_attack and not is_attacking and Input.is_action_just_pressed("attack") and is_on_floor() and not crouching:
+		_start_attack()
+
+	if is_attacking:
+		velocity.x = 0.0
+
+		if not is_on_floor():
+			velocity.y += gravity * delta
+
+		sprite.flip_h = face_dir < 0
+		_update_attack_hitbox_side()
+
+		move_and_slide()
+
+		if _check_spike_collision():
+			return
+
+		_update_slope_tilt()
+		_update_camera_follow()
+		return
+
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
@@ -234,6 +285,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0.0, current_move_speed)
 
 	sprite.flip_h = face_dir < 0
+	_update_attack_hitbox_side()
 
 	move_and_slide()
 
@@ -303,6 +355,10 @@ func _update_slope_tilt() -> void:
 
 
 func _update_anim() -> void:
+
+	if is_attacking:
+		return
+
 	if sprite.sprite_frames == null:
 		return
 
@@ -351,6 +407,7 @@ func die() -> void:
 
 	clear_super_jump()
 	clear_super_speed()
+	_cancel_attack()
 	died.emit()
 
 	death_windup_active = true
@@ -413,6 +470,7 @@ func fall_death() -> void:
 
 	clear_super_jump()
 	clear_super_speed()
+	_cancel_attack()
 	died.emit()
 
 	fall_respawn_active = true
@@ -510,6 +568,7 @@ func respawn() -> void:
 	crouching = false
 	_was_crouching = false
 	jump_anim_playing = false
+	_cancel_attack()
 	sprite.visible = true
 	sprite_pivot.rotation = 0.0
 
@@ -613,6 +672,7 @@ func _die_respawn_with_camera_travel() -> void:
 	crouching = false
 	_was_crouching = false
 	jump_anim_playing = false
+	_cancel_attack()
 
 	_apply_crouch_collision(false)
 
@@ -821,3 +881,96 @@ func _setup_super_speed_vfx() -> void:
 	super_speed_vfx.local_coords = false
 	super_speed_vfx.position = Vector2(0, 4)
 	super_speed_vfx.emitting = false
+
+func _start_attack() -> void:
+	if sprite.sprite_frames == null:
+		return
+
+	if not sprite.sprite_frames.has_animation("attack"):
+		return
+
+	is_attacking = true
+	attack_damage_active = false
+	velocity.x = 0.0
+
+	_update_attack_hitbox_side()
+
+	attack_hit_box.monitoring = false
+	sprite.play("attack")
+
+
+func _update_attack_hitbox_side() -> void:
+	if attack_hit_box == null or attack_hit_shape == null:
+		return
+
+	attack_hit_box.position.x = absf(attack_hit_box_start_pos.x) * face_dir
+	attack_hit_box.position.y = attack_hit_box_start_pos.y
+
+	attack_hit_shape.position.x = absf(attack_hit_shape_start_pos.x) * face_dir
+	attack_hit_shape.position.y = attack_hit_shape_start_pos.y
+
+
+func _on_sprite_frame_changed() -> void:
+	if not is_attacking:
+		return
+
+	if sprite.animation != "attack":
+		return
+
+	var current_frame := sprite.frame + 1
+	var should_damage := current_frame >= attack_damage_start_frame and current_frame <= attack_damage_end_frame
+
+	if should_damage and not attack_damage_active:
+		_set_attack_damage_active(true)
+		_damage_overlapping_attack_bodies()
+	elif not should_damage and attack_damage_active:
+		_set_attack_damage_active(false)
+
+
+func _set_attack_damage_active(active: bool) -> void:
+	attack_damage_active = active
+
+	if attack_hit_box != null:
+		attack_hit_box.monitoring = active
+
+
+func _damage_overlapping_attack_bodies() -> void:
+	if attack_hit_box == null:
+		return
+
+	for body in attack_hit_box.get_overlapping_bodies():
+		if body.has_method("take_damage"):
+			body.take_damage(attack_damage)
+
+
+func _on_attack_hit_box_body_entered(body: Node) -> void:
+	if not attack_damage_active:
+		return
+
+	if body.has_method("take_damage"):
+		body.take_damage(attack_damage)
+
+
+func _on_sprite_animation_finished() -> void:
+	if sprite.animation != "attack":
+		return
+
+	is_attacking = false
+	_set_attack_damage_active(false)
+
+
+func enable_attack() -> void:
+	can_attack = true
+
+
+func disable_attack() -> void:
+	can_attack = false
+	is_attacking = false
+	_set_attack_damage_active(false)
+
+func _cancel_attack() -> void:
+	is_attacking = false
+	attack_damage_active = false
+
+	if attack_hit_box != null:
+		attack_hit_box.monitoring = false
