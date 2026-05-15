@@ -44,6 +44,7 @@ var boss_fight_checkpoint_time := 0.0
 @onready var boss_arena_left_wall: StaticBody2D = get_node_or_null("BossArenaLeftWall")
 @onready var boss: CharacterBody2D = get_node_or_null("BringerBoss")
 @onready var final_crystal: Area2D = get_node_or_null("Crystal")
+@onready var boss_hp_ui: CanvasLayer = get_node_or_null("BossHpUi")
 
 func _ready() -> void:
 	if GameState.preview_mode:
@@ -71,6 +72,12 @@ func _ready() -> void:
 
 	if boss_intro_trigger != null and not boss_intro_trigger.is_connected("body_entered", Callable(self, "_on_boss_intro_trigger_body_entered")):
 		boss_intro_trigger.connect("body_entered", Callable(self, "_on_boss_intro_trigger_body_entered"))
+
+	if boss != null and boss.has_signal("hp_changed") and not boss.is_connected("hp_changed", Callable(self, "_on_boss_hp_changed")):
+		boss.connect("hp_changed", Callable(self, "_on_boss_hp_changed"))
+
+	if boss != null and boss.has_signal("defeated") and not boss.is_connected("defeated", Callable(self, "_on_boss_defeated")):
+		boss.connect("defeated", Callable(self, "_on_boss_defeated"))
 
 	if boss_arena_left_wall != null:
 		var wall_shape := boss_arena_left_wall.get_node_or_null("CollisionShape2D") as CollisionShape2D
@@ -305,6 +312,10 @@ func _start_boss_fight() -> void:
 		player.cutscene_lock = false
 		player.enable_attack()
 
+	if boss_hp_ui != null and boss != null:
+		if boss_hp_ui.has_method("setup") and boss.has_method("get_max_hp") and boss.has_method("get_hp"):
+			boss_hp_ui.setup(boss.get_max_hp(), boss.get_hp())
+
 	if boss != null and boss.has_method("start_fight"):
 		boss.start_fight()
 
@@ -325,6 +336,8 @@ func _restart_boss_fight_after_death() -> void:
 	boss_fight_resetting = true
 	timer_running = false
 	_set_level_timer_visible(false)
+	if boss_hp_ui != null and boss_hp_ui.has_method("hide_ui"):
+		boss_hp_ui.hide_ui()
 
 	if player != null:
 		player.disable_attack()
@@ -362,6 +375,9 @@ func _restart_boss_fight_after_death() -> void:
 
 	timer_running = true
 	_set_level_timer_visible(true)
+	if boss_hp_ui != null and boss != null:
+		if boss_hp_ui.has_method("setup") and boss.has_method("get_max_hp") and boss.has_method("get_hp"):
+			boss_hp_ui.setup(boss.get_max_hp(), boss.get_hp())
 
 	if player != null:
 		player.cutscene_lock = false
@@ -406,3 +422,12 @@ func _clear_boss_spells() -> void:
 func _set_level_timer_visible(value: bool) -> void:
 	if level_timer_ui != null:
 		level_timer_ui.visible = value
+
+func _on_boss_hp_changed(max_hp: int, current_hp: int) -> void:
+	if boss_hp_ui != null and boss_hp_ui.has_method("update_hp"):
+		boss_hp_ui.update_hp(max_hp, current_hp)
+
+
+func _on_boss_defeated() -> void:
+	if boss_hp_ui != null and boss_hp_ui.has_method("hide_ui"):
+		boss_hp_ui.hide_ui()

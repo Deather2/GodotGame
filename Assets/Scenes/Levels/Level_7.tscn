@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://cvi6ds45uokvr"]
+[gd_scene load_steps=32 format=3 uid="uid://cvi6ds45uokvr"]
 
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_aae5b"]
 [ext_resource type="Script" uid="uid://mul6ebt32fc6" path="res://Assets/Scripts/Levels/level_7.gd" id="1_hgy4a"]
@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://3k71180pq1f5" path="res://Assets/Scenes/Levels/BreakablePlatform.tscn" id="14_cagm5"]
 [ext_resource type="AudioStream" uid="uid://c44jo8bvbp2p7" path="res://Assets/Sounds/SFX/Level/shine.mp3" id="14_cmrno"]
 [ext_resource type="PackedScene" uid="uid://b0h36cfohtngm" path="res://Assets/Scenes/Levels/BringerBoss.tscn" id="16_2tego"]
+[ext_resource type="PackedScene" uid="uid://cryq731ovshs3" path="res://Assets/Scenes/UI/BossHpUi.tscn" id="17_6d6jn"]
 [ext_resource type="PackedScene" uid="uid://d1hufwe84g7pp" path="res://Assets/Scenes/Levels/Crystal.tscn" id="17_b4gsw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7ikdf"]
@@ -586,6 +587,8 @@ melee_cooldown = 1.4
 cast_cooldown = 4.0
 hurt_invulnerable_time = 0.8
 spell_spawn_global_y = 530.0
+
+[node name="BossHpUi" parent="." instance=ExtResource("17_6d6jn")]
 
 [node name="Crystal" parent="." instance=ExtResource("17_b4gsw")]
 position = Vector2(9744, 475)

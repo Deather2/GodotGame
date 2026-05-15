@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 signal defeated
+signal hp_changed(max_hp: int, current_hp: int)
 
 enum State {
 	IDLE,
@@ -223,9 +224,10 @@ func take_damage(amount: int = 1) -> void:
 		return
 
 	hp -= amount
+	hp = max(hp, 0)
+	hp_changed.emit(max_hp, hp)
 
 	if hp <= 0:
-		hp = 0
 		_start_final_hurt()
 	else:
 		_start_hurt()
@@ -374,6 +376,7 @@ func reset_fight() -> void:
 	action_id += 1
 
 	hp = max_hp
+	hp_changed.emit(max_hp, hp)
 	state = State.IDLE
 	fight_active = false
 	waiting_for_death_cutscene = false
@@ -390,3 +393,10 @@ func reset_fight() -> void:
 
 	_set_face_dir(-1)
 	_play_anim("idle")
+
+func get_max_hp() -> int:
+	return max_hp
+
+
+func get_hp() -> int:
+	return hp
