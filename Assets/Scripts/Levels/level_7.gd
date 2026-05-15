@@ -24,6 +24,9 @@ var boss_fight_checkpoint_time := 0.0
 
 @export var boss_camera_move_time: float = 1.2
 
+@export var world_light_restore_time: float = 4.0
+@export var player_light_fade_time: float = 1.8
+
 @onready var level_timer_ui = get_node_or_null("LevelTimer")
 @onready var pause_menu: CanvasLayer = get_node_or_null("PauseMenu")
 @onready var level_music: AudioStreamPlayer = get_node_or_null("LevelMusicPlayer")
@@ -79,6 +82,9 @@ func _ready() -> void:
 
 	if boss != null and boss.has_signal("defeated") and not boss.is_connected("defeated", Callable(self, "_on_boss_defeated")):
 		boss.connect("defeated", Callable(self, "_on_boss_defeated"))
+
+	if final_crystal != null and final_crystal.has_signal("collected") and not final_crystal.is_connected("collected", Callable(self, "_on_final_crystal_collected")):
+		final_crystal.connect("collected", Callable(self, "_on_final_crystal_collected"))
 
 	if boss_arena_left_wall != null:
 		var wall_shape := boss_arena_left_wall.get_node_or_null("CollisionShape2D") as CollisionShape2D
@@ -454,6 +460,10 @@ func _on_boss_defeated() -> void:
 
 	_set_final_crystal_locked(false)
 
+	boss_fight_started = false
+	timer_running = true
+	_set_level_timer_visible(true)
+
 	if player != null:
 		player.cutscene_lock = false
 
@@ -492,3 +502,100 @@ func _play_after_boss_dialogue() -> void:
 			"text": "Kā tas iespējams... Kā mirstīgais spēja mani uzva..."
 		}
 	])
+
+func _on_final_crystal_collected() -> void:
+	if finished:
+		return
+
+	finished = true
+	finish_transition = true
+	timer_running = false
+	_set_level_timer_visible(false)
+
+	if player != null:
+		player.disable_attack()
+		player.cutscene_lock = true
+		player.velocity = Vector2.ZERO
+
+	await _restore_world_light_fx()
+
+	await get_tree().create_timer(0.8, false).timeout
+
+	save_win_result()
+	show_win_ui()
+
+func _restore_world_light_fx() -> void:
+	var player_light := get_node_or_null("Player/PointLight2D") as PointLight2D
+
+	if light_on_sound != null:
+		light_on_sound.play()
+
+	var tw := create_tween()
+	tw.set_parallel(true)
+
+	if player_light != null:
+		tw.tween_property(player_light, "energy", 0.0, player_light_fade_time) \
+			.set_trans(Tween.TRANS_SINE) \
+			.set_ease(Tween.EASE_IN_OUT)
+
+	if world_dark != null:
+		world_dark.visible = true
+		tw.tween_property(world_dark, "color", Color(1, 1, 1, 1), world_light_restore_time) \
+			.set_trans(Tween.TRANS_SINE) \
+			.set_ease(Tween.EASE_IN_OUT)
+
+	if parallax_dark != null:
+		parallax_dark.visible = true
+		tw.tween_property(parallax_dark, "color", Color(1, 1, 1, 1), world_light_restore_time) \
+			.set_trans(Tween.TRANS_SINE) \
+			.set_ease(Tween.EASE_IN_OUT)
+
+	await tw.finished
+
+	if world_dark != null:
+		world_dark.visible = false
+
+	if parallax_dark != null:
+		parallax_dark.visible = false
+
+	if player_light != null:
+		player_light.enabled = false
+
+func get_earned_stars() -> int:
+	var max_by_deaths := 3
+
+	if death_count == 1:
+		max_by_deaths = 2
+	elif death_count >= 2:
+		max_by_deaths = 1
+
+	var stars_by_time := 1
+
+	if level_time <= 80.0:
+		stars_by_time = 3
+	elif level_time <= 110.0:
+		stars_by_time = 2
+
+	return min(max_by_deaths, stars_by_time)
+
+
+func save_win_result() -> void:
+	GameState.save_level_result(LEVEL_INDEX, get_earned_stars(), level_time)
+
+
+func show_win_ui() -> void:
+	var win_ui := get_node_or_null("WinUi")
+	if win_ui == null:
+		win_ui = get_node_or_null("WinUI")
+
+	if win_ui == null:
+		return
+
+	GameState.show_cursor()
+	win_ui.setup_result(get_earned_stars(), get_level_time_text(), LEVEL_INDEX)
+
+	var death_label := win_ui.get_node_or_null("Panel/VBox/DeathLabel") as Label
+	if death_label != null:
+		death_label.text = "Nāves: %d" % death_count
+
+	win_ui.show_with_anim()

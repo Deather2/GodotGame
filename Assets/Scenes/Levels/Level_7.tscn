@@ -717,7 +717,11 @@ scale = Vector2(1.3, 1.3)
 [node name="InteractionHint" parent="." instance=ExtResource("7_dtdno")]
 
 [node name="WinUi" parent="." instance=ExtResource("8_18727")]
+layer = 101
 visible = false
+
+[node name="Panel" parent="WinUi" index="1"]
+offset_bottom = 156.0
 
 [node name="VBox" parent="WinUi/Panel" index="0"]
 offset_left = -117.0

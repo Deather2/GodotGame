@@ -24,7 +24,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if locked:
-		if interaction_hint != null:
+		if interaction_hint != null and player_in_range:
 			interaction_hint.visible = false
 		return
 
@@ -105,5 +105,5 @@ func _on_animation_finished() -> void:
 func set_locked(value: bool) -> void:
 	locked = value
 
-	if locked and interaction_hint != null:
+	if locked and interaction_hint != null and player_in_range:
 		interaction_hint.visible = false
