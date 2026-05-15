@@ -5,6 +5,7 @@
 
 [node name="BossHpUi" type="CanvasLayer"]
 layer = 30
+visible = false
 script = ExtResource("1_jmlkj")
 
 [node name="Root" type="Control" parent="."]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://cvi6ds45uokvr"]
+[gd_scene load_steps=35 format=3 uid="uid://cvi6ds45uokvr"]
 
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_aae5b"]
 [ext_resource type="Script" uid="uid://mul6ebt32fc6" path="res://Assets/Scripts/Levels/level_7.gd" id="1_hgy4a"]
@@ -26,6 +26,8 @@
 [ext_resource type="PackedScene" uid="uid://b0h36cfohtngm" path="res://Assets/Scenes/Levels/BringerBoss.tscn" id="16_2tego"]
 [ext_resource type="PackedScene" uid="uid://cryq731ovshs3" path="res://Assets/Scenes/UI/BossHpUi.tscn" id="17_6d6jn"]
 [ext_resource type="PackedScene" uid="uid://d1hufwe84g7pp" path="res://Assets/Scenes/Levels/Crystal.tscn" id="17_b4gsw"]
+[ext_resource type="Script" uid="uid://b4vjyx2m6qwsr" path="res://Assets/Scripts/Levels/boss_dialogue.gd" id="18_7ikdf"]
+[ext_resource type="AudioStream" uid="uid://drfajfx1w8b4x" path="res://Assets/Sounds/SFX/Level/textBlip.mp3" id="20_ihmah"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7ikdf"]
 texture = ExtResource("5_lrteq")
@@ -359,6 +361,22 @@ size = Vector2(20, 528)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cmrno"]
 size = Vector2(48, 528)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ihmah"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.9490196, 0.9490196, 0.9490196, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [node name="Level7" type="Node2D"]
 script = ExtResource("1_hgy4a")
 
@@ -581,6 +599,7 @@ position = Vector2(9264, 432)
 [node name="BringerBoss" parent="." instance=ExtResource("16_2tego")]
 position = Vector2(9600, 532)
 scale = Vector2(1.5, 1.5)
+max_hp = 2
 melee_range = 120.0
 stop_distance = 70.0
 melee_cooldown = 1.4
@@ -589,6 +608,107 @@ hurt_invulnerable_time = 0.8
 spell_spawn_global_y = 530.0
 
 [node name="BossHpUi" parent="." instance=ExtResource("17_6d6jn")]
+
+[node name="BossDialogueUi" type="CanvasLayer" parent="."]
+layer = 50
+
+[node name="Root" type="Control" parent="BossDialogueUi"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BossDialogue" type="Control" parent="BossDialogueUi/Root"]
+visible = false
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -180.0
+offset_right = 20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("18_7ikdf")
+
+[node name="TypeSound" type="AudioStreamPlayer" parent="BossDialogueUi/Root/BossDialogue"]
+stream = ExtResource("20_ihmah")
+volume_db = 7.0
+
+[node name="Bubble" type="Panel" parent="BossDialogueUi/Root/BossDialogue"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ihmah")
+
+[node name="Pad" type="MarginContainer" parent="BossDialogueUi/Root/BossDialogue/Bubble"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Content" type="Control" parent="BossDialogueUi/Root/BossDialogue/Bubble/Pad"]
+layout_mode = 2
+
+[node name="SpeakerLabel" type="Label" parent="BossDialogueUi/Root/BossDialogue/Bubble/Pad/Content"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 160.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.2)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("9_cagm5")
+theme_override_font_sizes/font_size = 32
+text = "Apokalipse"
+
+[node name="TextLabel" type="Label" parent="BossDialogueUi/Root/BossDialogue/Bubble/Pad/Content"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 50.0
+offset_right = 160.0
+offset_bottom = 77.0
+theme_override_colors/font_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.2)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("9_cagm5")
+theme_override_font_sizes/font_size = 26
+autowrap_mode = 3
+
+[node name="HintLabel" type="Label" parent="BossDialogueUi/Root/BossDialogue/Bubble/Pad/Content"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 83.0
+offset_right = 160.0
+offset_bottom = 158.0
+theme_override_colors/font_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.2)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("9_cagm5")
+theme_override_font_sizes/font_size = 22
+text = "Nospied jebkuru pogu, lai turpinātu..."
+vertical_alignment = 2
+autowrap_mode = 3
 
 [node name="Crystal" parent="." instance=ExtResource("17_b4gsw")]
 position = Vector2(9744, 475)
@@ -622,6 +742,7 @@ vertical_alignment = 1
 [node name="LevelTimer" parent="." instance=ExtResource("10_hgy4a")]
 
 [node name="PauseMenu" parent="." instance=ExtResource("11_2tego")]
+layer = 100
 visible = false
 
 [node name="LevelMusicPlayer" type="AudioStreamPlayer" parent="."]

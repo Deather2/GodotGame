@@ -45,6 +45,7 @@ var boss_fight_checkpoint_time := 0.0
 @onready var boss: CharacterBody2D = get_node_or_null("BringerBoss")
 @onready var final_crystal: Area2D = get_node_or_null("Crystal")
 @onready var boss_hp_ui: CanvasLayer = get_node_or_null("BossHpUi")
+@onready var boss_dialogue: Control = get_node_or_null("BossDialogueUi/Root/BossDialogue")
 
 func _ready() -> void:
 	if GameState.preview_mode:
@@ -284,7 +285,7 @@ func _start_boss_intro_sequence() -> void:
 
 	_enable_boss_arena_wall()
 
-	await get_tree().create_timer(0.5).timeout
+	await _play_pre_boss_dialogue()
 
 	_start_boss_fight()
 
@@ -429,5 +430,65 @@ func _on_boss_hp_changed(max_hp: int, current_hp: int) -> void:
 
 
 func _on_boss_defeated() -> void:
+	if finished:
+		return
+
+	finish_transition = true
+	timer_running = false
+	_set_level_timer_visible(false)
+
 	if boss_hp_ui != null and boss_hp_ui.has_method("hide_ui"):
 		boss_hp_ui.hide_ui()
+
+	if player != null:
+		player.disable_attack()
+		player.cutscene_lock = true
+		player.velocity = Vector2.ZERO
+
+	await _play_after_boss_dialogue()
+
+	if boss != null and boss.has_method("play_death"):
+		await boss.play_death()
+
+	await get_tree().create_timer(0.5, false).timeout
+
+	_set_final_crystal_locked(false)
+
+	if player != null:
+		player.cutscene_lock = false
+
+	finish_transition = false
+
+func _play_pre_boss_dialogue() -> void:
+	if boss_dialogue == null or not boss_dialogue.has_method("play_sequence"):
+		return
+
+	await boss_dialogue.play_sequence([
+		{
+			"speaker": "Varonis",
+			"text": "Kas tu esi? Ko tu šeit dari?"
+		},
+		{
+			"speaker": "Apokalipse",
+			"text": "Es esmu Apokalipse. Es sargāju pēdējo kristālu."
+		},
+		{
+			"speaker": "Varonis",
+			"text": "Es tevi apturēšu un atjaunošu visuma līdzsvaru."
+		},
+		{
+			"speaker": "Apokalipse",
+			"text": "Tad parādi, ko spēj, mirstīgais."
+		}
+	])
+
+func _play_after_boss_dialogue() -> void:
+	if boss_dialogue == null or not boss_dialogue.has_method("play_sequence"):
+		return
+
+	await boss_dialogue.play_sequence([
+		{
+			"speaker": "Apokalipse",
+			"text": "Kā tas iespējams... Kā mirstīgais spēja mani uzva..."
+		}
+	])

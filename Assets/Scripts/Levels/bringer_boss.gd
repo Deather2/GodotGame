@@ -297,7 +297,7 @@ func play_death() -> void:
 	if state == State.DEAD:
 		return
 
-	_die()
+	await _die()
 
 func _set_face_dir(dir: int) -> void:
 	face_dir = dir
