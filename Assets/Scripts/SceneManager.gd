@@ -98,6 +98,9 @@ func _adopt_initial_scene() -> void:
 	_stack.append(_current)
 	_mark_path_opened(cs.scene_file_path)
 
+	if not _is_level_path(cs.scene_file_path):
+		MusicManager.play_menu_music_delayed(0.5)
+
 
 func goto_main_menu(tr: int = Transition.FADE) -> void:
 	await _go(MAIN_MENU, tr, _is_current_level_scene())

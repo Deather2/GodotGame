@@ -421,7 +421,7 @@ limit_bottom = 648
 [node name="PointLight2D" parent="Player" index="7"]
 enabled = false
 range_layer_min = -100
-texture_scale = 1.4
+texture_scale = 1.6
 
 [node name="JumpSound" parent="Player" index="8"]
 stream = null

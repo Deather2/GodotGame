@@ -8,5 +8,4 @@ script = ExtResource("1_p8uen")
 
 [node name="MenuMusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_p8uen")
-autoplay = true
 bus = &"MenuMusic"

@@ -209,34 +209,34 @@ func _play_crystal_light_gain_fx() -> void:
 	if light == null:
 		return
 
-	light.texture_scale = 1.4
+	light.texture_scale = 1.6
 
 	await get_tree().create_timer(0.1).timeout
 
 	if blink_off_sound != null:
 		blink_off_sound.play()
-	light.texture_scale = 1.5
+	light.texture_scale = 1.75
 	await get_tree().create_timer(0.28).timeout
 
 	if blink_off_sound != null:
 		blink_off_sound.play()
-	light.texture_scale = 1.4
+	light.texture_scale = 1.6
 	await get_tree().create_timer(0.28).timeout
 
 	if blink_off_sound != null:
 		blink_off_sound.play()
-	light.texture_scale = 1.5
+	light.texture_scale = 1.75
 	await get_tree().create_timer(0.28).timeout
 
 	if blink_off_sound != null:
 		blink_off_sound.play()
-	light.texture_scale = 1.4
+	light.texture_scale = 1.6
 	await get_tree().create_timer(0.35).timeout
 
 	if light_on_sound != null:
 		light_on_sound.play()
 
-	light.texture_scale = 1.5
+	light.texture_scale = 1.75
 
 
 func get_level_time_text() -> String:
