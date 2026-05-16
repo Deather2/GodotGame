@@ -12,6 +12,7 @@ extends CanvasLayer
 @onready var credits_text: Label = $Root/CreditsText
 @onready var thanks_label: Label = $Root/ThanksLabel
 
+@export var bg_scroll_speed := 10.0
 
 func _ready() -> void:
 	visible = false
@@ -49,11 +50,20 @@ func show_black_bg() -> void:
 
 func play_credits() -> void:
 	visible = true
+	_set_bg_scroll_offset(0.0)
 
 	if black_bg != null:
 		black_bg.visible = true
 
 	await get_tree().process_frame
+
+	var bg_tw := create_tween()
+	bg_tw.tween_method(
+		_set_bg_scroll_offset,
+		0.0,
+		bg_scroll_speed * (credits_scroll_time + thanks_move_time + thanks_hold_time),
+		credits_scroll_time + thanks_move_time + thanks_hold_time
+	).set_trans(Tween.TRANS_LINEAR)
 
 	var vp := get_viewport().get_visible_rect().size
 
@@ -98,3 +108,13 @@ func play_credits() -> void:
 
 		await tw2.finished
 		await get_tree().create_timer(thanks_hold_time, false).timeout
+
+func _set_bg_scroll_offset(value: float) -> void:
+	if black_bg == null:
+		return
+
+	var mat := black_bg.material as ShaderMaterial
+	if mat == null:
+		return
+
+	mat.set_shader_parameter("scroll_offset", value)

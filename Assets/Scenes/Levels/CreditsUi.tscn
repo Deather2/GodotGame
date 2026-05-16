@@ -1,7 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://cea80fa2q75ih"]
+[gd_scene load_steps=5 format=3 uid="uid://cea80fa2q75ih"]
 
 [ext_resource type="Script" uid="uid://yi8f6okb88j3" path="res://Assets/Scripts/Levels/credits_ui.gd" id="1_in6oi"]
+[ext_resource type="Shader" uid="uid://1muoqv1gu8uc" path="res://Assets/Shaders/CreditsUi.gdshader" id="2_5nhjs"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_wk2us"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e880g"]
+shader = ExtResource("2_5nhjs")
+shader_parameter/bg_color = Color(0.01, 0.008, 0.018, 1)
+shader_parameter/star_color = Color(0.55, 0.75, 1, 1)
+shader_parameter/cell_size = 32.0
+shader_parameter/star_size = 3.0
+shader_parameter/density = 0.18
+shader_parameter/scroll_offset = 0.0
+shader_parameter/brightness = 0.35
 
 [node name="CreditsUi" type="CanvasLayer"]
 layer = 100
@@ -17,6 +28,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BlackBg" type="ColorRect" parent="Root"]
+material = SubResource("ShaderMaterial_e880g")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

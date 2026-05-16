@@ -521,7 +521,7 @@ func _on_final_crystal_collected() -> void:
 
 	await _restore_world_light_fx()
 
-	await get_tree().create_timer(0.8, false).timeout
+	await get_tree().create_timer(0.5, false).timeout
 
 	await SceneManager.fade_to_black(1.0)
 
