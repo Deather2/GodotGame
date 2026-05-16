@@ -1,0 +1,150 @@
+[gd_scene load_steps=3 format=3 uid="uid://cea80fa2q75ih"]
+
+[ext_resource type="Script" uid="uid://yi8f6okb88j3" path="res://Assets/Scripts/Levels/credits_ui.gd" id="1_in6oi"]
+[ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_wk2us"]
+
+[node name="CreditsUi" type="CanvasLayer"]
+layer = 100
+visible = false
+script = ExtResource("1_in6oi")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BlackBg" type="ColorRect" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CreditsText" type="Label" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_wk2us")
+theme_override_font_sizes/font_size = 42
+text = "LIGHT SEEKER
+
+
+Izstrādātājs
+Artjoms Sidorčenko
+
+
+Idejas autors
+Artjoms Sidorčenko
+
+
+Programmēšana
+Artjoms Sidorčenko
+
+
+Spēles dizains
+Artjoms Sidorčenko
+
+
+Līmeņu izveide
+Artjoms Sidorčenko
+
+
+UI un spēles sistēmas
+Artjoms Sidorčenko
+
+
+Kvalifikācijas darba projekts
+
+
+Īpašs paldies par izmantotajiem resursiem
+
+
+Grafiskie resursi
+
+brullov
+
+ToffeeCraft
+
+Kenney
+
+rvros
+
+JumpButton
+
+Dreamir
+
+twiswist
+
+Nikoichu
+
+Blackwolfdave
+
+Szadi art.
+
+Anokolisa
+
+Dream Mix
+
+FalcoDJ
+
+CreativeKind
+
+Omniclause
+
+TwiceUponATime
+
+MonoPixelArt
+
+Clembod
+
+
+Fonts
+
+BoldPixels
+Yūki (@YukiPixels)
+
+
+Skaņas
+
+Pixabay
+
+
+Paldies visiem resursu autoriem,
+kuri palīdzēja izveidot šo spēli."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ThanksLabel" type="Label" parent="Root"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_wk2us")
+theme_override_font_sizes/font_size = 52
+text = "Paldies par spēli!"
+horizontal_alignment = 1
+vertical_alignment = 1

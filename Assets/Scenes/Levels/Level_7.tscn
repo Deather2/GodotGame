@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://cvi6ds45uokvr"]
+[gd_scene load_steps=36 format=3 uid="uid://cvi6ds45uokvr"]
 
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_aae5b"]
 [ext_resource type="Script" uid="uid://mul6ebt32fc6" path="res://Assets/Scripts/Levels/level_7.gd" id="1_hgy4a"]
@@ -28,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://d1hufwe84g7pp" path="res://Assets/Scenes/Levels/Crystal.tscn" id="17_b4gsw"]
 [ext_resource type="Script" uid="uid://b4vjyx2m6qwsr" path="res://Assets/Scripts/Levels/boss_dialogue.gd" id="18_7ikdf"]
 [ext_resource type="AudioStream" uid="uid://drfajfx1w8b4x" path="res://Assets/Sounds/SFX/Level/textBlip.mp3" id="20_ihmah"]
+[ext_resource type="PackedScene" uid="uid://cea80fa2q75ih" path="res://Assets/Scenes/Levels/CreditsUi.tscn" id="26_ihmah"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7ikdf"]
 texture = ExtResource("5_lrteq")
@@ -717,7 +718,6 @@ scale = Vector2(1.3, 1.3)
 [node name="InteractionHint" parent="." instance=ExtResource("7_dtdno")]
 
 [node name="WinUi" parent="." instance=ExtResource("8_18727")]
-layer = 101
 visible = false
 
 [node name="Panel" parent="WinUi" index="1"]
@@ -748,6 +748,8 @@ vertical_alignment = 1
 [node name="PauseMenu" parent="." instance=ExtResource("11_2tego")]
 layer = 100
 visible = false
+
+[node name="CreditsUi" parent="." instance=ExtResource("26_ihmah")]
 
 [node name="LevelMusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("12_b4gsw")

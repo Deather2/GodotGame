@@ -50,6 +50,8 @@ var boss_fight_checkpoint_time := 0.0
 @onready var boss_hp_ui: CanvasLayer = get_node_or_null("BossHpUi")
 @onready var boss_dialogue: Control = get_node_or_null("BossDialogueUi/Root/BossDialogue")
 
+var credits_ui: CanvasLayer = null
+
 func _ready() -> void:
 	if GameState.preview_mode:
 		_prepare_preview_mode()
@@ -521,6 +523,21 @@ func _on_final_crystal_collected() -> void:
 
 	await get_tree().create_timer(0.8, false).timeout
 
+	await SceneManager.fade_to_black(1.0)
+
+	var credits := _get_credits_ui()
+
+	if credits == null:
+		push_error("CreditsUi still not found")
+	else:
+		if credits.has_method("show_black_bg"):
+			credits.show_black_bg()
+
+	await SceneManager.fade_from_black(0.35)
+
+	if credits != null and credits.has_method("play_credits"):
+		await credits.play_credits()
+
 	save_win_result()
 	show_win_ui()
 
@@ -599,3 +616,9 @@ func show_win_ui() -> void:
 		death_label.text = "Nāves: %d" % death_count
 
 	win_ui.show_with_anim()
+
+func _get_credits_ui() -> CanvasLayer:
+	if credits_ui == null:
+		credits_ui = get_node_or_null("CreditsUi") as CanvasLayer
+
+	return credits_ui
