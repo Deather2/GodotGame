@@ -24,8 +24,9 @@ var boss_fight_checkpoint_time := 0.0
 
 @export var boss_camera_move_time: float = 1.2
 
-@export var world_light_restore_time: float = 4.0
-@export var player_light_fade_time: float = 1.8
+@export var world_light_restore_time: float = 5.0
+@export var player_light_fade_time: float = 4.5
+@export var player_light_expand_scale: float = 2.4
 
 @onready var level_timer_ui = get_node_or_null("LevelTimer")
 @onready var pause_menu: CanvasLayer = get_node_or_null("PauseMenu")
@@ -36,8 +37,7 @@ var boss_fight_checkpoint_time := 0.0
 @onready var player: CharacterBody2D = get_node_or_null("Player")
 
 @onready var kill_zone: Area2D = get_node_or_null("KillZone")
-@onready var blink_off_sound: AudioStreamPlayer = get_node_or_null("BlinkOffSound")
-@onready var light_on_sound: AudioStreamPlayer = get_node_or_null("LightOnSound")
+@onready var light_restore_sound: AudioStreamPlayer = get_node_or_null("LightRestoreSound")
 
 @onready var spawn_point: Node2D = get_node_or_null("SpawnPoint")
 
@@ -49,7 +49,9 @@ var boss_fight_checkpoint_time := 0.0
 @onready var final_crystal: Area2D = get_node_or_null("Crystal")
 @onready var boss_hp_ui: CanvasLayer = get_node_or_null("BossHpUi")
 @onready var boss_dialogue: Control = get_node_or_null("BossDialogueUi/Root/BossDialogue")
-
+@onready var boss_fight_music: AudioStreamPlayer = get_node_or_null("BossFightMusicPlayer")
+var boss_fight_music_base_volume := 1.0
+var boss_fight_music_fade_tween: Tween
 var credits_ui: CanvasLayer = null
 
 func _ready() -> void:
@@ -62,6 +64,10 @@ func _ready() -> void:
 
 	if level_music != null:
 		level_music_base_volume = level_music.volume_linear
+
+	if boss_fight_music != null:
+		boss_fight_music_base_volume = boss_fight_music.volume_linear
+		boss_fight_music.stop()
 
 	if SceneManager.is_transitioning():
 		await SceneManager.transition_finished
@@ -142,6 +148,9 @@ func _exit_tree() -> void:
 		level_music.stop()
 		level_music.volume_linear = level_music_base_volume
 
+	if boss_fight_music != null:
+		boss_fight_music.stop()
+		boss_fight_music.volume_linear = boss_fight_music_base_volume
 
 func _start_level_music_cycle() -> void:
 	while music_cycle_active:
@@ -325,6 +334,8 @@ func _start_boss_fight() -> void:
 		if boss_hp_ui.has_method("setup") and boss.has_method("get_max_hp") and boss.has_method("get_hp"):
 			boss_hp_ui.setup(boss.get_max_hp(), boss.get_hp())
 
+	_play_boss_fight_music()
+
 	if boss != null and boss.has_method("start_fight"):
 		boss.start_fight()
 
@@ -351,6 +362,8 @@ func _restart_boss_fight_after_death() -> void:
 	if player != null:
 		player.disable_attack()
 		player.cutscene_lock = true
+
+	_fade_out_boss_fight_music(0.8)
 
 	await get_tree().create_timer(0.75, false).timeout
 	await SceneManager.fade_to_black(0.7)
@@ -391,6 +404,8 @@ func _restart_boss_fight_after_death() -> void:
 	if player != null:
 		player.cutscene_lock = false
 		player.enable_attack()
+
+	_play_boss_fight_music()
 
 	if boss != null and boss.has_method("start_fight"):
 		boss.start_fight()
@@ -440,6 +455,8 @@ func _on_boss_hp_changed(max_hp: int, current_hp: int) -> void:
 func _on_boss_defeated() -> void:
 	if finished:
 		return
+
+	_stop_boss_fight_music()
 
 	finish_transition = true
 	timer_running = false
@@ -544,14 +561,20 @@ func _on_final_crystal_collected() -> void:
 func _restore_world_light_fx() -> void:
 	var player_light := get_node_or_null("Player/PointLight2D") as PointLight2D
 
-	if light_on_sound != null:
-		light_on_sound.play()
+	if light_restore_sound != null:
+		light_restore_sound.play()
 
 	var tw := create_tween()
 	tw.set_parallel(true)
 
 	if player_light != null:
+		player_light.enabled = true
+
 		tw.tween_property(player_light, "energy", 0.0, player_light_fade_time) \
+			.set_trans(Tween.TRANS_SINE) \
+			.set_ease(Tween.EASE_IN_OUT)
+
+		tw.tween_property(player_light, "texture_scale", player_light_expand_scale, player_light_fade_time) \
 			.set_trans(Tween.TRANS_SINE) \
 			.set_ease(Tween.EASE_IN_OUT)
 
@@ -622,3 +645,50 @@ func _get_credits_ui() -> CanvasLayer:
 		credits_ui = get_node_or_null("CreditsUi") as CanvasLayer
 
 	return credits_ui
+
+func _play_boss_fight_music() -> void:
+	if boss_fight_music == null:
+		return
+
+	if boss_fight_music_fade_tween != null and boss_fight_music_fade_tween.is_valid():
+		boss_fight_music_fade_tween.kill()
+
+	boss_fight_music.volume_linear = boss_fight_music_base_volume
+
+	if not boss_fight_music.playing:
+		boss_fight_music.play()
+
+
+func _stop_boss_fight_music() -> void:
+	if boss_fight_music == null:
+		return
+
+	if boss_fight_music.playing:
+		boss_fight_music.stop()
+
+	boss_fight_music.volume_linear = boss_fight_music_base_volume
+
+func _fade_out_boss_fight_music(fade_time: float = 0.8) -> void:
+	if boss_fight_music == null:
+		return
+
+	if not boss_fight_music.playing:
+		return
+
+	if boss_fight_music_fade_tween != null and boss_fight_music_fade_tween.is_valid():
+		boss_fight_music_fade_tween.kill()
+
+	boss_fight_music_fade_tween = create_tween()
+	boss_fight_music_fade_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	boss_fight_music_fade_tween.tween_property(
+		boss_fight_music,
+		"volume_linear",
+		0.001,
+		fade_time
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	boss_fight_music_fade_tween.finished.connect(func():
+		if boss_fight_music != null:
+			boss_fight_music.stop()
+			boss_fight_music.volume_linear = boss_fight_music_base_volume
+	)

@@ -29,6 +29,8 @@ signal died
 @onready var attack_hit_box: Area2D = $AttackHitBox
 @onready var attack_hit_shape: CollisionShape2D = $AttackHitBox/CollisionShape2D
 
+@onready var PlayerAttackSound: AudioStreamPlayer2D = $PlayerAttackSound
+
 var can_attack := false
 var is_attacking := false
 var attack_damage_active := false
@@ -905,6 +907,9 @@ func _start_attack() -> void:
 	is_attacking = true
 	attack_damage_active = false
 	velocity.x = 0.0
+
+	if PlayerAttackSound != null:
+		PlayerAttackSound.play()
 
 	_update_attack_hitbox_side()
 

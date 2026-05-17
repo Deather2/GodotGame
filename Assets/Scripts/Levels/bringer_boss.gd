@@ -39,6 +39,10 @@ var waiting_for_death_cutscene := false
 @onready var melee_hit_box: Area2D = $MeleeHitBox
 @onready var melee_hit_shape: CollisionShape2D = $MeleeHitBox/CollisionShape2D
 @onready var hurt_box: Area2D = $HurtBox
+@onready var BossMeleeSound: AudioStreamPlayer2D = $BossMeleeSound
+@onready var BossHurtSound: AudioStreamPlayer2D = $BossHurtSound
+@onready var BossDeathSound: AudioStreamPlayer2D = $BossDeathSound
+@onready var BossCastSound: AudioStreamPlayer2D = $BossCastSound
 
 var gravity: float = float(ProjectSettings.get_setting("physics/2d/default_gravity"))
 
@@ -161,6 +165,9 @@ func _start_melee_attack() -> void:
 	if current_action != action_id or state != State.MELEE_ATTACK:
 		return
 
+	if BossMeleeSound != null:
+		BossMeleeSound.play()
+
 	melee_hit_box.monitoring = true
 
 	await get_tree().physics_frame
@@ -194,6 +201,9 @@ func _start_cast_attack() -> void:
 	cast_timer = cast_cooldown
 	velocity.x = 0.0
 	melee_hit_box.monitoring = false
+
+	if BossCastSound != null:
+		BossCastSound.play()
 
 	_play_anim("cast")
 
@@ -241,6 +251,9 @@ func _start_final_hurt() -> void:
 	melee_hit_box.monitoring = false
 	velocity.x = 0.0
 
+	if BossHurtSound != null:
+		BossHurtSound.play()
+
 	_play_anim("hurt")
 
 	await sprite.animation_finished
@@ -260,6 +273,9 @@ func _start_hurt() -> void:
 	invulnerable = true
 	melee_hit_box.monitoring = false
 	velocity.x = 0.0
+
+	if BossHurtSound != null:
+		BossHurtSound.play()
 
 	_play_anim("hurt")
 
@@ -286,6 +302,9 @@ func _die() -> void:
 	waiting_for_death_cutscene = false
 	melee_hit_box.monitoring = false
 	velocity = Vector2.ZERO
+
+	if BossDeathSound != null:
+		BossDeathSound.play()
 
 	_play_anim("death")
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://d2ac8s1q00l8d"]
+[gd_scene load_steps=23 format=3 uid="uid://d2ac8s1q00l8d"]
 
 [ext_resource type="Script" uid="uid://bj264nj22q63u" path="res://Assets/Scripts/Levels/boss_spell.gd" id="1_lo2vi"]
 [ext_resource type="Texture2D" uid="uid://byolho4884dws" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_1.png" id="1_mgewk"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://dem6fjfc46slk" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_14.png" id="14_pd6vb"]
 [ext_resource type="Texture2D" uid="uid://dicbjxe41on4b" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_15.png" id="15_obq56"]
 [ext_resource type="Texture2D" uid="uid://du7i6qv0rvrt4" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Spell/Bringer-of-Death_Spell_16.png" id="16_kqiio"]
+[ext_resource type="AudioStream" uid="uid://b8mviknflmdw" path="res://Assets/Sounds/SFX/Boss/bossSpellImpact.mp3" id="18_vtxsd"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ph1ac"]
 animations = [{
@@ -108,3 +109,8 @@ scale = Vector2(0.75000006, 1)
 texture = SubResource("GradientTexture2D_lo2vi")
 
 [node name="LifeTimer" type="Timer" parent="."]
+
+[node name="SpellImpactSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("18_vtxsd")
+volume_db = 10.0
+bus = &"SFX"

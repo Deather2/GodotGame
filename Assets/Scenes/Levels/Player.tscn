@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cblv52lkscke7"]
+[gd_scene load_steps=13 format=3 uid="uid://cblv52lkscke7"]
 
 [ext_resource type="Script" uid="uid://b5towj76s0dll" path="res://Assets/Scripts/Levels/player.gd" id="1_1iq5p"]
 [ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_mqbe8"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://cogwcs8din3sm" path="res://Assets/Sounds/SFX/Player/jump.mp3" id="4_kiw01"]
 [ext_resource type="AudioStream" uid="uid://b0svmpsjffyc6" path="res://Assets/Sounds/SFX/Player/hurt.mp3" id="5_02ikm"]
 [ext_resource type="AudioStream" uid="uid://dk8v5ajpkhlxq" path="res://Assets/Sounds/SFX/Player/death.mp3" id="6_bau5h"]
+[ext_resource type="AudioStream" uid="uid://b5ja21ij7fsip" path="res://Assets/Sounds/SFX/Player/swordAttack.mp3" id="7_bau5h"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gv6bx"]
 radius = 7.0
@@ -93,4 +94,9 @@ bus = &"SFX"
 [node name="DeathPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_bau5h")
 volume_db = 7.0
+bus = &"SFX"
+
+[node name="PlayerAttackSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_bau5h")
+volume_db = 10.0
 bus = &"SFX"

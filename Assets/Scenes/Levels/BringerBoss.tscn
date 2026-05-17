@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://b0h36cfohtngm"]
+[gd_scene load_steps=61 format=3 uid="uid://b0h36cfohtngm"]
 
 [ext_resource type="Script" uid="uid://kn60dstnkit5" path="res://Assets/Scripts/Levels/bringer_boss.gd" id="1_t36tx"]
 [ext_resource type="PackedScene" uid="uid://d2ac8s1q00l8d" path="res://Assets/Scenes/Levels/BossSpell.tscn" id="2_kr32g"]
@@ -50,6 +50,10 @@
 [ext_resource type="Texture2D" uid="uid://dj5wll3t5kien" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Walk/Bringer-of-Death_Walk_6.png" id="47_002xp"]
 [ext_resource type="Texture2D" uid="uid://clk8ekdsub3i6" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Walk/Bringer-of-Death_Walk_7.png" id="48_y2ovl"]
 [ext_resource type="Texture2D" uid="uid://cipr2eu315duj" path="res://Assets/Boss/Bringer-Of-Death/Individual Sprite/Walk/Bringer-of-Death_Walk_8.png" id="49_gkvko"]
+[ext_resource type="AudioStream" uid="uid://dkxpkc8evu40v" path="res://Assets/Sounds/SFX/Boss/bossAttack.mp3" id="51_kr32g"]
+[ext_resource type="AudioStream" uid="uid://hpd52n101r3d" path="res://Assets/Sounds/SFX/Boss/bossHurt.mp3" id="52_mf8mv"]
+[ext_resource type="AudioStream" uid="uid://cbqy6uskdqa1d" path="res://Assets/Sounds/SFX/Boss/bossDeath.wav" id="53_feqlx"]
+[ext_resource type="AudioStream" uid="uid://xwjyrbsy2nm1" path="res://Assets/Sounds/SFX/Boss/bossSpellCast.mp3" id="54_fkqfk"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ikudx"]
 animations = [{
@@ -284,3 +288,23 @@ position = Vector2(1.0000019, -28)
 scale = Vector2(2.125, 1)
 texture = SubResource("GradientTexture2D_t36tx")
 texture_scale = 1.5
+
+[node name="BossMeleeSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("51_kr32g")
+volume_db = 5.0
+bus = &"SFX"
+
+[node name="BossHurtSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("52_mf8mv")
+volume_db = 5.0
+bus = &"SFX"
+
+[node name="BossDeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("53_feqlx")
+volume_db = 5.0
+bus = &"SFX"
+
+[node name="BossCastSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("54_fkqfk")
+volume_db = 3.0
+bus = &"SFX"

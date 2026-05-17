@@ -3,16 +3,23 @@ extends CanvasLayer
 @export var credits_scroll_time := 20.0
 @export var thanks_move_time := 2.0
 @export var thanks_hold_time := 1.2
+
 @export var side_margin := 64.0
 @export var start_bottom_offset := 60.0
 @export var end_top_offset := 60.0
+
+@export var bg_scroll_speed := 10.0
+@export var credits_music_fade_out_time := 1.0
+@export var credits_music_start_offset := 1.0
 
 @onready var root: Control = $Root
 @onready var black_bg: ColorRect = $Root/BlackBg
 @onready var credits_text: Label = $Root/CreditsText
 @onready var thanks_label: Label = $Root/ThanksLabel
+@onready var credits_music: AudioStreamPlayer = get_node_or_null("CreditsMusicPlayer") as AudioStreamPlayer
 
-@export var bg_scroll_speed := 10.0
+var credits_music_base_volume := 1.0
+
 
 func _ready() -> void:
 	visible = false
@@ -32,7 +39,12 @@ func _ready() -> void:
 
 	if thanks_label != null:
 		thanks_label.visible = false
+		thanks_label.modulate.a = 1.0
 		thanks_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	if credits_music != null:
+		credits_music_base_volume = credits_music.volume_linear
+		credits_music.stop()
 
 
 func show_black_bg() -> void:
@@ -46,23 +58,27 @@ func show_black_bg() -> void:
 
 	if thanks_label != null:
 		thanks_label.visible = false
+		thanks_label.modulate.a = 1.0
 
 
 func play_credits() -> void:
 	visible = true
 	_set_bg_scroll_offset(0.0)
+	_play_credits_music()
 
 	if black_bg != null:
 		black_bg.visible = true
 
 	await get_tree().process_frame
 
+	var total_bg_time := credits_scroll_time + thanks_move_time + thanks_hold_time
+
 	var bg_tw := create_tween()
 	bg_tw.tween_method(
 		_set_bg_scroll_offset,
 		0.0,
-		bg_scroll_speed * (credits_scroll_time + thanks_move_time + thanks_hold_time),
-		credits_scroll_time + thanks_move_time + thanks_hold_time
+		bg_scroll_speed * total_bg_time,
+		total_bg_time
 	).set_trans(Tween.TRANS_LINEAR)
 
 	var vp := get_viewport().get_visible_rect().size
@@ -91,6 +107,7 @@ func play_credits() -> void:
 
 	if thanks_label != null:
 		thanks_label.visible = true
+		thanks_label.modulate.a = 1.0
 		thanks_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		thanks_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 
@@ -109,6 +126,9 @@ func play_credits() -> void:
 		await tw2.finished
 		await get_tree().create_timer(thanks_hold_time, false).timeout
 
+	await _fade_out_credits_music()
+
+
 func _set_bg_scroll_offset(value: float) -> void:
 	if black_bg == null:
 		return
@@ -118,3 +138,32 @@ func _set_bg_scroll_offset(value: float) -> void:
 		return
 
 	mat.set_shader_parameter("scroll_offset", value)
+
+
+func _play_credits_music() -> void:
+	if credits_music == null:
+		return
+
+	credits_music.volume_linear = credits_music_base_volume
+
+	if not credits_music.playing:
+		credits_music.play(credits_music_start_offset)
+
+
+func _fade_out_credits_music() -> void:
+	if credits_music == null:
+		return
+
+	if not credits_music.playing:
+		return
+
+	var tw := create_tween()
+	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.tween_property(credits_music, "volume_linear", 0.001, credits_music_fade_out_time) \
+		.set_trans(Tween.TRANS_SINE) \
+		.set_ease(Tween.EASE_IN_OUT)
+
+	await tw.finished
+
+	credits_music.stop()
+	credits_music.volume_linear = credits_music_base_volume

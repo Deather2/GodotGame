@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cea80fa2q75ih"]
+[gd_scene load_steps=6 format=3 uid="uid://cea80fa2q75ih"]
 
 [ext_resource type="Script" uid="uid://yi8f6okb88j3" path="res://Assets/Scripts/Levels/credits_ui.gd" id="1_in6oi"]
 [ext_resource type="Shader" uid="uid://1muoqv1gu8uc" path="res://Assets/Shaders/CreditsUi.gdshader" id="2_5nhjs"]
 [ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_wk2us"]
+[ext_resource type="AudioStream" uid="uid://cav38iyqxpkmu" path="res://Assets/Sounds/LevelMusic/creaditsMusic.mp3" id="4_5nhjs"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e880g"]
 shader = ExtResource("2_5nhjs")
@@ -55,27 +56,27 @@ theme_override_font_sizes/font_size = 42
 text = "LIGHT SEEKER
 
 
-Izstrādātājs
+Izstrādātājs:
 Artjoms Sidorčenko
 
 
-Idejas autors
+Idejas autors:
 Artjoms Sidorčenko
 
 
-Programmēšana
+Programmēšana:
 Artjoms Sidorčenko
 
 
-Spēles dizains
+Spēles dizains:
 Artjoms Sidorčenko
 
 
-Līmeņu izveide
+Līmeņu izveide:
 Artjoms Sidorčenko
 
 
-UI un spēles sistēmas
+UI un spēles sistēmas:
 Artjoms Sidorčenko
 
 
@@ -85,53 +86,33 @@ Kvalifikācijas darba projekts
 Īpašs paldies par izmantotajiem resursiem
 
 
-Grafiskie resursi
-
+Grafiskie resursi:
 brullov
-
 ToffeeCraft
-
 Kenney
-
 rvros
-
 JumpButton
-
 Dreamir
-
 twiswist
-
 Nikoichu
-
 Blackwolfdave
-
 Szadi art.
-
 Anokolisa
-
 Dream Mix
-
 FalcoDJ
-
 CreativeKind
-
 Omniclause
-
 TwiceUponATime
-
 MonoPixelArt
-
 Clembod
 
 
-Fonts
-
+Fonts:
 BoldPixels
 Yūki (@YukiPixels)
 
 
-Skaņas
-
+Skaņas:
 Pixabay
 
 
@@ -160,3 +141,7 @@ theme_override_font_sizes/font_size = 52
 text = "Paldies par spēli!"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CreditsMusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_5nhjs")
+bus = &"LevelMusic"

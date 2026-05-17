@@ -19,16 +19,16 @@
 [ext_resource type="PackedScene" uid="uid://7aav2caa6uif" path="res://Assets/Scenes/Levels/FallingSpikeTrap.tscn" id="11_5f77l"]
 [ext_resource type="AudioStream" uid="uid://byjx0d43tk6yb" path="res://Assets/Sounds/LevelMusic/levelMusic.mp3" id="12_b4gsw"]
 [ext_resource type="PackedScene" uid="uid://bu3ajukqx3vit" path="res://Assets/Scenes/Levels/RotatingSpikeTrap.tscn" id="12_dtdno"]
-[ext_resource type="AudioStream" uid="uid://jvy4ouj35075" path="res://Assets/Sounds/SFX/Level/lightSwitchOff.mp3" id="13_6d6jn"]
 [ext_resource type="PackedScene" uid="uid://cg72wspj0xrt3" path="res://Assets/Scenes/Levels/SuperSpeedPickup.tscn" id="13_18727"]
 [ext_resource type="PackedScene" uid="uid://3k71180pq1f5" path="res://Assets/Scenes/Levels/BreakablePlatform.tscn" id="14_cagm5"]
-[ext_resource type="AudioStream" uid="uid://c44jo8bvbp2p7" path="res://Assets/Sounds/SFX/Level/shine.mp3" id="14_cmrno"]
 [ext_resource type="PackedScene" uid="uid://b0h36cfohtngm" path="res://Assets/Scenes/Levels/BringerBoss.tscn" id="16_2tego"]
 [ext_resource type="PackedScene" uid="uid://cryq731ovshs3" path="res://Assets/Scenes/UI/BossHpUi.tscn" id="17_6d6jn"]
 [ext_resource type="PackedScene" uid="uid://d1hufwe84g7pp" path="res://Assets/Scenes/Levels/Crystal.tscn" id="17_b4gsw"]
 [ext_resource type="Script" uid="uid://b4vjyx2m6qwsr" path="res://Assets/Scripts/Levels/boss_dialogue.gd" id="18_7ikdf"]
 [ext_resource type="AudioStream" uid="uid://drfajfx1w8b4x" path="res://Assets/Sounds/SFX/Level/textBlip.mp3" id="20_ihmah"]
 [ext_resource type="PackedScene" uid="uid://cea80fa2q75ih" path="res://Assets/Scenes/Levels/CreditsUi.tscn" id="26_ihmah"]
+[ext_resource type="AudioStream" uid="uid://b1u6qvejtej1b" path="res://Assets/Sounds/SFX/Level/lightRestore.mp3" id="29_ihmah"]
+[ext_resource type="AudioStream" uid="uid://bpbekrgptcqer" path="res://Assets/Sounds/LevelMusic/bossFightMusic.mp3" id="30_0t3ba"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7ikdf"]
 texture = ExtResource("5_lrteq")
@@ -755,12 +755,12 @@ visible = false
 stream = ExtResource("12_b4gsw")
 bus = &"LevelMusic"
 
-[node name="BlinkOffSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("13_6d6jn")
-bus = &"SFX"
+[node name="BossFightMusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("30_0t3ba")
+bus = &"LevelMusic"
 
-[node name="LightOnSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("14_cmrno")
+[node name="LightRestoreSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("29_ihmah")
 bus = &"SFX"
 
 [editable path="Player"]
