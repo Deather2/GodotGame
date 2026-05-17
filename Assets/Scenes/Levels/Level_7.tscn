@@ -605,7 +605,6 @@ position = Vector2(9264, 432)
 [node name="BringerBoss" parent="." instance=ExtResource("16_2tego")]
 position = Vector2(9600, 532)
 scale = Vector2(1.5, 1.5)
-max_hp = 2
 melee_range = 120.0
 stop_distance = 70.0
 melee_cooldown = 1.4

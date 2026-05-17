@@ -494,11 +494,11 @@ custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 focus_mode = 0
 
-[node name="PauseRow" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList"]
+[node name="AttackRow" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList"]
 layout_mode = 2
 theme_override_constants/separation = 250
 
-[node name="ActionLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow"]
+[node name="ActionLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/AttackRow"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
@@ -509,15 +509,20 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("2_4g7x7")
 theme_override_font_sizes/font_size = 22
-text = "Pauze"
+text = "Uzbrukums"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/AttackRow"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Bind1" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer"]
+[node name="Bind1" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/AttackRow/HBoxContainer"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+focus_mode = 0
+
+[node name="Bind2" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/AttackRow/HBoxContainer"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 focus_mode = 0
@@ -546,6 +551,34 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Bind1" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/InteractRow/HBoxContainer"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+focus_mode = 0
+
+[node name="PauseRow" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="ActionLabel" type="Label" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_4g7x7")
+theme_override_font_sizes/font_size = 22
+text = "Pauze"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Bind1" type="Button" parent="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 focus_mode = 0
@@ -727,12 +760,18 @@ bus = &"UI"
 [connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/CrouchRow/HBoxContainer/Bind2" to="." method="on_button_pressed"]
-[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_exited"]
-[connection signal="pressed" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="." method="on_button_pressed"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/AttackRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/AttackRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/AttackRow/HBoxContainer/Bind1" to="." method="on_button_pressed"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/AttackRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/AttackRow/HBoxContainer/Bind2" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/AttackRow/HBoxContainer/Bind2" to="." method="on_button_pressed"]
 [connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/InteractRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/InteractRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/InteractRow/HBoxContainer/Bind1" to="." method="on_button_pressed"]
+[connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ControlsList/PauseRow/HBoxContainer/Bind1" to="." method="on_button_pressed"]
 [connection signal="mouse_entered" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/ControlsSection/ResetControlsButton" to="." method="_on_button_mouse_exited"]
 [connection signal="drag_started" from="Panel/Pad/Root/Body/RightWrap/ContentPanel/ContentScroll/ContentPad/Sections/AudioSection/AudioRows/MenuMusicRow/MenuMusicSlider" to="." method="on_button_pressed"]
