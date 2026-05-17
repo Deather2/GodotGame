@@ -54,6 +54,19 @@ var boss_fight_music_base_volume := 1.0
 var boss_fight_music_fade_tween: Tween
 var credits_ui: CanvasLayer = null
 
+@export var super_jump_pickup_scene: PackedScene
+@export var super_speed_pickup_scene: PackedScene
+
+@export var boss_buff_min_delay := 5.0
+@export var boss_buff_max_delay := 10.0
+@export var boss_buff_min_x := 0.0
+@export var boss_buff_max_x := 0.0
+@export var boss_buff_spawn_y := 0.0
+
+var boss_buff_spawn_active := false
+var boss_buff_spawn_id := 0
+var current_boss_buff: Node = null
+
 func _ready() -> void:
 	if GameState.preview_mode:
 		_prepare_preview_mode()
@@ -339,6 +352,8 @@ func _start_boss_fight() -> void:
 	if boss != null and boss.has_method("start_fight"):
 		boss.start_fight()
 
+	_start_boss_buff_spawner()
+
 func _set_final_crystal_locked(value: bool) -> void:
 	if final_crystal == null:
 		return
@@ -364,6 +379,7 @@ func _restart_boss_fight_after_death() -> void:
 		player.cutscene_lock = true
 
 	_fade_out_boss_fight_music(0.8)
+	_stop_boss_buff_spawner()
 
 	await get_tree().create_timer(0.75, false).timeout
 	await SceneManager.fade_to_black(0.7)
@@ -406,6 +422,7 @@ func _restart_boss_fight_after_death() -> void:
 		player.enable_attack()
 
 	_play_boss_fight_music()
+	_start_boss_buff_spawner()
 
 	if boss != null and boss.has_method("start_fight"):
 		boss.start_fight()
@@ -457,6 +474,7 @@ func _on_boss_defeated() -> void:
 		return
 
 	_stop_boss_fight_music()
+	_stop_boss_buff_spawner()
 
 	finish_transition = true
 	timer_running = false
@@ -692,3 +710,85 @@ func _fade_out_boss_fight_music(fade_time: float = 0.8) -> void:
 			boss_fight_music.stop()
 			boss_fight_music.volume_linear = boss_fight_music_base_volume
 	)
+
+func _start_boss_buff_spawner() -> void:
+	if boss_buff_spawn_active:
+		return
+
+	boss_buff_spawn_active = true
+	boss_buff_spawn_id += 1
+
+	_spawn_boss_buff_loop(boss_buff_spawn_id)
+
+
+func _stop_boss_buff_spawner() -> void:
+	boss_buff_spawn_active = false
+	boss_buff_spawn_id += 1
+
+	if current_boss_buff != null and is_instance_valid(current_boss_buff):
+		current_boss_buff.visible = false
+
+		if "monitoring" in current_boss_buff:
+			current_boss_buff.monitoring = false
+
+		current_boss_buff.queue_free()
+
+	current_boss_buff = null
+
+
+func _spawn_boss_buff_loop(spawn_id: int) -> void:
+	var delay := randf_range(boss_buff_min_delay, boss_buff_max_delay)
+	await get_tree().create_timer(delay, false).timeout
+
+	if spawn_id != boss_buff_spawn_id:
+		return
+
+	if not boss_buff_spawn_active:
+		return
+
+	if not boss_fight_started or boss_fight_resetting or finished:
+		return
+
+	if current_boss_buff != null and is_instance_valid(current_boss_buff):
+		return
+
+	_spawn_random_boss_buff()
+
+
+func _spawn_random_boss_buff() -> void:
+	var scene: PackedScene = null
+
+	if randi_range(0, 1) == 0:
+		scene = super_jump_pickup_scene
+	else:
+		scene = super_speed_pickup_scene
+
+	if scene == null:
+		return
+
+	var buff := scene.instantiate()
+	add_child(buff)
+
+	var x := randf_range(boss_buff_min_x, boss_buff_max_x)
+	buff.global_position = Vector2(x, boss_buff_spawn_y)
+
+	if "one_shot" in buff:
+		buff.one_shot = true
+
+	current_boss_buff = buff
+
+	if buff.has_signal("picked_up"):
+		buff.connect("picked_up", Callable(self, "_on_boss_buff_picked_up"))
+
+
+func _on_boss_buff_picked_up() -> void:
+	current_boss_buff = null
+
+	if not boss_buff_spawn_active:
+		return
+
+	if not boss_fight_started or boss_fight_resetting or finished:
+		return
+
+	boss_buff_spawn_id += 1
+	_spawn_boss_buff_loop(boss_buff_spawn_id)
