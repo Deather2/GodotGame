@@ -365,7 +365,7 @@ func get_current_respawn_point() -> Node2D:
 	if boss_intro_started or boss_fight_started:
 		return boss_run_target
 
-	return spawn_point
+	return null
 
 func _restart_boss_fight_after_death() -> void:
 	boss_fight_resetting = true
