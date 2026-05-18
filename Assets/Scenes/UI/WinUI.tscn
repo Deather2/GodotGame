@@ -53,6 +53,7 @@ texture = ExtResource("1_62q4l")
 region_rect = Rect2(417.83246, 100.71987, 90.39563, 26.478867)
 
 [node name="WinUi" type="CanvasLayer"]
+layer = 101
 script = ExtResource("1_s2q11")
 star_filled = ExtResource("4_6txqx")
 star_empty = ExtResource("5_tev45")

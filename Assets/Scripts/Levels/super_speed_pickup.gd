@@ -12,6 +12,7 @@ var player_in_range := false
 var activated := false
 
 @export var super_speed_duration: float = 5.0
+@export var one_shot := false
 
 
 func _ready() -> void:
@@ -24,6 +25,7 @@ func _ready() -> void:
 
 	if interaction_hint != null:
 		interaction_hint.visible = false
+
 
 func _process(_delta: float) -> void:
 	if activated:
@@ -48,7 +50,16 @@ func _process(_delta: float) -> void:
 		monitoring = false
 
 		picked_up.emit()
-		respawn_timer.start()
+
+		if one_shot:
+			set_process(false)
+
+			if pickup_sound != null and pickup_sound.stream != null and pickup_sound.playing:
+				await pickup_sound.finished
+
+			queue_free()
+		else:
+			respawn_timer.start()
 
 
 func _on_body_entered(body: Node) -> void:
@@ -92,4 +103,14 @@ func force_reset() -> void:
 
 
 func _on_player_died() -> void:
+	if one_shot:
+		if interaction_hint != null:
+			interaction_hint.visible = false
+
+		visible = false
+		monitoring = false
+		set_process(false)
+		queue_free()
+		return
+
 	force_reset()

@@ -1,11 +1,12 @@
-[gd_scene load_steps=11 format=3 uid="uid://cblv52lkscke7"]
+[gd_scene load_steps=13 format=3 uid="uid://cblv52lkscke7"]
 
 [ext_resource type="Script" uid="uid://b5towj76s0dll" path="res://Assets/Scripts/Levels/player.gd" id="1_1iq5p"]
 [ext_resource type="Resource" uid="uid://cvwqdppkj64vm" path="res://Assets/Data/characterDB.tres" id="2_mqbe8"]
-[ext_resource type="SpriteFrames" uid="uid://bsv1smlcunq57" path="res://Assets/Animations/Char3.tres" id="3_kiw01"]
+[ext_resource type="SpriteFrames" uid="uid://dxu0k46qid04c" path="res://Assets/Animations/Char0.tres" id="3_02ikm"]
 [ext_resource type="AudioStream" uid="uid://cogwcs8din3sm" path="res://Assets/Sounds/SFX/Player/jump.mp3" id="4_kiw01"]
 [ext_resource type="AudioStream" uid="uid://b0svmpsjffyc6" path="res://Assets/Sounds/SFX/Player/hurt.mp3" id="5_02ikm"]
 [ext_resource type="AudioStream" uid="uid://dk8v5ajpkhlxq" path="res://Assets/Sounds/SFX/Player/death.mp3" id="6_bau5h"]
+[ext_resource type="AudioStream" uid="uid://b5ja21ij7fsip" path="res://Assets/Sounds/SFX/Player/swordAttack.mp3" id="7_bau5h"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gv6bx"]
 radius = 7.0
@@ -24,6 +25,9 @@ gradient = SubResource("Gradient_mqbe8")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_02ikm"]
+size = Vector2(26, 20)
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_index = 10
 collision_mask = 3
@@ -41,7 +45,7 @@ shape = SubResource("CapsuleShape2D_gv6bx")
 [node name="SpritePivot" type="Node2D" parent="."]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="SpritePivot"]
-sprite_frames = ExtResource("3_kiw01")
+sprite_frames = ExtResource("3_02ikm")
 animation = &"crouch"
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -73,6 +77,15 @@ target_position = Vector2(0, 13)
 position = Vector2(6, 0)
 target_position = Vector2(0, 13)
 
+[node name="AttackHitBox" type="Area2D" parent="."]
+collision_mask = 4
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitBox"]
+position = Vector2(14, 0)
+shape = SubResource("RectangleShape2D_02ikm")
+
 [node name="HurtPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_02ikm")
 volume_db = 7.0
@@ -81,4 +94,9 @@ bus = &"SFX"
 [node name="DeathPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_bau5h")
 volume_db = 7.0
+bus = &"SFX"
+
+[node name="PlayerAttackSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_bau5h")
+volume_db = 10.0
 bus = &"SFX"

@@ -1,0 +1,147 @@
+[gd_scene load_steps=6 format=3 uid="uid://cea80fa2q75ih"]
+
+[ext_resource type="Script" uid="uid://yi8f6okb88j3" path="res://Assets/Scripts/Levels/credits_ui.gd" id="1_in6oi"]
+[ext_resource type="Shader" uid="uid://1muoqv1gu8uc" path="res://Assets/Shaders/CreditsUi.gdshader" id="2_5nhjs"]
+[ext_resource type="FontFile" uid="uid://c4xqfn3lesxqk" path="res://Assets/fonts/BoldPixels.ttf" id="2_wk2us"]
+[ext_resource type="AudioStream" uid="uid://cav38iyqxpkmu" path="res://Assets/Sounds/LevelMusic/creaditsMusic.mp3" id="4_5nhjs"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e880g"]
+shader = ExtResource("2_5nhjs")
+shader_parameter/bg_color = Color(0.01, 0.008, 0.018, 1)
+shader_parameter/star_color = Color(0.55, 0.75, 1, 1)
+shader_parameter/cell_size = 32.0
+shader_parameter/star_size = 3.0
+shader_parameter/density = 0.18
+shader_parameter/scroll_offset = 0.0
+shader_parameter/brightness = 0.35
+
+[node name="CreditsUi" type="CanvasLayer"]
+layer = 100
+visible = false
+script = ExtResource("1_in6oi")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BlackBg" type="ColorRect" parent="Root"]
+material = SubResource("ShaderMaterial_e880g")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CreditsText" type="Label" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_wk2us")
+theme_override_font_sizes/font_size = 42
+text = "Gaismas Meklētājs
+
+
+Izstrādātājs:
+Artjoms Sidorčenko
+
+
+Idejas autors:
+Artjoms Sidorčenko
+
+
+Programmēšana:
+Artjoms Sidorčenko
+
+
+Spēles dizains:
+Artjoms Sidorčenko
+
+
+Līmeņu izveide:
+Artjoms Sidorčenko
+
+
+UI un spēles sistēmas:
+Artjoms Sidorčenko
+
+
+Kvalifikācijas darba projekts
+
+
+Īpašs paldies par izmantotajiem resursiem
+
+
+Grafiskie resursi:
+brullov
+ToffeeCraft
+Kenney
+rvros
+JumpButton
+Dreamir
+twiswist
+Nikoichu
+Blackwolfdave
+Szadi art.
+Anokolisa
+Dream Mix
+FalcoDJ
+CreativeKind
+Omniclause
+TwiceUponATime
+MonoPixelArt
+Clembod
+
+
+Fonts:
+BoldPixels
+Yūki (@YukiPixels)
+
+
+Skaņas:
+Pixabay
+
+
+Paldies visiem resursu autoriem,
+kuri palīdzēja izveidot šo spēli."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ThanksLabel" type="Label" parent="Root"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9098039, 0.9529412, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.49803922)
+theme_override_colors/font_outline_color = Color(0.101960786, 0.050980393, 0.023529412, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_wk2us")
+theme_override_font_sizes/font_size = 52
+text = "Paldies par spēli!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CreditsMusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_5nhjs")
+bus = &"LevelMusic"

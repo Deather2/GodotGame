@@ -1,19 +1,25 @@
-[gd_resource type="SpriteFrames" load_steps=29 format=3 uid="uid://dxu0k46qid04c"]
+[gd_resource type="SpriteFrames" load_steps=35 format=3 uid="uid://dxu0k46qid04c"]
 
 [ext_resource type="Texture2D" uid="uid://dei0f7g27ws8r" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r05_c03.png" id="1_4k74k"]
+[ext_resource type="Texture2D" uid="uid://c5o7yw8eflupk" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r06_c05.png" id="1_5g4ct"]
 [ext_resource type="Texture2D" uid="uid://dtcno8nf4lxao" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r00_c04.png" id="1_ixtor"]
+[ext_resource type="Texture2D" uid="uid://cafbsl4ek2ky8" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r06_c06.png" id="2_7jn5g"]
 [ext_resource type="Texture2D" uid="uid://4wuhuw5tvng8" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r05_c04.png" id="2_koy7r"]
 [ext_resource type="Texture2D" uid="uid://eggdl4snowor" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r00_c05.png" id="2_odgj0"]
 [ext_resource type="Texture2D" uid="uid://dova23lry107e" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r00_c06.png" id="3_h4apu"]
+[ext_resource type="Texture2D" uid="uid://cb7eweepuycmo" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r07_c00.png" id="3_kvwaq"]
 [ext_resource type="Texture2D" uid="uid://clb2m83eew27y" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r05_c05.png" id="3_sbukd"]
 [ext_resource type="Texture2D" uid="uid://gea4flw4i1pt" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r05_c06.png" id="4_hf4yb"]
+[ext_resource type="Texture2D" uid="uid://cunm53qv1ww40" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r07_c01.png" id="4_qsqvo"]
 [ext_resource type="Texture2D" uid="uid://bioxqr1unqx2v" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r01_c00.png" id="4_ym62l"]
 [ext_resource type="Texture2D" uid="uid://btxhjmq2chd83" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r01_c01.png" id="5_4k74k"]
+[ext_resource type="Texture2D" uid="uid://btgg4jtw330xh" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r07_c02.png" id="5_6rjvt"]
 [ext_resource type="Texture2D" uid="uid://cqcknfbw8dnlm" path="res://Assets/characters/adventurer_hand_combat/frames_padded_64x64/third_row_from_bottom_sprite_4_64x64.png" id="5_exph2"]
 [ext_resource type="Texture2D" uid="uid://ds727e4i8g1a7" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r02_c02.png" id="5_tu6ir"]
 [ext_resource type="Texture2D" uid="uid://dixbsy0pta8om" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r02_c03.png" id="6_c4qq1"]
 [ext_resource type="Texture2D" uid="uid://d0atc5osnbulk" path="res://Assets/characters/adventurer_hand_combat/frames_padded_64x64/third_row_from_bottom_sprite_5_64x64.png" id="6_jonwe"]
 [ext_resource type="Texture2D" uid="uid://cdhqyvtbv6u6j" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r01_c02.png" id="6_koy7r"]
+[ext_resource type="Texture2D" uid="uid://blhvhe26yfj2a" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r07_c03.png" id="6_m5csf"]
 [ext_resource type="Texture2D" uid="uid://brl4qg0uf4hp1" path="res://Assets/characters/adventurer_hand_combat/frames_padded_64x64/third_row_from_bottom_sprite_6_64x64.png" id="7_5g4ct"]
 [ext_resource type="Texture2D" uid="uid://cfvawjjc87j4l" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r02_c04.png" id="7_6gs0y"]
 [ext_resource type="Texture2D" uid="uid://cy04atg30e2p8" path="res://Assets/characters/adventurer/frames_padded_64x64/adventurer_r01_c03.png" id="7_sbukd"]
@@ -31,6 +37,29 @@
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_5g4ct")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_7jn5g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_kvwaq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_qsqvo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_6rjvt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_m5csf")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 10.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_ixtor")

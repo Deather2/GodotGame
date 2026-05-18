@@ -98,6 +98,9 @@ func _adopt_initial_scene() -> void:
 	_stack.append(_current)
 	_mark_path_opened(cs.scene_file_path)
 
+	if not _is_level_path(cs.scene_file_path):
+		MusicManager.play_menu_music_delayed(0.5)
+
 
 func goto_main_menu(tr: int = Transition.FADE) -> void:
 	await _go(MAIN_MENU, tr, _is_current_level_scene())
@@ -352,6 +355,15 @@ func _go_fade_load_from_pause(path: String, show_loading: bool = false) -> void:
 		_show_loading_spinner()
 		loading_started = Time.get_ticks_msec()
 
+	if old != null and is_instance_valid(old):
+		if old.has_method("force_stop_level_music"):
+			old.force_stop_level_music()
+
+		old.queue_free()
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+
 	get_tree().paused = false
 
 	var packed: PackedScene = _get_packed_scene(path)
@@ -371,12 +383,10 @@ func _go_fade_load_from_pause(path: String, show_loading: bool = false) -> void:
 		if elapsed < LOADING_MIN_TIME:
 			await get_tree().create_timer(LOADING_MIN_TIME - elapsed).timeout
 
-	if old != null and is_instance_valid(old):
-		old.queue_free()
-
 	_current = next
 	_stack.clear()
 	_stack.append(_current)
+	_mark_path_opened(path)
 
 	if show_loading:
 		_hide_loading_spinner()
@@ -680,3 +690,22 @@ func consume_levels_menu_start_page() -> int:
 	var p := levels_menu_start_page
 	levels_menu_start_page = 0
 	return p
+
+func fade_to_black(duration: float = FADE_OUT_DUR) -> void:
+	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
+
+	var tw := create_tween()
+	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.tween_property(_fade, "modulate:a", 1.0, duration)
+
+	await tw.finished
+
+
+func fade_from_black(duration: float = FADE_IN_DUR) -> void:
+	var tw := create_tween()
+	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.tween_property(_fade, "modulate:a", 0.0, duration)
+
+	await tw.finished
+
+	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE

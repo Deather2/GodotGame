@@ -12,17 +12,20 @@ var player_in_range := false
 var activated := false
 
 @export var super_jump_duration: float = 5.0
+@export var one_shot := false
+
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	respawn_timer.timeout.connect(_on_respawn_timer_timeout)
 
-	if player != null and not player.died.is_connected(_on_player_died):
+	if player != null and player.has_signal("died") and not player.died.is_connected(_on_player_died):
 		player.died.connect(_on_player_died)
 
 	if interaction_hint != null:
 		interaction_hint.visible = false
+
 
 func _process(_delta: float) -> void:
 	if activated:
@@ -45,8 +48,18 @@ func _process(_delta: float) -> void:
 
 		icon.visible = false
 		monitoring = false
+
 		picked_up.emit()
-		respawn_timer.start()
+
+		if one_shot:
+			set_process(false)
+
+			if pickup_sound != null and pickup_sound.stream != null and pickup_sound.playing:
+				await pickup_sound.finished
+
+			queue_free()
+		else:
+			respawn_timer.start()
 
 
 func _on_body_entered(body: Node) -> void:
@@ -55,6 +68,7 @@ func _on_body_entered(body: Node) -> void:
 
 	if body.name == "Player":
 		player_in_range = true
+
 		if interaction_hint != null:
 			interaction_hint.visible = true
 
@@ -62,6 +76,7 @@ func _on_body_entered(body: Node) -> void:
 func _on_body_exited(body: Node) -> void:
 	if body.name == "Player":
 		player_in_range = false
+
 		if interaction_hint != null:
 			interaction_hint.visible = false
 
@@ -71,6 +86,7 @@ func _on_respawn_timer_timeout() -> void:
 	player_in_range = false
 	icon.visible = true
 	monitoring = true
+
 
 func force_reset() -> void:
 	activated = false
@@ -85,5 +101,16 @@ func force_reset() -> void:
 	if interaction_hint != null:
 		interaction_hint.visible = false
 
+
 func _on_player_died() -> void:
+	if one_shot:
+		if interaction_hint != null:
+			interaction_hint.visible = false
+
+		visible = false
+		monitoring = false
+		set_process(false)
+		queue_free()
+		return
+
 	force_reset()

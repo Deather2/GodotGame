@@ -9,6 +9,7 @@ signal collected
 
 var player_in_range := false
 var activated := false
+@export var locked := false
 
 
 func _ready() -> void:
@@ -22,6 +23,11 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if locked:
+		if interaction_hint != null and player_in_range:
+			interaction_hint.visible = false
+		return
+
 	if activated:
 		if interaction_hint != null and player_in_range:
 			interaction_hint.visible = false
@@ -35,6 +41,9 @@ func _process(_delta: float) -> void:
 
 
 func _can_interact() -> bool:
+	if locked:
+		return false
+
 	if not player_in_range:
 		return false
 
@@ -92,3 +101,9 @@ func _on_animation_finished() -> void:
 	if sprite.animation == "destruction":
 		collected.emit()
 		hide()
+
+func set_locked(value: bool) -> void:
+	locked = value
+
+	if locked and interaction_hint != null and player_in_range:
+		interaction_hint.visible = false
