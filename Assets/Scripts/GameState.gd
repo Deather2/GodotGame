@@ -6,6 +6,8 @@ signal stars_spent_changed
 
 signal controls_changed
 
+signal demo_mode_changed(enabled: bool)
+
 const SETTINGS_PATH := "user://settings.cfg"
 const PROGRESS_PATH := "user://progress.cfg"
 
@@ -26,6 +28,9 @@ var stars_per_level: Array[int] = []
 var best_time_per_level: Array[float] = []
 var unlocked_characters: Array[int] = []
 var stars_spent: int = 0
+
+var demo_mode_enabled: bool = false
+var _selected_before_demo: int = 0
 
 var window_mode: int = WINDOW_MODE_WINDOWED
 var vsync_enabled: bool = true
@@ -81,6 +86,7 @@ func _ready() -> void:
 	_load_selected_character()
 	_load_level_progress()
 	_load_shop_progress()
+	_load_demo_mode()
 
 func _setup_brightness_overlay() -> void:
 	_ensure_brightness_overlay()
@@ -339,9 +345,13 @@ func _load_level_progress() -> void:
 
 
 func is_level_unlocked(level_index: int) -> bool:
+	if demo_mode_enabled:
+		return true
+
 	if level_index <= 0:
 		return true
-	return stars_per_level[level_index - 1] > 0
+
+	return get_level_stars(level_index - 1) > 0
 
 
 func set_level_stars(level_index: int, stars: int) -> void:
@@ -389,8 +399,74 @@ func _load_shop_progress() -> void:
 	if stars_spent < 0:
 		stars_spent = 0
 
+func _save_demo_mode() -> void:
+	var cfg: ConfigFile = ConfigFile.new()
+	cfg.load(PROGRESS_PATH)
+	cfg.set_value(PROGRESS_SECTION, "demo_mode_enabled", demo_mode_enabled)
+	cfg.save(PROGRESS_PATH)
+
+
+func _load_demo_mode() -> void:
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: int = cfg.load(PROGRESS_PATH)
+
+	if err != OK:
+		demo_mode_enabled = false
+		return
+
+	demo_mode_enabled = bool(cfg.get_value(PROGRESS_SECTION, "demo_mode_enabled", false))
+
+func set_demo_mode_enabled(enabled: bool) -> void:
+	if demo_mode_enabled == enabled:
+		return
+
+	if enabled:
+		_selected_before_demo = selected_character_index
+	else:
+		if not unlocked_characters.has(selected_character_index):
+			selected_character_index = _selected_before_demo if unlocked_characters.has(_selected_before_demo) else 0
+			_save_selected_character()
+			emit_signal("selected_character_changed", selected_character_index)
+
+	demo_mode_enabled = enabled
+	_save_demo_mode()
+
+	emit_signal("demo_mode_changed", demo_mode_enabled)
+	emit_signal("unlocks_changed")
+	emit_signal("stars_spent_changed")
+
+func get_level_stars(level_index: int) -> int:
+	if demo_mode_enabled:
+		return 3
+
+	if level_index < 0 or level_index >= stars_per_level.size():
+		return 0
+
+	return int(stars_per_level[level_index])
+
+func get_unlocked_character_ids(max_count: int) -> Array[int]:
+	var result: Array[int] = []
+
+	if demo_mode_enabled:
+		for i in range(max_count):
+			result.append(i)
+		return result
+
+	for id in unlocked_characters:
+		var i := int(id)
+		if i >= 0 and i < max_count and not result.has(i):
+			result.append(i)
+
+	if not result.has(0):
+		result.insert(0, 0)
+
+	result.sort()
+	return result
 
 func is_character_unlocked(id: int) -> bool:
+	if demo_mode_enabled:
+		return true
+
 	return unlocked_characters.has(id)
 
 
@@ -406,6 +482,9 @@ func unlock_character(id: int) -> void:
 
 
 func get_total_stars() -> int:
+	if demo_mode_enabled:
+		return LEVEL_COUNT * 3
+
 	var sum := 0
 	for s in stars_per_level:
 		sum += int(s)
@@ -421,6 +500,9 @@ func can_afford(price: int) -> bool:
 
 
 func spend_stars(price: int) -> bool:
+	if demo_mode_enabled:
+		return true
+
 	if price <= 0:
 		return true
 	if not can_afford(price):
@@ -433,6 +515,9 @@ func spend_stars(price: int) -> bool:
 
 
 func reset_all_progress_keep_settings() -> void:
+	demo_mode_enabled = false
+	_save_demo_mode()
+
 	_init_default_progress()
 	selected_character_index = 0
 	_init_default_shop()
@@ -444,9 +529,13 @@ func reset_all_progress_keep_settings() -> void:
 	emit_signal("selected_character_changed", selected_character_index)
 	emit_signal("unlocks_changed")
 	emit_signal("stars_spent_changed")
+	emit_signal("demo_mode_changed", demo_mode_enabled)
 
 
 func has_any_progress() -> bool:
+	if demo_mode_enabled:
+		return true
+
 	if selected_character_index != 0:
 		return true
 
@@ -463,6 +552,9 @@ func has_any_progress() -> bool:
 
 
 func save_level_result(level_index: int, stars: int, time_sec: float) -> void:
+	if demo_mode_enabled:
+		return
+
 	if level_index < 0 or level_index >= LEVEL_COUNT:
 		return
 

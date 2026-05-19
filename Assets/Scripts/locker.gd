@@ -65,18 +65,7 @@ func _on_unlocks_changed() -> void:
 
 
 func _rebuild_unlocked_list() -> void:
-	unlocked_ids.clear()
-
-	for id in GameState.unlocked_characters:
-		var i := int(id)
-		if i >= 0 and i < db.idle_frames.size():
-			if not unlocked_ids.has(i):
-				unlocked_ids.append(i)
-
-	if not unlocked_ids.has(0):
-		unlocked_ids.insert(0, 0)
-
-	unlocked_ids.sort()
+	unlocked_ids = GameState.get_unlocked_character_ids(db.idle_frames.size())
 
 
 func _get_current_id() -> int:
