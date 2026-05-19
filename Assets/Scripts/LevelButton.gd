@@ -63,7 +63,7 @@ func _refresh() -> void:
 	if not unlocked:
 		return
 
-	var got := GameState.stars_per_level[level_index]
+	var got: int = GameState.get_level_stars(level_index)
 	for s in range(3):
 		star_nodes[s].texture = star_full if s < got else star_empty
 

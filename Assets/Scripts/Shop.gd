@@ -97,8 +97,24 @@ func _prepare_popup(popup: Control, dim: ColorRect, panel: Control) -> void:
 
 
 func _refresh_top() -> void:
+	if GameState.demo_mode_enabled:
+		var demo_available: int = maxi(GameState.LEVEL_COUNT * 3 - _get_all_characters_price(), 0)
+		stars_count.text = str(demo_available)
+		return
+
 	stars_count.text = str(GameState.get_available_stars())
 
+func _get_all_characters_price() -> int:
+	var total: int = 0
+
+	if db == null:
+		return 0
+
+	for i in range(db.idle_frames.size()):
+		var price: int = prices[i] if i < prices.size() else 0
+		total += price
+
+	return total
 
 func _refresh_all() -> void:
 	_refresh_top()
