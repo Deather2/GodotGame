@@ -38,8 +38,8 @@ var vsync_enabled: bool = true
 var brightness_percent: int = 50
 
 var _brightness_layer: CanvasLayer
-var _brightness_black: ColorRect
-var _brightness_white: ColorRect
+var _brightness_filter: ColorRect
+var _brightness_material: ShaderMaterial
 
 var _window_apply_busy: bool = false
 var _window_reapply_requested: bool = false
@@ -594,41 +594,61 @@ func _ensure_brightness_overlay() -> void:
 	_brightness_layer.name = "BrightnessOverlayLayer"
 	_brightness_layer.layer = 1000
 
-	_brightness_black = ColorRect.new()
-	_brightness_black.name = "BrightnessBlack"
-	_brightness_black.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_brightness_black.color = Color(0, 0, 0, 0)
-	_brightness_black.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_brightness_filter = ColorRect.new()
+	_brightness_filter.name = "BrightnessGammaFilter"
+	_brightness_filter.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_brightness_filter.color = Color.WHITE
+	_brightness_filter.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
-	_brightness_white = ColorRect.new()
-	_brightness_white.name = "BrightnessWhite"
-	_brightness_white.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_brightness_white.color = Color(1, 1, 1, 0)
-	_brightness_white.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var shader := Shader.new()
+	shader.code = """
+shader_type canvas_item;
+render_mode unshaded;
+
+uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_nearest;
+uniform float brightness_percent = 50.0;
+
+void fragment() {
+	vec4 color = texture(screen_texture, SCREEN_UV);
+
+	float t = clamp((brightness_percent - 50.0) / 50.0, -1.0, 1.0);
+
+	float gamma_value = 1.0;
+	float brightness_add = 0.0;
+
+	if (t < 0.0) {
+		gamma_value = mix(1.0, 1.45, -t);
+		brightness_add = mix(0.0, -0.08, -t);
+	} else {
+		gamma_value = mix(1.0, 0.75, t);
+		brightness_add = mix(0.0, 0.08, t);
+	}
+
+	color.rgb = pow(max(color.rgb, vec3(0.0)), vec3(gamma_value));
+	color.rgb += vec3(brightness_add);
+	color.rgb = clamp(color.rgb, vec3(0.0), vec3(1.0));
+
+	COLOR = color;
+}
+"""
+
+	_brightness_material = ShaderMaterial.new()
+	_brightness_material.shader = shader
+
+	_brightness_filter.material = _brightness_material
 
 	root.add_child(_brightness_layer)
 	root.move_child(_brightness_layer, root.get_child_count() - 1)
-	_brightness_layer.add_child(_brightness_black)
-	_brightness_layer.add_child(_brightness_white)
+	_brightness_layer.add_child(_brightness_filter)
 
 
 func _apply_brightness_setting() -> void:
 	_ensure_brightness_overlay()
 
-	if _brightness_black == null or _brightness_white == null:
+	if _brightness_material == null:
 		return
 
-	if brightness_percent < 50:
-		var t := float(50 - brightness_percent) / 50.0
-		_brightness_black.color = Color(0, 0, 0, t * 0.85)
-		_brightness_white.color = Color(1, 1, 1, 0.0)
-	elif brightness_percent > 50:
-		var t := float(brightness_percent - 50) / 50.0
-		_brightness_black.color = Color(0, 0, 0, 0.0)
-		_brightness_white.color = Color(1, 1, 1, t * 0.45)
-	else:
-		_brightness_black.color = Color(0, 0, 0, 0.0)
-		_brightness_white.color = Color(1, 1, 1, 0.0)
+	_brightness_material.set_shader_parameter("brightness_percent", float(brightness_percent))
 
 func set_show_fps_setting(enabled: bool) -> void:
 	if show_fps == enabled:
