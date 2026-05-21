@@ -133,15 +133,109 @@ Pabeigt visus līmeņus, savākt kristālus, iegūt zvaigznes, atbloķēt jaunus
 
 ---
 
-## ▶️ Running the Game / Spēles palaišana
+## 📥 Download / Lejupielāde
 
 **EN:**  
-Open the project in Godot Engine and run the main scene.  
-If an exported version is available, launch the executable file.
+Ready-to-play builds are available in the **Releases** section of this repository.  
+Download the latest archive:
+
+```text
+Gaismas_Mekletajs_TestBuild.zip
+```
+
+Then extract the archive before starting the game.
 
 **LV:**  
-Atver projektu Godot Engine vidē un palaid galveno ainu.  
-Ja ir pieejama eksportētā versija, palaid izpildāmo failu.
+Gatavās spēles versijas ir pieejamas šī repozitorija sadaļā **Releases**.  
+Lejupielādē jaunāko arhīvu:
+
+```text
+Gaismas_Mekletajs_TestBuild.zip
+```
+
+Pirms spēles palaišanas arhīvs ir jāizpako.
+
+---
+
+## ▶️ Running the Exported Game / Eksportētās spēles palaišana
+
+### Windows
+
+**EN:**
+1. Download `Gaismas_Mekletajs_TestBuild.zip` from **Releases**.
+2. Extract the archive.
+3. Open the `Windows` folder.
+4. Run:
+
+```text
+Gaismas_Mekletajs.exe
+```
+
+Do not run the game directly from the archive. Extract it first.
+
+**LV:**
+1. Lejupielādē `Gaismas_Mekletajs_TestBuild.zip` no sadaļas **Releases**.
+2. Izpako arhīvu.
+3. Atver mapi `Windows`.
+4. Palaid failu:
+
+```text
+Gaismas_Mekletajs.exe
+```
+
+Nespēlē spēli tieši no arhīva. Vispirms tas ir jāizpako.
+
+---
+
+### Linux
+
+**EN:**
+1. Download `Gaismas_Mekletajs_TestBuild.zip` from **Releases**.
+2. Extract the archive.
+3. Open the `Linux` folder.
+4. If the game does not start by double-clicking, open the terminal in the `Linux` folder and run:
+
+```bash
+chmod +x Gaismas_Mekletajs.x86_64
+chmod +x Gaismas_Mekletajs.sh
+./Gaismas_Mekletajs.sh
+```
+
+Do not run the game directly from the archive. Extract it first.
+
+**LV:**
+1. Lejupielādē `Gaismas_Mekletajs_TestBuild.zip` no sadaļas **Releases**.
+2. Izpako arhīvu.
+3. Atver mapi `Linux`.
+4. Ja spēli nevar palaist ar dubultklikšķi, atver termināli mapē `Linux` un ievadi:
+
+```bash
+chmod +x Gaismas_Mekletajs.x86_64
+chmod +x Gaismas_Mekletajs.sh
+./Gaismas_Mekletajs.sh
+```
+
+Nespēlē spēli tieši no arhīva. Vispirms tas ir jāizpako.
+
+---
+
+## 🧩 Running from Source / Projekta palaišana no pirmkoda
+
+**EN:**  
+To run the project from source:
+
+1. Install Godot Engine.
+2. Clone or download this repository.
+3. Open the project in Godot.
+4. Run the main scene.
+
+**LV:**  
+Lai palaistu projektu no pirmkoda:
+
+1. Instalē Godot Engine.
+2. Klonē vai lejupielādē šo repozitoriju.
+3. Atver projektu Godot vidē.
+4. Palaid galveno ainu.
 
 ---
 
@@ -166,10 +260,12 @@ Ja ir pieejama eksportētā versija, palaid izpildāmo failu.
 ## 💾 Progress Saving / Progresa saglabāšana
 
 **EN:**  
-The game saves progress locally, including unlocked levels, collected stars, best results, purchased characters, selected character and settings.
+The game saves progress locally, including unlocked levels, collected stars, best results, purchased characters, selected character and settings.  
+Save files are stored separately for each player on their own computer.
 
 **LV:**  
-Spēle saglabā progresu lokāli, tostarp atbloķētos līmeņus, iegūtās zvaigznes, labākos rezultātus, nopirktos personāžus, izvēlēto personāžu un iestatījumus.
+Spēle saglabā progresu lokāli, tostarp atbloķētos līmeņus, iegūtās zvaigznes, labākos rezultātus, nopirktos personāžus, izvēlēto personāžu un iestatījumus.  
+Saglabāšanas faili katram spēlētājam tiek veidoti atsevišķi viņa datorā.
 
 ---
 
