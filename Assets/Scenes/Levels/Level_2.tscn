@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://3ud346wfrehl"]
+[gd_scene load_steps=26 format=3 uid="uid://3ud346wfrehl"]
 
 [ext_resource type="Script" uid="uid://bx0hyeycs5vy6" path="res://Assets/Scripts/Levels/level_2.gd" id="1_m62uk"]
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="2_wp4i5"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://ytp5tluquc64" path="res://Assets/Scenes/UI/InteractionHint.tscn" id="13_d5qly"]
 [ext_resource type="AudioStream" uid="uid://jvy4ouj35075" path="res://Assets/Sounds/SFX/Level/lightSwitchOff.mp3" id="13_y3x6l"]
 [ext_resource type="AudioStream" uid="uid://c44jo8bvbp2p7" path="res://Assets/Sounds/SFX/Level/shine.mp3" id="14_xbeyj"]
+[ext_resource type="PackedScene" uid="uid://cdwmxn4cjpv0j" path="res://Assets/Scenes/UI/ArtifactNotification.tscn" id="21_xbeyj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m62uk"]
 size = Vector2(4590, 64)
@@ -344,6 +345,8 @@ visible = false
 [node name="LevelMusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_xbeyj")
 bus = &"LevelMusic"
+
+[node name="ArtifactNotification" parent="." instance=ExtResource("21_xbeyj")]
 
 [connection signal="body_entered" from="KillZone" to="." method="_on_kill_zone_body_entered"]
 

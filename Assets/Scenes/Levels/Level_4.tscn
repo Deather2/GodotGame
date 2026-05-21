@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://yufo6cprbkrw"]
+[gd_scene load_steps=27 format=3 uid="uid://yufo6cprbkrw"]
 
 [ext_resource type="Script" uid="uid://budekmp2ewbqi" path="res://Assets/Scripts/Levels/level_4.gd" id="1_5dq8t"]
 [ext_resource type="Texture2D" uid="uid://biy1id57xunw1" path="res://Assets/backgrounds/background_layer_1.png" id="1_hlt2w"]
@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://33u0ergybluf" path="res://Assets/Scenes/Levels/HiddenCrystal.tscn" id="13_fansk"]
 [ext_resource type="AudioStream" uid="uid://c44jo8bvbp2p7" path="res://Assets/Sounds/SFX/Level/shine.mp3" id="13_tcrre"]
 [ext_resource type="SpriteFrames" uid="uid://bt27p4s56ri0" path="res://Assets/Animations/Magenta_crystal.tres" id="14_ng2gr"]
+[ext_resource type="PackedScene" uid="uid://cdwmxn4cjpv0j" path="res://Assets/Scenes/UI/ArtifactNotification.tscn" id="23_ng2gr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fansk"]
 texture = ExtResource("6_j6qbb")
@@ -523,6 +524,8 @@ bus = &"SFX"
 [node name="LightOnSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("13_tcrre")
 bus = &"SFX"
+
+[node name="ArtifactNotification" parent="." instance=ExtResource("23_ng2gr")]
 
 [editable path="Player"]
 [editable path="Checkpoint_0"]

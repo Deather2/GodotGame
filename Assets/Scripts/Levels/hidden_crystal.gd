@@ -12,10 +12,11 @@ signal collected(crystal_id: int)
 @onready var interaction_hint: CanvasLayer = get_parent().get_node_or_null("InteractionHint")
 @onready var destruction_sound: AudioStreamPlayer = $CrystalDesctructionSound
 @onready var player: CharacterBody2D = get_parent().get_node_or_null("Player")
+@onready var artifact_notification: CanvasLayer = get_parent().get_node_or_null("ArtifactNotification")
 
 var player_in_range := false
 var activated := false
-
+var collected_now := false
 
 func _ready() -> void:
 	if GameState.is_hidden_crystal_collected(crystal_id):
@@ -76,7 +77,7 @@ func _update_interaction_hint() -> void:
 func _activate_crystal() -> void:
 	activated = true
 
-	GameState.collect_hidden_crystal(crystal_id)
+	collected_now = GameState.collect_hidden_crystal(crystal_id)
 
 	if player != null:
 		player.cutscene_lock = true
@@ -118,6 +119,9 @@ func _on_animation_finished() -> void:
 
 	if player != null:
 		player.cutscene_lock = false
+
+	if collected_now and artifact_notification != null and artifact_notification.has_method("show_artifact_collected"):
+		artifact_notification.show_artifact_collected()
 
 	collected.emit(crystal_id)
 	queue_free()
