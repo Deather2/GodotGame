@@ -3,6 +3,7 @@ extends Node
 signal selected_character_changed(new_index: int)
 signal unlocks_changed
 signal stars_spent_changed
+signal hidden_crystals_changed
 
 signal controls_changed
 
@@ -19,6 +20,8 @@ const MIN_BUS_DB := -80.0
 
 const LEVEL_COUNT := 7
 
+const HIDDEN_CRYSTAL_COUNT := 3
+
 const WINDOW_MODE_WINDOWED := 0
 const WINDOW_MODE_FULLSCREEN := 1
 const WINDOW_MODE_BORDERLESS := 2
@@ -28,6 +31,8 @@ var stars_per_level: Array[int] = []
 var best_time_per_level: Array[float] = []
 var unlocked_characters: Array[int] = []
 var stars_spent: int = 0
+
+var collected_hidden_crystals: Array[int] = []
 
 var demo_mode_enabled: bool = false
 var _selected_before_demo: int = 0
@@ -86,6 +91,7 @@ func _ready() -> void:
 	_load_selected_character()
 	_load_level_progress()
 	_load_shop_progress()
+	_load_hidden_crystals()
 	_load_demo_mode()
 
 func _setup_brightness_overlay() -> void:
@@ -399,6 +405,73 @@ func _load_shop_progress() -> void:
 	if stars_spent < 0:
 		stars_spent = 0
 
+func _save_hidden_crystals() -> void:
+	var cfg: ConfigFile = ConfigFile.new()
+	cfg.load(PROGRESS_PATH)
+	cfg.set_value(PROGRESS_SECTION, "collected_hidden_crystals", collected_hidden_crystals)
+	cfg.save(PROGRESS_PATH)
+
+
+func _load_hidden_crystals() -> void:
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: int = cfg.load(PROGRESS_PATH)
+
+	collected_hidden_crystals.clear()
+
+	if err != OK:
+		return
+
+	var arr: Variant = cfg.get_value(PROGRESS_SECTION, "collected_hidden_crystals", [])
+
+	if arr is Array:
+		for v in (arr as Array):
+			var id := int(v)
+
+			if id >= 0 and id < HIDDEN_CRYSTAL_COUNT and not collected_hidden_crystals.has(id):
+				collected_hidden_crystals.append(id)
+
+	collected_hidden_crystals.sort()
+
+
+func is_hidden_crystal_collected(id: int) -> bool:
+	if id < 0 or id >= HIDDEN_CRYSTAL_COUNT:
+		return false
+
+	if demo_mode_enabled:
+		return true
+
+	return collected_hidden_crystals.has(id)
+
+
+func collect_hidden_crystal(id: int) -> bool:
+	if id < 0 or id >= HIDDEN_CRYSTAL_COUNT:
+		return false
+
+	if demo_mode_enabled:
+		return false
+
+	if collected_hidden_crystals.has(id):
+		return false
+
+	collected_hidden_crystals.append(id)
+	collected_hidden_crystals.sort()
+
+	_save_hidden_crystals()
+	emit_signal("hidden_crystals_changed")
+
+	return true
+
+
+func get_collected_hidden_crystals_count() -> int:
+	if demo_mode_enabled:
+		return HIDDEN_CRYSTAL_COUNT
+
+	return collected_hidden_crystals.size()
+
+
+func get_hidden_crystals_count() -> int:
+	return HIDDEN_CRYSTAL_COUNT
+
 func _save_demo_mode() -> void:
 	var cfg: ConfigFile = ConfigFile.new()
 	cfg.load(PROGRESS_PATH)
@@ -434,6 +507,7 @@ func set_demo_mode_enabled(enabled: bool) -> void:
 	emit_signal("demo_mode_changed", demo_mode_enabled)
 	emit_signal("unlocks_changed")
 	emit_signal("stars_spent_changed")
+	emit_signal("hidden_crystals_changed")
 
 func get_level_stars(level_index: int) -> int:
 	if demo_mode_enabled:
@@ -521,14 +595,17 @@ func reset_all_progress_keep_settings() -> void:
 	_init_default_progress()
 	selected_character_index = 0
 	_init_default_shop()
+	collected_hidden_crystals.clear()
 
 	_save_level_progress()
 	_save_selected_character()
 	_save_shop_progress()
+	_save_hidden_crystals()
 
 	emit_signal("selected_character_changed", selected_character_index)
 	emit_signal("unlocks_changed")
 	emit_signal("stars_spent_changed")
+	emit_signal("hidden_crystals_changed")
 	emit_signal("demo_mode_changed", demo_mode_enabled)
 
 
@@ -546,6 +623,9 @@ func has_any_progress() -> bool:
 	if stars_spent > 0:
 		return true
 	if unlocked_characters.size() > 1:
+		return true
+
+	if collected_hidden_crystals.size() > 0:
 		return true
 
 	return false

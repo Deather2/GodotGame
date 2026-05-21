@@ -6,6 +6,7 @@ const SHOP := "res://Assets/Scenes/shop.tscn"
 const LOCKER := "res://Assets/Scenes/locker.tscn"
 const SETTINGS := "res://Assets/Scenes/settings.tscn"
 const LEVELS_DIR := "res://Assets/Scenes/Levels/"
+const ARTIFACTS := "res://Assets/Scenes/ArtifactCollectionMenu.tscn"
 
 const FPS_COUNTER_SCENE := preload("res://Assets/Scenes/UI/FpsCounter.tscn")
 const LOADING_SPINNER_SCENE := preload("res://Assets/Scenes/UI/LoadingSpinner.tscn")
@@ -15,6 +16,7 @@ const LEVELS_MENU_SCENE := preload("res://Assets/Scenes/levels_menu.tscn")
 const SHOP_SCENE := preload("res://Assets/Scenes/shop.tscn")
 const LOCKER_SCENE := preload("res://Assets/Scenes/locker.tscn")
 const SETTINGS_SCENE := preload("res://Assets/Scenes/settings.tscn")
+const ARTIFACTS_SCENE := preload("res://Assets/Scenes/ArtifactCollectionMenu.tscn")
 
 const SLIDE_DUR := 0.35
 const FADE_OUT_DUR := 0.45
@@ -129,13 +131,14 @@ func goto_levels_menu_from_pause() -> void:
 func goto_shop(tr: int = Transition.FADE) -> void:
 	_go(SHOP, tr)
 
-
 func goto_locker(tr: int = Transition.FADE) -> void:
 	_go(LOCKER, tr)
 
-
 func goto_settings(tr: int = Transition.FADE) -> void:
 	_go(SETTINGS, tr)
+
+func goto_artifacts(tr: int = Transition.DROP_DOWN) -> void:
+	_go(ARTIFACTS, tr)
 
 func goto_level(i: int, tr: int = Transition.FADE) -> void:
 	MusicManager.stop_menu_music()
@@ -284,11 +287,14 @@ func _go(path: String, tr: int, show_loading: bool = false) -> void:
 	
 func _go_fade_load(path: String, show_loading: bool = false, prepared_next: Node = null) -> void:
 	var old := _current
+	var old_was_level := old != null and is_instance_valid(old) and _is_level_path(old.scene_file_path)
+	var next_is_level := _is_level_path(path)
 
 	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
 	_fade.modulate.a = 0.0
 
 	var t := create_tween()
+	t.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	t.tween_property(_fade, "modulate:a", 1.0, FADE_OUT_DUR)
 	await t.finished
 
@@ -297,19 +303,30 @@ func _go_fade_load(path: String, show_loading: bool = false, prepared_next: Node
 		_show_loading_spinner()
 		loading_started = Time.get_ticks_msec()
 
+	get_tree().paused = false
+
+	if old_was_level:
+		if old.has_method("force_stop_level_music"):
+			old.force_stop_level_music()
+
+		old.queue_free()
+
+		await get_tree().process_frame
+		await get_tree().process_frame
+
 	var next: Node = prepared_next
 	if next == null:
 		var packed: PackedScene = _get_packed_scene(path)
 		next = packed.instantiate()
 
-		if _is_level_path(path):
+		if next_is_level:
 			get_tree().root.add_child(next)
 		else:
 			_stage.add_child(next)
 			_set_pos(next, Vector2.ZERO)
 	else:
 		_set_canvas_item_alpha(next, 1.0)
-		if not _is_level_path(path):
+		if not next_is_level:
 			_set_pos(next, Vector2.ZERO)
 
 	await get_tree().process_frame
@@ -320,8 +337,9 @@ func _go_fade_load(path: String, show_loading: bool = false, prepared_next: Node
 		if elapsed < LOADING_MIN_TIME:
 			await get_tree().create_timer(LOADING_MIN_TIME - elapsed).timeout
 
-	if old != null and is_instance_valid(old):
-		old.queue_free()
+	if not old_was_level:
+		if old != null and is_instance_valid(old):
+			old.queue_free()
 
 	_current = next
 	_stack.clear()
@@ -332,6 +350,7 @@ func _go_fade_load(path: String, show_loading: bool = false, prepared_next: Node
 		_hide_loading_spinner()
 
 	var t2 := create_tween()
+	t2.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	t2.tween_property(_fade, "modulate:a", 0.0, FADE_IN_DUR)
 	await t2.finished
 
@@ -608,6 +627,8 @@ func _get_packed_scene(path: String) -> PackedScene:
 			return LOCKER_SCENE
 		SETTINGS:
 			return SETTINGS_SCENE
+		ARTIFACTS:
+			return ARTIFACTS_SCENE
 		_:
 			return load(path) as PackedScene
 

@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://33u0ergybluf"]
+
+[ext_resource type="Script" uid="uid://g7rfeen7im2v" path="res://Assets/Scripts/Levels/hidden_crystal.gd" id="1_eswbv"]
+[ext_resource type="SpriteFrames" uid="uid://dhsyxuu4578s6" path="res://Assets/Animations/Green_crystal.tres" id="1_ka43j"]
+[ext_resource type="AudioStream" uid="uid://bxu84e2wu1kno" path="res://Assets/Sounds/SFX/Level/crystall.mp3" id="3_dmeek"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lgmc7"]
+radius = 28.01785
+
+[sub_resource type="Gradient" id="Gradient_mqbe8"]
+offsets = PackedFloat32Array(0, 0.7235577)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_sxhmu"]
+gradient = SubResource("Gradient_mqbe8")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="HiddenCrystal" type="Area2D"]
+script = ExtResource("1_eswbv")
+crystal_frames = ExtResource("1_ka43j")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("1_ka43j")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_lgmc7")
+
+[node name="CrystalLight" type="PointLight2D" parent="."]
+texture = SubResource("GradientTexture2D_sxhmu")
+texture_scale = 1.2
+
+[node name="CrystalDesctructionSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_dmeek")
+bus = &"SFX"
