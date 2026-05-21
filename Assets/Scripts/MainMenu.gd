@@ -4,6 +4,7 @@ var updating_demo_toggle := false
 
 @onready var UIButtonSound: AudioStreamPlayer = $UIButtonSound
 @onready var demo_toggle: CheckButton = $DemoModeToggle
+@onready var artifacts_button: Button = $ArtifactsButton
 
 
 func _ready() -> void:
@@ -14,6 +15,8 @@ func _ready() -> void:
 
 	demo_toggle.set_pressed_no_signal(GameState.demo_mode_enabled)
 	demo_toggle.toggled.connect(_on_demo_mode_toggled)
+
+	artifacts_button.pressed.connect(_on_artifacts_pressed)
 
 	if not GameState.demo_mode_changed.is_connected(_on_demo_mode_changed):
 		GameState.demo_mode_changed.connect(_on_demo_mode_changed)
@@ -90,3 +93,9 @@ func _on_demo_mode_changed(enabled: bool) -> void:
 	updating_demo_toggle = true
 	demo_toggle.set_pressed_no_signal(enabled)
 	updating_demo_toggle = false
+
+func _on_artifacts_pressed() -> void:
+	if UIButtonSound != null:
+		UIButtonSound.play()
+
+	SceneManager.goto_artifacts()

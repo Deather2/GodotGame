@@ -11,6 +11,8 @@ extends Control
 @onready var status1: Label = $MainPanel/Pad/RootBox/ArtifactsRow/ArtifactSlot1/SlotBox/StatusLabel
 @onready var status2: Label = $MainPanel/Pad/RootBox/ArtifactsRow/ArtifactSlot2/SlotBox/StatusLabel
 
+@onready var UIButtonSound: AudioStreamPlayer = $UIButtonSound
+
 var crystal_ids := [0, 1, 2]
 
 
@@ -49,4 +51,12 @@ func _set_slot_state(image: TextureRect, status: Label, found: bool) -> void:
 
 
 func _on_back_pressed() -> void:
+	UIButtonSound.play()
 	SceneManager.goto_main_menu(SceneManager.Transition.DROP_UP)
+
+func _on_menu_button_mouse_entered() -> void:
+	Cursor.set_hover()
+
+
+func _on_menu_button_mouse_exited() -> void:
+	Cursor.set_normal()

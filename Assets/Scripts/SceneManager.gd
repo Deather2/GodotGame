@@ -6,6 +6,7 @@ const SHOP := "res://Assets/Scenes/shop.tscn"
 const LOCKER := "res://Assets/Scenes/locker.tscn"
 const SETTINGS := "res://Assets/Scenes/settings.tscn"
 const LEVELS_DIR := "res://Assets/Scenes/Levels/"
+const ARTIFACTS := "res://Assets/Scenes/ArtifactCollectionMenu.tscn"
 
 const FPS_COUNTER_SCENE := preload("res://Assets/Scenes/UI/FpsCounter.tscn")
 const LOADING_SPINNER_SCENE := preload("res://Assets/Scenes/UI/LoadingSpinner.tscn")
@@ -15,6 +16,7 @@ const LEVELS_MENU_SCENE := preload("res://Assets/Scenes/levels_menu.tscn")
 const SHOP_SCENE := preload("res://Assets/Scenes/shop.tscn")
 const LOCKER_SCENE := preload("res://Assets/Scenes/locker.tscn")
 const SETTINGS_SCENE := preload("res://Assets/Scenes/settings.tscn")
+const ARTIFACTS_SCENE := preload("res://Assets/Scenes/ArtifactCollectionMenu.tscn")
 
 const SLIDE_DUR := 0.35
 const FADE_OUT_DUR := 0.45
@@ -129,13 +131,14 @@ func goto_levels_menu_from_pause() -> void:
 func goto_shop(tr: int = Transition.FADE) -> void:
 	_go(SHOP, tr)
 
-
 func goto_locker(tr: int = Transition.FADE) -> void:
 	_go(LOCKER, tr)
 
-
 func goto_settings(tr: int = Transition.FADE) -> void:
 	_go(SETTINGS, tr)
+
+func goto_artifacts(tr: int = Transition.DROP_DOWN) -> void:
+	_go(ARTIFACTS, tr)
 
 func goto_level(i: int, tr: int = Transition.FADE) -> void:
 	MusicManager.stop_menu_music()
@@ -624,6 +627,8 @@ func _get_packed_scene(path: String) -> PackedScene:
 			return LOCKER_SCENE
 		SETTINGS:
 			return SETTINGS_SCENE
+		ARTIFACTS:
+			return ARTIFACTS_SCENE
 		_:
 			return load(path) as PackedScene
 
